@@ -36,7 +36,7 @@ Progress:
 - [x] Functional Requirements
 - [x] System Architecture
 - [ ] Technical Stack
-- [ ] Domain Modules
+- [x] Domain Modules
 - [ ] Data Model
 - [ ] API Specification
 - [ ] Design System
@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`docs/05-domain-modules.md`
+`docs/06-data-model.md`
 
 Tujuan:
 
-Mendefinisikan boundary, tanggung jawab, kontrak, dan relasi antar domain module sebagai dasar implementasi.
+Menyusun struktur entity, relasi, dan constraint database yang selaras dengan domain modules.
 
 ---
 
@@ -248,12 +248,13 @@ Future:
 - ✅ 02-user-experience.md
 - ✅ 03-functional-requirements.md
 - ✅ 04-system-architecture.md
+- ✅ 05-domain-modules.md
 
 ---
 
 ## In Progress
 
-- 🚧 05-domain-modules.md
+- 🚧 06-data-model.md
 
 ---
 
@@ -272,21 +273,20 @@ Future:
 
 Selesaikan:
 
-`docs/05-domain-modules.md`
+`docs/06-data-model.md`
 
 Fokus pembahasan:
 
-- Module Purpose & Scope
-- Module Responsibilities
-- Owned Data
-- Public Service Contract
-- Inter-Module Dependencies
-- Domain Events (jika ada)
-- Anti-Spaghetti Dependency Rules
+- Entity per module
+- Relasi antar entitas
+- Primary key dan foreign key
+- Unique constraints
+- Enum/status domain utama
+- Audit fields (`created_at`, `updated_at`, `deleted_at`)
 
 Setelah selesai lanjutkan ke:
 
-`docs/06-data-model.md`
+`docs/07-api-specification.md`
 
 ---
 
@@ -295,7 +295,7 @@ Setelah selesai lanjutkan ke:
 Planning Progress
 
 ```
-████████████████░░░░ 42%
+█████████████████░░░ 50%
 ```
 
 Business Analysis
@@ -368,7 +368,7 @@ Status:
 Seluruh keputusan bisnis utama telah ditetapkan.
 
 Dokumen `04-system-architecture.md` telah selesai dan menjadi baseline arsitektur implementasi.
-
-Fokus saat ini berpindah ke `05-domain-modules.md` untuk merinci boundary module sebelum masuk ke data model dan API.
+Dokumen `05-domain-modules.md` telah selesai dan menjadi baseline domain boundary.
+Fokus saat ini berpindah ke `06-data-model.md` untuk memetakan entitas dan relasi berdasarkan domain modules sebelum masuk ke API specification.
 
 Perubahan requirement bisnis sebaiknya diminimalkan agar desain sistem, database, API, dan implementasi dapat berkembang secara stabil.

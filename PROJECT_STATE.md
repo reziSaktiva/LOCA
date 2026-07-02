@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Planning Finalization (Ready for Implementation Setup)
+Status: Phase 1 Kickoff (Implementation Setup In Progress)
 
-Current Version: v0.7
+Current Version: v0.8
 
 Project Type:
 
@@ -27,6 +27,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 # Current Phase
 
 ✅ Phase 0 — Planning & Documentation (Completed)
+⏳ Phase 1 — Project Foundation (Implementation Setup In Progress)
 
 Progress:
 
@@ -50,11 +51,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`documentation consistency hardening`
+`phase-1 implementation setup kickoff`
 
 Tujuan:
 
-Menjaga seluruh dokumen di folder `docs/` tetap sinkron sebelum masuk ke fase implementasi, agar tidak terjadi konflik aturan saat coding, review, atau penggunaan AI assistant.
+Memulai fase implementasi dengan fondasi engineering yang siap dipakai development harian, sambil menjaga konsistensi antara aturan agent, dokumentasi resmi, dan workflow eksekusi.
 
 ---
 
@@ -100,6 +101,7 @@ Menjaga seluruh dokumen di folder `docs/` tetap sinkron sebelum masuk ke fase im
 - Source of Truth diperluas dan diselaraskan:
   - Business -> UX -> Functional -> System Architecture -> Domain -> Data Model -> API -> Technical Stack -> Design System -> Development Rules.
 - `00-project-foundation.md` diperlakukan sebagai dokumen fondasi awal (draft baseline); jika terjadi konflik, dokumen bernomor 01+ menjadi acuan final.
+- `AGENTS.md` diperbarui menjadi panduan operasional agent untuk implementasi agar selaras dengan `docs/10-development-rules.md`.
 
 ---
 
@@ -154,16 +156,21 @@ Belum diputuskan:
 - `planning/decisions.md` memuat keputusan sinkronisasi terbaru (Decision 006).
 - `planning/changelog.md` memuat audit update tanggal 2026-07-02.
 
+## Agent Governance
+
+- ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
+
 ---
 
 # Next Action
 
-Masuk ke **Phase 1 — Project Foundation (Implementation Setup)**:
+Eksekusi **Phase 1 — Project Foundation (Implementation Setup)**:
 
-1. Finalisasi struktur folder implementasi mengikuti domain boundaries.
+1. Finalisasi struktur folder implementasi + import boundary enforcement.
 2. Inisialisasi baseline engineering (lint, format, type-safety, test scaffold).
 3. Setup auth + database integration sesuai keputusan final stack.
-4. Menetapkan definition of ready untuk mulai build module pertama (`catalog`).
+4. Tetapkan baseline CI minimum (lint, typecheck, test).
+5. Menetapkan definition of ready untuk mulai build module pertama (`catalog`).
 
 ---
 

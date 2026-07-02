@@ -382,8 +382,11 @@ Mengelola seluruh transaksi pembelian.
 ### Order Status
 
 ```text
-Pending Payment
-        │
+Pending
+        ├────────────► Cancelled
+        ▼
+Waiting Payment
+        ├────────────► Cancelled
         ▼
 Paid
         │
@@ -398,8 +401,6 @@ Delivered
         │
         ▼
 Completed
-
-Cancelled
 ```
 
 ### Business Rules
@@ -481,7 +482,7 @@ Mengelola proses pengiriman pesanan.
 
 - Waiting
 - Packed
-- Shipped
+- Picked Up
 - In Transit
 - Delivered
 

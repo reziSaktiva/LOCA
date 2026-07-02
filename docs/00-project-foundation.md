@@ -173,7 +173,7 @@ ORM
 
 Authentication
 
-- Better Auth
+- Supabase Auth
 
 Payment
 
@@ -290,9 +290,9 @@ Alur: `Dashboard -> Products -> Categories -> Inventory -> Orders -> Customers -
 
 # Business Modules
 
-Module yang telah disepakati:
+Module yang telah disepakati (selaras dengan `04-system-architecture.md` dan `05-domain-modules.md`):
 
-Core Modules
+Domain Modules
 
 - Auth
 - Customer
@@ -303,9 +303,13 @@ Core Modules
 - Order
 - Payment
 - Shipping
-- Content
-- Analytics
-- Admin
+- Review
+- Homepage
+
+Catatan:
+
+- `Admin` bukan domain module, melainkan interface/presentation layer untuk mengelola domain module di atas.
+- `Analytics` diperlakukan sebagai cross-cutting concern, bukan domain module tersendiri.
 
 ## Auth
 
@@ -328,7 +332,7 @@ Bertanggung jawab terhadap:
 - Customer Preferences
 - Purchase History
 
-## Admin
+## Admin (Interface Layer)
 
 Bertanggung jawab terhadap:
 

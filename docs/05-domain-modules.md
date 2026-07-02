@@ -169,11 +169,11 @@ Session Revoked / Logged Out
 ### Dependencies
 
 - Shared kernel.
-- External auth provider adapter (Better Auth).
+- External auth provider adapter (Supabase Auth).
 
 ### External Providers
 
-- Better Auth
+- Supabase Auth
 
 ### Events
 

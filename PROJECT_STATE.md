@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Planning Phase
+Status: Planning Finalization (Ready for Implementation Setup)
 
-Current Version: v0.6
+Current Version: v0.7
 
 Project Type:
 
@@ -26,7 +26,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 
 # Current Phase
 
-✅ Phase 0 — Planning & Discovery
+✅ Phase 0 — Planning & Documentation (Completed)
 
 Progress:
 
@@ -35,40 +35,37 @@ Progress:
 - [x] User Experience
 - [x] Functional Requirements
 - [x] System Architecture
-- [ ] Technical Stack
+- [x] Technical Stack
 - [x] Domain Modules
 - [x] Data Model
 - [x] API Specification
-- [ ] Design System
-- [ ] Development Roadmap
-- [ ] Development Rules
-- [ ] AGENTS.md
-- [ ] Context
-- [ ] Skills
+- [x] Design System
+- [x] Development Rules
+- [x] Development Roadmap
+- [ ] Phase 1 Implementation Setup
 
 ---
 
-# Current Task
+# Current Focus
 
 Sedang mengerjakan:
 
-`docs/08-technical-stack.md`
+`documentation consistency hardening`
 
 Tujuan:
 
-Menetapkan pilihan teknologi inti (frontend, backend, database, tooling, deployment) sebagai baseline implementasi fase development.
+Menjaga seluruh dokumen di folder `docs/` tetap sinkron sebelum masuk ke fase implementasi, agar tidak terjadi konflik aturan saat coding, review, atau penggunaan AI assistant.
 
 ---
 
 # Latest Decisions
 
-## Business
+## Business & Product
 
 - Website berfungsi sebagai Brand Hub sekaligus Direct Sales.
 - Marketplace (Shopee & TikTok Shop) tetap digunakan sebagai channel penjualan.
-- Fokus utama MVP adalah membangun brand terlebih dahulu, bukan mengejar kompleksitas fitur.
-- Target market adalah mahasiswa dan young professionals dengan lifestyle olahraga modern.
-- Produk diposisikan sebagai Sports Apparel Essentials.
+- Fokus utama MVP adalah membangun fondasi brand dan alur pembelian end-to-end yang stabil.
+- Produk diposisikan sebagai Sports Apparel Essentials untuk target market mahasiswa dan young professionals.
 
 ---
 
@@ -76,29 +73,33 @@ Menetapkan pilihan teknologi inti (frontend, backend, database, tooling, deploym
 
 - Modular Monolith.
 - Feature-Based Architecture.
-- Repository Pattern.
-- Service Layer.
-- Business Logic dipisahkan dari UI.
-- Domain Driven Module.
-- API First Internal Design.
-- Siap dipisahkan menjadi Headless Commerce apabila diperlukan di masa depan.
-- Inter-module communication wajib melalui Public Service.
-- Shared Kernel hanya untuk technical shared concerns, bukan business logic.
-- Analytics diperlakukan sebagai cross-cutting concern, bukan domain module.
-- Admin diperlakukan sebagai interface, bukan domain module.
-- Domain module MVP: Auth, Customer, Catalog, Inventory, Cart, Checkout, Order, Payment, Shipping, Review, Homepage.
+- Repository Pattern + Service Layer.
+- Business Logic dipisahkan tegas dari UI/Route Handler.
+- Inter-module communication wajib melalui public service.
+- Shared kernel hanya untuk technical shared concerns, bukan business logic.
+- `admin` diperlakukan sebagai interface/presentation layer, bukan domain module.
+- `analytics` diperlakukan sebagai cross-cutting concern, bukan domain module.
+- Domain module MVP: `auth`, `customer`, `catalog`, `inventory`, `cart`, `checkout`, `order`, `payment`, `shipping`, `review`, `homepage`.
 
 ---
 
-## Documentation
+## Technical
 
-Seluruh proyek menggunakan pendekatan:
+- Provider autentikasi resmi: **Supabase Auth**.
+- Database utama: **Supabase PostgreSQL**.
+- Deployment aplikasi: **Vercel**.
+- ORM utama: **Prisma**.
+- Kontrak status order diselaraskan ke model detail:
+  - `PENDING -> WAITING_PAYMENT -> PAID -> PROCESSING -> SHIPPED -> DELIVERED -> COMPLETED` (+ `CANCELLED` path).
+- Shipping status diselaraskan menggunakan `PICKED_UP`.
 
-- Documentation First
-- Specification Driven Development
-- AI Friendly Documentation
+---
 
-Urutan dokumentasi menjadi acuan utama implementasi.
+## Documentation Governance
+
+- Source of Truth diperluas dan diselaraskan:
+  - Business -> UX -> Functional -> System Architecture -> Domain -> Data Model -> API -> Technical Stack -> Design System -> Development Rules.
+- `00-project-foundation.md` diperlakukan sebagai dokumen fondasi awal (draft baseline); jika terjadi konflik, dokumen bernomor 01+ menjadi acuan final.
 
 ---
 
@@ -108,188 +109,76 @@ Belum diputuskan:
 
 ## Branding
 
-- Nama Brand
-- Logo
-- Warna Brand
-- Typography
-- Tone of Voice
-- Brand Story
+- Nama brand final
+- Logo final
+- Warna brand final
+- Typography brand final
+- Tone of voice final
+- Brand story final
 
-## Design
+## Phase 1 Engineering
 
-- Design System
-- UI Components
-- Motion Guidelines
-- Illustration Style
-- Photography Style
+- Folder structure implementasi final (nama akhir + import boundary enforcement)
+- Testing strategy detail per layer (unit/integration/e2e)
+- CI baseline (lint, typecheck, test minimum)
+- Deployment flow detail (preview, release, rollback)
 
-## Technical
+## Operations
 
-- Finalisasi technical stack detail
-- Folder Structure Detail (nama akhir dan aturan import)
-- Coding Convention
-- Testing Strategy
-- CI/CD
-- Deployment Strategy
-
-## AI Development
-
-- AGENTS.md
-- Context Files
-- Skills
-- Prompt Library
-
----
-
-# Important Business Notes
-
-## Target Audience
-
-Primary
-
-- Mahasiswa
-- Mahasiswa yang sudah bekerja
-- Mahasiswa yang memiliki bisnis
-- Young Professionals
-
-Target Persona
-
-Customer ingin terlihat:
-
-- Modern
-- Aktif
-- Mapan
-- Profesional
-- Stylish
-
-Produk dibeli bukan hanya karena kebutuhan, tetapi juga karena image yang dibangun.
-
----
-
-## Target Community
-
-- Padel
-- Running
-- Gym
-- Golf
-- Lifestyle Community
-
----
-
-## Product Categories (MVP)
-
-- Kaos Kaki
-- Manset
-- Boxer
-- Celana Pendek
-- Sandal
-
-Future:
-
-- Kaos
-- Jersey
-- Hoodie
-- Jaket
-- Topi
-- Tas
-- Aksesoris lainnya
-
----
-
-# Development Principles
-
-- Documentation First
-- Business Driven Development
-- Spec Driven Development
-- Long-term Maintainability
-- AI Friendly Architecture
-- Modular Design
-- Clean Architecture
-- Simplicity First
-- Build MVP, Scale Later
+- KPI dashboard prioritas awal
+- SOP operasional order handling
+- SLA internal untuk proses shipping
 
 ---
 
 # Current Repository Status
 
-## Completed Documents
+## Documentation State
 
-- ✅ 00-project-foundation.md
-- ✅ 01-business.md
-- ✅ 02-user-experience.md
-- ✅ 03-functional-requirements.md
-- ✅ 04-system-architecture.md
-- ✅ 05-domain-modules.md
-- ✅ 06-data-model.md
-- ✅ 07-api-specification.md
+- ✅ `docs/00-project-foundation.md`
+- ✅ `docs/01-business.md`
+- ✅ `docs/02-user-experience.md`
+- ✅ `docs/03-functional-requirements.md`
+- ✅ `docs/04-system-architecture.md`
+- ✅ `docs/05-domain-modules.md`
+- ✅ `docs/06-data-model.md`
+- ✅ `docs/07-api-specification.md`
+- ✅ `docs/08-technical-stack.md`
+- ✅ `docs/09-design-system.md`
+- ✅ `docs/10-development-rules.md`
+- ✅ `docs/11-development-roadmap.md`
 
----
+## Planning Workspace
 
-## In Progress
-
-- 🚧 08-technical-stack.md
-
----
-
-## Planned
-
-- 09-design-system.md
-- 10-development-roadmap.md
-- 11-development-rules.md
+- `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
+- `planning/decisions.md` memuat keputusan sinkronisasi terbaru (Decision 006).
+- `planning/changelog.md` memuat audit update tanggal 2026-07-02.
 
 ---
 
 # Next Action
 
-Selesaikan:
+Masuk ke **Phase 1 — Project Foundation (Implementation Setup)**:
 
-`docs/08-technical-stack.md`
-
-Fokus pembahasan:
-
-- Runtime dan framework utama
-- Database dan strategi akses data
-- API layer dan auth stack
-- Infra, deployment, dan observability
-- Testing dan quality tooling
-- Security baseline
-
-Setelah selesai lanjutkan ke:
-
-`docs/09-design-system.md`
+1. Finalisasi struktur folder implementasi mengikuti domain boundaries.
+2. Inisialisasi baseline engineering (lint, format, type-safety, test scaffold).
+3. Setup auth + database integration sesuai keputusan final stack.
+4. Menetapkan definition of ready untuk mulai build module pertama (`catalog`).
 
 ---
 
 # Overall Progress
 
-Planning Progress
-
-```
-████████████████████░ 67%
-```
-
-Business Analysis
+Planning & Documentation
 
 ```
 ████████████████████ 100%
 ```
 
-User Experience
+System Design Readiness
 
 ```
 ████████████████████ 100%
-```
-
-Functional Specification
-
-```
-████████████████████ 100%
-```
-
-System Design
-
-```
-████████████████░░░░  80%
 ```
 
 Implementation
@@ -317,28 +206,29 @@ Status:
 
 ---
 
-## 🚧 Milestone 2 — System Design (Current)
+## ✅ Milestone 2 — System Design & Documentation (Completed)
 
-Target Deliverables:
+Deliverables:
 
 - System Architecture
 - Technical Stack
 - Domain Modules
 - Data Model
 - API Specification
+- Design System
+- Development Rules
+- Development Roadmap
 
 Status:
 
-**In Progress (4/5 completed)**
+**Completed**
 
 ---
 
-# Notes
+## ⏳ Milestone 3 — Implementation Foundation (Next)
 
-Seluruh keputusan bisnis utama telah ditetapkan.
+Target:
 
-Dokumen `04-system-architecture.md`, `05-domain-modules.md`, `06-data-model.md`, dan `07-api-specification.md` telah selesai dan menjadi baseline desain sistem.
-
-Fokus saat ini berpindah ke `08-technical-stack.md` untuk memfinalisasi keputusan teknologi sebelum masuk ke design system dan roadmap development.
-
-Perubahan requirement bisnis sebaiknya diminimalkan agar desain sistem, database, API, dan implementasi dapat berkembang secara stabil.
+- Project bootstrap siap development harian.
+- Baseline quality gates berjalan.
+- Module implementation dapat dimulai tanpa ambiguity dokumen.

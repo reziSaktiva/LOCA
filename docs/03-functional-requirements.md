@@ -382,7 +382,10 @@ Mengelola seluruh transaksi pembelian.
 ### Order Status
 
 ```text
-Pending Payment
+Pending
+        │
+        ▼
+Waiting Payment
         │
         ▼
 Paid
@@ -481,7 +484,7 @@ Mengelola proses pengiriman pesanan.
 
 - Waiting
 - Packed
-- Shipped
+- Picked Up
 - In Transit
 - Delivered
 

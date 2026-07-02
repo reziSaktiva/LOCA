@@ -169,21 +169,18 @@ Masuk ke **Phase 1 — Project Foundation (Implementation Setup)**:
 
 # Overall Progress
 
+```
 Planning & Documentation
-
-```
 ████████████████████ 100%
 ```
 
+```
 System Design Readiness
-
-```
 ████████████████████ 100%
 ```
 
-Implementation
-
 ```
+Implementation
 ░░░░░░░░░░░░░░░░░░░░   0%
 ```
 

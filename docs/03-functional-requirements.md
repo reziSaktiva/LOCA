@@ -383,10 +383,10 @@ Mengelola seluruh transaksi pembelian.
 
 ```text
 Pending
-        │
+        ├────────────► Cancelled
         ▼
 Waiting Payment
-        │
+        ├────────────► Cancelled
         ▼
 Paid
         │
@@ -401,8 +401,6 @@ Delivered
         │
         ▼
 Completed
-
-Cancelled
 ```
 
 ### Business Rules

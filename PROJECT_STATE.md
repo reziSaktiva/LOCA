@@ -8,7 +8,7 @@
 
 Status: Planning Phase
 
-Current Version: v0.4
+Current Version: v0.6
 
 Project Type:
 
@@ -37,8 +37,8 @@ Progress:
 - [x] System Architecture
 - [ ] Technical Stack
 - [x] Domain Modules
-- [ ] Data Model
-- [ ] API Specification
+- [x] Data Model
+- [x] API Specification
 - [ ] Design System
 - [ ] Development Roadmap
 - [ ] Development Rules
@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`docs/06-data-model.md`
+`docs/08-technical-stack.md`
 
 Tujuan:
 
-Menyusun struktur entity, relasi, dan constraint database yang selaras dengan domain modules.
+Menetapkan pilihan teknologi inti (frontend, backend, database, tooling, deployment) sebagai baseline implementasi fase development.
 
 ---
 
@@ -102,34 +102,6 @@ Urutan dokumentasi menjadi acuan utama implementasi.
 
 ---
 
-## Functional Requirements
-
-Setiap module memiliki:
-
-- Purpose
-- Actors
-- Requirement ID
-- Dependencies
-- Functional Requirements
-- Business Rules
-- Validation
-
-Requirement menggunakan format:
-
-```
-MODULE-001
-```
-
-Contoh:
-
-```
-PRODUCT-001
-ORDER-003
-CHECKOUT-005
-```
-
----
-
 # Open Decisions
 
 Belum diputuskan:
@@ -153,9 +125,8 @@ Belum diputuskan:
 
 ## Technical
 
+- Finalisasi technical stack detail
 - Folder Structure Detail (nama akhir dan aturan import)
-- Database Design
-- API Design
 - Coding Convention
 - Testing Strategy
 - CI/CD
@@ -249,20 +220,19 @@ Future:
 - ✅ 03-functional-requirements.md
 - ✅ 04-system-architecture.md
 - ✅ 05-domain-modules.md
+- ✅ 06-data-model.md
+- ✅ 07-api-specification.md
 
 ---
 
 ## In Progress
 
-- 🚧 06-data-model.md
+- 🚧 08-technical-stack.md
 
 ---
 
 ## Planned
 
-- 06-data-model.md
-- 07-api-specification.md
-- 08-technical-stack.md
 - 09-design-system.md
 - 10-development-roadmap.md
 - 11-development-rules.md
@@ -273,20 +243,20 @@ Future:
 
 Selesaikan:
 
-`docs/06-data-model.md`
+`docs/08-technical-stack.md`
 
 Fokus pembahasan:
 
-- Entity per module
-- Relasi antar entitas
-- Primary key dan foreign key
-- Unique constraints
-- Enum/status domain utama
-- Audit fields (`created_at`, `updated_at`, `deleted_at`)
+- Runtime dan framework utama
+- Database dan strategi akses data
+- API layer dan auth stack
+- Infra, deployment, dan observability
+- Testing dan quality tooling
+- Security baseline
 
 Setelah selesai lanjutkan ke:
 
-`docs/07-api-specification.md`
+`docs/09-design-system.md`
 
 ---
 
@@ -295,7 +265,7 @@ Setelah selesai lanjutkan ke:
 Planning Progress
 
 ```
-█████████████████░░░ 50%
+████████████████████░ 67%
 ```
 
 Business Analysis
@@ -319,7 +289,7 @@ Functional Specification
 System Design
 
 ```
-████░░░░░░░░░░░░░░░░  20%
+████████████████░░░░  80%
 ```
 
 Implementation
@@ -347,7 +317,7 @@ Status:
 
 ---
 
-## 🚧 Milestone 2 — System Design (Next)
+## 🚧 Milestone 2 — System Design (Current)
 
 Target Deliverables:
 
@@ -359,7 +329,7 @@ Target Deliverables:
 
 Status:
 
-**In Progress**
+**In Progress (4/5 completed)**
 
 ---
 
@@ -367,8 +337,8 @@ Status:
 
 Seluruh keputusan bisnis utama telah ditetapkan.
 
-Dokumen `04-system-architecture.md` telah selesai dan menjadi baseline arsitektur implementasi.
-Dokumen `05-domain-modules.md` telah selesai dan menjadi baseline domain boundary.
-Fokus saat ini berpindah ke `06-data-model.md` untuk memetakan entitas dan relasi berdasarkan domain modules sebelum masuk ke API specification.
+Dokumen `04-system-architecture.md`, `05-domain-modules.md`, `06-data-model.md`, dan `07-api-specification.md` telah selesai dan menjadi baseline desain sistem.
+
+Fokus saat ini berpindah ke `08-technical-stack.md` untuk memfinalisasi keputusan teknologi sebelum masuk ke design system dan roadmap development.
 
 Perubahan requirement bisnis sebaiknya diminimalkan agar desain sistem, database, API, dan implementasi dapat berkembang secara stabil.

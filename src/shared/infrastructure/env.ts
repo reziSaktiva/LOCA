@@ -11,4 +11,7 @@ export const env = {
     url: requireEnv('NEXT_PUBLIC_SUPABASE_URL'),
     publishableKey: requireEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
   },
+  database: {
+    url: requireEnv('DATABASE_URL'),
+  },
 } as const

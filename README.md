@@ -73,6 +73,6 @@ bun dev
 
 Script yang tersedia saat ini: `dev`, `build`, `start`, `lint`. Script `typecheck` dan `test` akan distandarkan pada M3.3 — Engineering Baseline Ready (lihat `PROJECT_STATE.md`).
 
-> Catatan: `docs/08-technical-stack.md` menetapkan pnpm sebagai package manager resmi, tetapi repo ini memakai `bun.lock`. Belum diputuskan final — lihat `planning/questions.md`.
+Package manager resmi proyek adalah **Bun** (lihat `docs/08-technical-stack.md` dan `planning/decisions.md` Decision 008).
 
 Buka [http://localhost:3000](http://localhost:3000) setelah `bun dev` berjalan.

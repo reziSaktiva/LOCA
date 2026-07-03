@@ -75,7 +75,7 @@
 
 - Hosting App: Vercel
 - Source control: GitHub
-- Package manager: pnpm
+- Package manager: Bun
 - IDE utama: Cursor
 
 ## MVP Technology Constraints

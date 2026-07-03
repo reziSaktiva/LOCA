@@ -9,6 +9,16 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (10)
+
+### Fixed
+
+* **Next.js 16: `middleware.ts` → `proxy.ts`** — `src/middleware.ts` dihapus, diganti `src/proxy.ts` dengan exported function `proxy()`. Warning deprecasi `⚠ The "middleware" file convention is deprecated` tidak muncul lagi. Logika Supabase Auth token refresh tidak berubah.
+* **Hydration mismatch `next-themes`** — menambahkan `suppressHydrationWarning` pada `<html>` di `src/app/layout.tsx`. `ThemeProvider` dari `next-themes` menambahkan `style={{color-scheme:"dark"}}` di sisi client setelah hydration (server tidak tahu preferensi tema user), yang memunculkan diff React. `suppressHydrationWarning` adalah solusi resmi untuk kasus ini.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 015).
+
+---
+
 ## 2026-07-03 (9)
 
 ### Added

@@ -327,3 +327,27 @@ Alasan:
 Dampak:
 
 `package.json`, `bun.lock`, `components.json`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/providers.tsx`, `src/shared/ui/` (seluruh folder), `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.
+
+---
+
+## Decision 015
+
+Tanggal: 2026-07-03
+
+Judul:
+
+Fix: `middleware.ts` → `proxy.ts` (Next.js 16) dan `suppressHydrationWarning` untuk `next-themes`.
+
+Keputusan:
+
+* **`src/middleware.ts` dihapus, diganti `src/proxy.ts`** dengan exported function `proxy()` (bukan `middleware()`). Ini mengikuti konvensi file baru Next.js 16 yang mengganti nama `middleware` → `proxy`. Logika Supabase Auth token refresh tetap sama.
+* **`suppressHydrationWarning` ditambahkan ke `<html>` di `src/app/layout.tsx`** untuk menghilangkan hydration mismatch yang disebabkan oleh `next-themes`. Server tidak tahu preferensi tema user saat render, sehingga `ThemeProvider` (client-side) menambahkan `style={{color-scheme:"dark"}}` setelah hydration — memunculkan diff antara server HTML dan client DOM.
+
+Alasan:
+
+* Next.js 16 mendeprecate konvensi file `middleware.ts` dan merekomendasikan migrasi ke `proxy.ts`. Warning `⚠ The "middleware" file convention is deprecated` muncul di console setiap request jika tidak dimigrasi.
+* `suppressHydrationWarning` adalah solusi resmi untuk masalah ini: atribut yang dikelola oleh third-party (seperti `next-themes` pada `<html>`) boleh berbeda antara server/client tanpa menjadi bug — React tidak akan mencoba mempatch perbedaan ini.
+
+Dampak:
+
+`src/middleware.ts` (dihapus), `src/proxy.ts` (baru), `src/app/layout.tsx`.

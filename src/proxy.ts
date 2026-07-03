@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 import { env } from './shared/infrastructure/env'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(env.supabase.url, env.supabase.publishableKey, {
@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Jalankan middleware pada semua route kecuali:
+     * Jalankan proxy pada semua route kecuali:
      * - _next/static (static files)
      * - _next/image (image optimization)
      * - favicon.ico, sitemap.xml, robots.txt

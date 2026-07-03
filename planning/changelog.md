@@ -9,6 +9,46 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (5)
+
+### Added
+
+* Menambahkan standard command quality gate harian di `package.json`: `check` (`lint + typecheck + test`) dan `check:full` (`check + format:check`).
+* Mencatat keputusan finalisasi M3.3 pada `planning/decisions.md` (Decision 010).
+
+### Changed
+
+* Memperbarui `README.md` agar daftar script development mencerminkan baseline terbaru M3.3.
+* Memperbarui `PROJECT_STATE.md` untuk menandai M3.3 selesai dan memindahkan next action ke M3.4.
+
+### Verified
+
+* Validasi lokal lolos: `bun run check` dan `bun run check:full`.
+
+---
+
+## 2026-07-03 (4)
+
+### Added
+
+* Menambahkan baseline quality tooling M3.3 bagian pertama: `prettier`, `vitest`, `.prettierrc.json`, `.prettierignore`, `vitest.config.ts`, dan smoke test awal `src/shared/kernel/engineering-baseline-smoke.test.ts`.
+* Menstandarkan script kualitas di `package.json`: `typecheck`, `test`, `format`, `format:check`, `test:watch` (melengkapi script `lint` yang sudah ada).
+* Mencatat keputusan resmi baseline engineering pada `planning/decisions.md` (Decision 009).
+
+### Changed
+
+* Menjalankan formatting pada file source/config yang termasuk scope script formatter sehingga `src/app/layout.tsx`, `src/app/page.tsx`, `eslint.config.mjs`, dan `next.config.ts` ikut tersinkronkan style-nya.
+
+### Verified
+
+* Seluruh quality gate minimum lolos lokal: `bun run lint`, `bun run typecheck`, `bun run test`, dan `bun run format:check`.
+
+### Notes
+
+* Scope formatter sengaja dibatasi ke source dan file konfigurasi inti agar tidak memicu reformat massal dokumen markdown yang berada di luar scope task M3.3 bagian pertama.
+
+---
+
 ## 2026-07-03 (3)
 
 ### Changed

@@ -12,7 +12,7 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - `phase-1 implementation setup kickoff`
 - Menuntaskan fondasi implementasi agar siap development harian.
-- Next active item: **M3.5 - UI Foundation Ready**
+- Next active item: **M3.6 - CI Baseline Ready**
 
 ## Completed (Planning Side)
 
@@ -48,14 +48,16 @@ Sudah selesai pada Milestone 3:
   - Supabase Auth via `@supabase/ssr` (browser/server client + middleware proxy).
   - Prisma 7 via `@prisma/adapter-pg` (pooled connection + singleton).
   - Env template `.env.example` siap.
+- **M3.5 - UI Foundation Ready**
+  - shadcn/ui `base-nova` diinisialisasi; 15 core components di `src/shared/ui/`.
+  - Design tokens aktif: semantic colors (success/warning/error/info), radius scale (xs–xl), shadow (sm/md/lg).
+  - Dependency stack UI: `lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`.
+  - Provider pattern aktif (`src/app/providers.tsx`); barrel export di `src/shared/ui/index.ts`.
 
 ## Phase 1 (Next Targets)
 
 Target setup awal:
 
-- **M3.5 - UI Foundation Ready**
-  - Baseline layout, typography, color token, komponen dasar.
-  - Selaras dengan `docs/09-design-system.md` dan `docs/08-technical-stack.md`.
 - **M3.6 - CI Baseline Ready**
   - Pipeline minimum: lint + typecheck + test.
 - **M3.7 - Catalog Start Gate (Definition of Ready)**

@@ -28,9 +28,10 @@ Jalankan setelah:
 - Perubahan trivial yang tidak mengubah status project (typo, formatting kecil, komentar).
 - Eksperimen/percobaan yang di-revert sebelum selesai.
 
-## Alur Wajib (urutan tetap)
+## Alur Wajib
 
 ```
+urutan tetap
 1. PROJECT_STATE.md               -> update status/checklist/next action
 2. planning/changelog.md          -> tambah entry baru (paling atas)
 3. context/ctx-implementation.md  -> selaraskan snapshot dengan PROJECT_STATE.md
@@ -60,19 +61,19 @@ Gunakan subsection sesuai kebutuhan (boleh skip yang tidak relevan):
 
 ### Added
 
-* <hal baru yang ditambahkan, sebutkan file/path>
+- <hal baru yang ditambahkan, sebutkan file/path>
 
 ### Changed
 
-* <hal yang diubah>
+- <hal yang diubah>
 
 ### Verified
 
-* <command/quality gate yang lolos, mis. `bun run check`>
+- <command/quality gate yang lolos, mis. `bun run check`>
 
 ### Notes
 
-* <catatan penting, keputusan terkait, atau hal yang perlu diperhatikan berikutnya>
+- <catatan penting, keputusan terkait, atau hal yang perlu diperhatikan berikutnya>
 
 ---
 ```

@@ -17,9 +17,10 @@ Project ini menganut **Documentation First / Spec Driven Development**: dokumen 
 4. **Pastikan kontrak data/API** sesuai `docs/06-data-model.md` dan `docs/07-api-specification.md` — jangan buat entity/endpoint baru yang menyimpang tanpa mencatatnya (lihat skill `docs-sync`).
 5. Kalau menyentuh UI, cek `docs/09-design-system.md` (token, komponen shadcn/ui, pola state).
 
-## Source of Truth Priority (jika dokumen bertentangan)
+## Source of Truth Priority
 
 ```
+Urutan Prioritas jika dokumen bertentangan
 01-business > 02-user-experience > 03-functional-requirements >
 04-system-architecture > 05-domain-modules > 06-data-model >
 07-api-specification > 08-technical-stack > 09-design-system >
@@ -62,6 +63,7 @@ Task dianggap selesai jika **semua** berikut terpenuhi:
 ## Batasan untuk AI Assistant
 
 Jangan pernah:
+
 - Mengubah business rule tanpa dasar dokumentasi.
 - Menambah dependency tanpa alasan jelas.
 - Membuat struktur folder baru di luar `docs/04-system-architecture.md` tanpa persetujuan eksplisit dari user.

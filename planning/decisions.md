@@ -296,3 +296,34 @@ Alasan:
 Dampak:
 
 * `.agents/skills/progress-sync/SKILL.md` (baru), `PROJECT_STATE.md` (Agent Governance), `planning/changelog.md`.
+
+---
+
+## Decision 014
+
+Judul:
+
+M3.5 — UI Foundation: shadcn/ui (base-nova), shared/ui path, design tokens, dan dependency stack.
+
+Keputusan:
+
+* Menggunakan shadcn/ui versi terbaru dengan style `base-nova` (Base UI primitives + Nova visual theme) sebagai fondasi komponen UI.
+* Seluruh komponen shadcn/ui di-install ke `src/shared/ui/` (bukan default `src/components/ui/`) agar selaras dengan arsitektur Modular Monolith; `components.json` aliases diupdate: `ui` dan `utils` keduanya menunjuk ke `@/shared/ui`.
+* Design token struktur diselaraskan dengan `docs/09-design-system.md`: radius tokens (xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 24px), semantic color tokens (success, warning, error alias ke destructive, info) ditambah ke `globals.css` menggunakan oklch color space. Nilai primary masih placeholder (branding TBD).
+* 15 core components dari design system inventory diinstall: `button`, `input`, `textarea`, `select`, `checkbox`, `radio-group`, `switch`, `badge`, `card`, `dialog`, `dropdown-menu`, `tabs`, `table`, `pagination`, `sonner`.
+* Dependency stack UI dilengkapi: `lucide-react` (icons), `motion` (animation), `react-hook-form` (form state), `zod` (validation), `next-themes` (dark mode), `sonner` (toast).
+* Provider pattern ditetapkan: `src/app/providers.tsx` (client component) wrapping `ThemeProvider` + `Toaster`, dipanggil dari `src/app/layout.tsx` (Server Component).
+* Barrel export `src/shared/ui/index.ts` tersedia agar modul dapat import clean dari `@/shared/ui`.
+* `Container` component primitif ditambahkan ke `src/shared/ui/container.tsx` sebagai layout building block.
+* `lang="id"` ditetapkan di root HTML element.
+
+Alasan:
+
+* shadcn/ui `base-nova` dipilih karena selaras dengan design philosophy "clarity, functional, modern" dan sudah mendukung Tailwind v4 (menggunakan `@theme inline`).
+* Path ke `src/shared/ui/` selaras dengan module boundary rules — shared UI tidak milik modul domain manapun.
+* Design tokens oklch future-proof untuk dark mode dan color manipulation, konsisten dengan shadcn default.
+* Branding final masih open decision — token structure disiapkan agar mudah di-swap saat brand colors diputuskan.
+
+Dampak:
+
+`package.json`, `bun.lock`, `components.json`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/providers.tsx`, `src/shared/ui/` (seluruh folder), `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.

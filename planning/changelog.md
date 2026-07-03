@@ -9,6 +9,68 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (10)
+
+### Fixed
+
+* **Next.js 16: `middleware.ts` → `proxy.ts`** — `src/middleware.ts` dihapus, diganti `src/proxy.ts` dengan exported function `proxy()`. Warning deprecasi `⚠ The "middleware" file convention is deprecated` tidak muncul lagi. Logika Supabase Auth token refresh tidak berubah.
+* **Hydration mismatch `next-themes`** — menambahkan `suppressHydrationWarning` pada `<html>` di `src/app/layout.tsx`. `ThemeProvider` dari `next-themes` menambahkan `style={{color-scheme:"dark"}}` di sisi client setelah hydration (server tidak tahu preferensi tema user), yang memunculkan diff React. `suppressHydrationWarning` adalah solusi resmi untuk kasus ini.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 015).
+
+---
+
+## 2026-07-03 (9)
+
+### Added
+
+* **shadcn/ui initialized** — style `base-nova` (Base UI primitives), dikonfigurasi via `components.json` dengan `ui` alias menunjuk ke `src/shared/ui/`.
+* **15 core UI components** installed ke `src/shared/ui/`: `button`, `input`, `textarea`, `select`, `checkbox`, `radio-group`, `switch`, `badge`, `card`, `dialog`, `dropdown-menu`, `tabs`, `table`, `pagination`, `sonner`.
+* **Barrel export** `src/shared/ui/index.ts` — semua komponen dan utilities dapat diimport dari `@/shared/ui`.
+* **Container component** `src/shared/ui/container.tsx` — layout primitive responsif (max-w-7xl, horizontal padding `sm`/`lg`).
+* **Provider pattern** `src/app/providers.tsx` — client component wrapping `ThemeProvider` (next-themes) + `Toaster` (sonner).
+* **Design tokens** dikonfigurasi di `src/app/globals.css`:
+  - Semantic colors: `success`, `warning`, `error` (alias ke `destructive`), `info` — tersedia sebagai CSS variable dan Tailwind utilities (`bg-success`, `text-info`, dll).
+  - Radius scale: `radius-xs` (4px) → `radius-xl` (24px).
+  - Shadow tokens: `shadow-sm`, `shadow-md`, `shadow-lg`.
+  - Font reference diperbaiki: `--font-sans: var(--font-geist-sans)`.
+* **Dependency stack UI** dilengkapi: `lucide-react@1.23.0`, `motion@12.42.2`, `react-hook-form@7.80.0`, `zod@4.4.3`, `next-themes@0.4.6`, `sonner@2.0.7`.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 014).
+
+### Changed
+
+* `src/app/layout.tsx` — tambah `Providers` wrapper, ubah `lang="en"` ke `lang="id"`.
+* `src/app/globals.css` — diperbarui total: menambah design tokens, semantic colors, memperbaiki font reference, mempertahankan shadcn theme variables.
+* `components.json` — `aliases.ui` dan `aliases.utils` diupdate ke `@/shared/ui`.
+
+### Verified
+
+* `bun run check` (lint + typecheck + test) — semua lolos.
+
+### Notes
+
+* Nilai primary masih placeholder (neutral dark) — akan diupdate saat brand colors difinalisasi (Open Decision).
+* Komponen shadcn menggunakan oklch color space — kompatibel dengan dark mode via `next-themes`.
+
+---
+
+## 2026-07-03 (8)
+
+### Added
+
+* Menambahkan skill baru `.agents/skills/progress-sync/SKILL.md` yang mewajibkan agent otomatis melaporkan progress task implementasi ke `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` tanpa harus diminta user — mencegah drift status antar dokumen.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 013).
+
+### Changed
+
+* Memperbarui `context/ctx-implementation.md` agar mencerminkan progress M3.1-M3.4 yang sudah selesai (sebelumnya masih menampilkan status "0%, belum dimulai" yang usang).
+* Memperbarui `PROJECT_STATE.md` (Agent Governance) untuk mencatat penambahan skill `progress-sync`.
+
+### Notes
+
+* Skill ini melengkapi `docs-sync`: `docs-sync` untuk perubahan spesifikasi/keputusan besar, `progress-sync` untuk pelaporan status implementasi rutin di akhir setiap task.
+
+---
+
 ## 2026-07-03 (7)
 
 ### Changed

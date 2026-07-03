@@ -273,3 +273,81 @@ Alasan:
 Dampak:
 
 `package.json`, `README.md`, `PROJECT_STATE.md`, `planning/changelog.md`.
+
+---
+
+## Decision 013
+
+Judul:
+
+Menambahkan skill `progress-sync` untuk otomasi pelaporan progress.
+
+Keputusan:
+
+* Menambahkan skill baru `.agents/skills/progress-sync/SKILL.md` yang mewajibkan agent memperbarui `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` di akhir setiap task implementasi (fitur, fix, setup engineering, milestone, refactor) secara otomatis tanpa harus diminta user.
+* Skill ini melengkapi (bukan menggantikan) `docs-sync` — `docs-sync` fokus ke perubahan spesifikasi/keputusan besar, `progress-sync` fokus ke pelaporan status implementasi rutin setiap task selesai.
+* Urutan update ditetapkan tetap: `PROJECT_STATE.md` -> `planning/changelog.md` -> `context/ctx-implementation.md`.
+
+Alasan:
+
+* Sebelumnya update ke 3 file status ini bergantung pada user secara manual meminta setiap kali, menyebabkan drift (mis. `context/ctx-implementation.md` sempat tertinggal beberapa milestone).
+* Skill memaksa agent menjadikan pelaporan status sebagai bagian dari Definition of Done task, bukan langkah opsional terpisah.
+
+Dampak:
+
+* `.agents/skills/progress-sync/SKILL.md` (baru), `PROJECT_STATE.md` (Agent Governance), `planning/changelog.md`.
+
+---
+
+## Decision 014
+
+Judul:
+
+M3.5 — UI Foundation: shadcn/ui (base-nova), shared/ui path, design tokens, dan dependency stack.
+
+Keputusan:
+
+* Menggunakan shadcn/ui versi terbaru dengan style `base-nova` (Base UI primitives + Nova visual theme) sebagai fondasi komponen UI.
+* Seluruh komponen shadcn/ui di-install ke `src/shared/ui/` (bukan default `src/components/ui/`) agar selaras dengan arsitektur Modular Monolith; `components.json` aliases diupdate: `ui` dan `utils` keduanya menunjuk ke `@/shared/ui`.
+* Design token struktur diselaraskan dengan `docs/09-design-system.md`: radius tokens (xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 24px), semantic color tokens (success, warning, error alias ke destructive, info) ditambah ke `globals.css` menggunakan oklch color space. Nilai primary masih placeholder (branding TBD).
+* 15 core components dari design system inventory diinstall: `button`, `input`, `textarea`, `select`, `checkbox`, `radio-group`, `switch`, `badge`, `card`, `dialog`, `dropdown-menu`, `tabs`, `table`, `pagination`, `sonner`.
+* Dependency stack UI dilengkapi: `lucide-react` (icons), `motion` (animation), `react-hook-form` (form state), `zod` (validation), `next-themes` (dark mode), `sonner` (toast).
+* Provider pattern ditetapkan: `src/app/providers.tsx` (client component) wrapping `ThemeProvider` + `Toaster`, dipanggil dari `src/app/layout.tsx` (Server Component).
+* Barrel export `src/shared/ui/index.ts` tersedia agar modul dapat import clean dari `@/shared/ui`.
+* `Container` component primitif ditambahkan ke `src/shared/ui/container.tsx` sebagai layout building block.
+* `lang="id"` ditetapkan di root HTML element.
+
+Alasan:
+
+* shadcn/ui `base-nova` dipilih karena selaras dengan design philosophy "clarity, functional, modern" dan sudah mendukung Tailwind v4 (menggunakan `@theme inline`).
+* Path ke `src/shared/ui/` selaras dengan module boundary rules — shared UI tidak milik modul domain manapun.
+* Design tokens oklch future-proof untuk dark mode dan color manipulation, konsisten dengan shadcn default.
+* Branding final masih open decision — token structure disiapkan agar mudah di-swap saat brand colors diputuskan.
+
+Dampak:
+
+`package.json`, `bun.lock`, `components.json`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/providers.tsx`, `src/shared/ui/` (seluruh folder), `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.
+
+---
+
+## Decision 015
+
+Tanggal: 2026-07-03
+
+Judul:
+
+Fix: `middleware.ts` → `proxy.ts` (Next.js 16) dan `suppressHydrationWarning` untuk `next-themes`.
+
+Keputusan:
+
+* **`src/middleware.ts` dihapus, diganti `src/proxy.ts`** dengan exported function `proxy()` (bukan `middleware()`). Ini mengikuti konvensi file baru Next.js 16 yang mengganti nama `middleware` → `proxy`. Logika Supabase Auth token refresh tetap sama.
+* **`suppressHydrationWarning` ditambahkan ke `<html>` di `src/app/layout.tsx`** untuk menghilangkan hydration mismatch yang disebabkan oleh `next-themes`. Server tidak tahu preferensi tema user saat render, sehingga `ThemeProvider` (client-side) menambahkan `style={{color-scheme:"dark"}}` setelah hydration — memunculkan diff antara server HTML dan client DOM.
+
+Alasan:
+
+* Next.js 16 mendeprecate konvensi file `middleware.ts` dan merekomendasikan migrasi ke `proxy.ts`. Warning `⚠ The "middleware" file convention is deprecated` muncul di console setiap request jika tidak dimigrasi.
+* `suppressHydrationWarning` adalah solusi resmi untuk masalah ini: atribut yang dikelola oleh third-party (seperti `next-themes` pada `<html>`) boleh berbeda antara server/client tanpa menjadi bug — React tidak akan mencoba mempatch perbedaan ini.
+
+Dampak:
+
+`src/middleware.ts` (dihapus), `src/proxy.ts` (baru), `src/app/layout.tsx`.

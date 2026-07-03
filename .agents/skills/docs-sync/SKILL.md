@@ -13,6 +13,7 @@ Project memisahkan dua ruang dokumentasi:
 ## Alur Wajib
 
 ```
+Alur Ide
 ideas.md -> backlog.md -> decisions.md -> docs/ (jika berdampak spesifikasi) -> changelog.md
 ```
 
@@ -24,16 +25,16 @@ ideas.md -> backlog.md -> decisions.md -> docs/ (jika berdampak spesifikasi) -> 
 
 ## Pemetaan Perubahan -> Dokumen yang Wajib Diupdate
 
-| Jenis perubahan | Dokumen `docs/` yang wajib diupdate |
-|---|---|
-| Business rule | `01-business.md` -> turunan: `03-functional-requirements.md`, `05-domain-modules.md`, `06-data-model.md` |
-| UX / user flow | `02-user-experience.md` |
-| API contract (endpoint, request/response, error code) | `07-api-specification.md` |
-| Arsitektur / deployment / folder structure | `04-system-architecture.md`, `08-technical-stack.md` |
-| Domain module (entity, invariant, dependency) | `05-domain-modules.md`, `06-data-model.md` |
-| UI pattern / design token | `09-design-system.md` |
-| Aturan development / naming / testing | `10-development-rules.md` |
-| Milestone/phase/status project | `PROJECT_STATE.md` |
+| Jenis perubahan                                       | Dokumen `docs/` yang wajib diupdate                                                                      |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Business rule                                         | `01-business.md` -> turunan: `03-functional-requirements.md`, `05-domain-modules.md`, `06-data-model.md` |
+| UX / user flow                                        | `02-user-experience.md`                                                                                  |
+| API contract (endpoint, request/response, error code) | `07-api-specification.md`                                                                                |
+| Arsitektur / deployment / folder structure            | `04-system-architecture.md`, `08-technical-stack.md`                                                     |
+| Domain module (entity, invariant, dependency)         | `05-domain-modules.md`, `06-data-model.md`                                                               |
+| UI pattern / design token                             | `09-design-system.md`                                                                                    |
+| Aturan development / naming / testing                 | `10-development-rules.md`                                                                                |
+| Milestone/phase/status project                        | `PROJECT_STATE.md`                                                                                       |
 
 Gunakan urutan **Source of Truth** di `docs/10-development-rules.md` bila ada konflik antar dokumen.
 

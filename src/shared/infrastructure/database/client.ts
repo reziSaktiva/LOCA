@@ -8,7 +8,12 @@ import { env } from '../env'
 // DATABASE_URL menggunakan connection pooler (PgBouncer port 6543)
 // agar aman digunakan di environment serverless (Vercel).
 function createPrismaClient() {
-  const pool = new Pool({ connectionString: env.database.url })
+  const pool = new Pool({
+    connectionString: env.database.url,
+    max: 10,
+    connectionTimeoutMillis: 5_000,
+    idleTimeoutMillis: 30_000,
+  })
   const adapter = new PrismaPg(pool)
   return new PrismaClient({ adapter })
 }

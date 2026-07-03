@@ -98,6 +98,7 @@ Memulai fase implementasi dengan fondasi engineering yang siap dipakai developme
 - Standard command quality gate M3.3 ditetapkan: `bun run check` (lint + typecheck + test) dan `bun run check:full` (check + format:check). Lihat `planning/decisions.md` Decision 010.
 - M3.4 plumbing selesai: Supabase Auth via `@supabase/ssr` (middleware proxy + browser/server client), Prisma 7 via `@prisma/adapter-pg` (pooled connection + env template). Lihat `planning/decisions.md` Decision 011.
 - Skills project dipindah ke `.agents/skills/`, 2 skill Supabase ditambahkan, tracking via `skills-lock.json`. Lihat `planning/decisions.md` Decision 012.
+- M3.5 UI Foundation selesai: shadcn/ui `base-nova` + 15 core components di `src/shared/ui/`, design tokens (semantic colors: success/warning/error/info; radius scale: xs-xl; shadow: sm/md/lg) aktif di `globals.css`, dependency stack UI lengkap (lucide-react, motion, react-hook-form, zod, next-themes, sonner), provider pattern aktif. Lihat `planning/decisions.md` Decision 014.
 
 ---
 
@@ -157,21 +158,23 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 012** (reorganisasi skills + penambahan skill Supabase).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-03** (entry 7).
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 014** (M3.5 UI Foundation).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-03** (entry 9).
 
 ## Agent Governance
 
 - ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
 - ✅ Folder `agents/` sudah berisi role profiles inti (`backend`, `frontend`, `database`, `security`, `qa`, `code-review`, `product`, `solution-architect`, `ui`) untuk mendukung eksekusi Phase 1.
-- ✅ Folder `.agents/skills/` sudah berisi 5 skill aktif: 3 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) + 2 skill baru dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012.
+- ✅ Folder `.agents/skills/` sudah berisi 6 skill aktif: 4 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`, `progress-sync`) + 2 skill dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi skill registry via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012-013.
+- ✅ Skill `progress-sync` memaksa agent otomatis melaporkan progress task ke `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` di akhir setiap task implementasi, tanpa harus diminta user. Detail: `planning/decisions.md` Decision 013.
 
 ## Implementation State
 
 - ✅ **M3.1 — Folder Structure Ready**: struktur folder `src/modules/<module>/{presentation,application,domain,infrastructure,public}` (11 module MVP) dan `src/shared/{kernel,infrastructure,events,analytics,ui}` sudah dibuat sesuai `docs/04-system-architecture.md`. Import boundary rules ditegakkan otomatis lewat `import/no-restricted-paths` di `eslint.config.mjs` (terverifikasi lolos `lint` + `tsc --noEmit`, dan terbukti menangkap pelanggaran cross-layer/cross-module saat diuji manual). Detail: `planning/decisions.md` Decision 007.
 - ✅ **M3.2 — Bootstrap Workspace Ready**: project Next.js (App Router) + TypeScript + Tailwind CSS terverifikasi berjalan di lokal dengan Bun (`bun install`, `bun dev`, `bun run build`, `bun run lint`, `tsc --noEmit` — semua lolos tanpa warning). Boilerplate default `create-next-app` (metadata title, konten marketing `page.tsx`) dibersihkan agar mencerminkan identitas project sementara (`Loca`), tanpa membangun fitur `homepage` module (ditunda ke fase implementasi module sesuai roadmap).
 - ✅ **M3.3 — Engineering Baseline Ready**: baseline engineering selesai dan distandarkan untuk workflow harian — `prettier` + `vitest` aktif, script minimum `lint`/`typecheck`/`test` tersedia, command agregat `check` + `check:full` tersedia, dan seluruh gate minimum terverifikasi lolos di lokal. Detail: `planning/decisions.md` Decision 009-010.
-- ✅ **M3.4 — Data & Auth Plumbing Ready**: Supabase Auth (`@supabase/ssr@0.12.0`) dan Prisma 7 (`@prisma/adapter-pg`) terinstall dan terkonfigurasi. Browser/server Supabase client tersedia di `src/shared/infrastructure/supabase/`, Prisma singleton di `src/shared/infrastructure/database/`, dan Next.js middleware proxy untuk token refresh aktif di `src/middleware.ts`. Env template `.env.example` siap. Detail: `planning/decisions.md` Decision 011.
+- ✅ **M3.4 — Data & Auth Plumbing Ready**: Supabase Auth (`@supabase/ssr@0.12.0`) dan Prisma 7 (`@prisma/adapter-pg`) terinstall dan terkonfigurasi. Browser/server Supabase client tersedia di `src/shared/infrastructure/supabase/`, Prisma singleton di `src/shared/infrastructure/database/`, dan Next.js proxy untuk token refresh aktif di `src/proxy.ts` (dimigrasi dari `middleware.ts` sesuai Next.js 16). Lihat `planning/decisions.md` Decision 015. Env template `.env.example` siap. Detail: `planning/decisions.md` Decision 011.
+- ✅ **M3.5 — UI Foundation Ready**: shadcn/ui (`base-nova`) diinisialisasi, 15 core components dari design system inventory diinstall ke `src/shared/ui/`, design tokens (semantic colors, radius scale, shadow) dikonfigurasi di `globals.css`, dependency stack UI dilengkapi (`lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`), provider pattern aktif di `src/app/providers.tsx`, barrel export tersedia di `src/shared/ui/index.ts`. Detail: `planning/decisions.md` Decision 014.
 
 ---
 
@@ -199,10 +202,12 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
    - ✅ Setup integrasi Supabase PostgreSQL + Prisma 7 baseline (driver adapter, singleton, env template).
    - ✅ Exit criteria: auth + database siap dipakai untuk pengembangan module. — Tercapai.
 
-5. **M3.5 — UI Foundation Ready**
-   - Setup fondasi UI sesuai keputusan pada `docs/09-design-system.md` dan `docs/08-technical-stack.md`.
-   - Tetapkan baseline layout, typography, color token, dan komponen dasar.
-   - Exit criteria: fondasi UI siap dipakai konsisten untuk implementasi module.
+5. ✅ **M3.5 — UI Foundation Ready** (Selesai)
+   - ✅ shadcn/ui (`base-nova`) diinisialisasi, 15 core components diinstall ke `src/shared/ui/`.
+   - ✅ Design tokens aktif: semantic colors, radius scale (xs-xl), shadow tokens.
+   - ✅ Dependency stack UI lengkap: `lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`.
+   - ✅ Provider pattern aktif di `src/app/providers.tsx`, barrel export di `src/shared/ui/index.ts`.
+   - ✅ Exit criteria: fondasi UI siap dipakai konsisten untuk implementasi module. — Tercapai.
 
 6. **M3.6 — CI Baseline Ready**
    - Tetapkan baseline CI minimum: lint, typecheck, test.
@@ -282,7 +287,7 @@ Breakdown:
 - [x] M3.2 Bootstrap Workspace Ready
 - [x] M3.3 Engineering Baseline Ready
 - [x] M3.4 Data & Auth Plumbing Ready
-- [ ] M3.5 UI Foundation Ready
+- [x] M3.5 UI Foundation Ready
 - [ ] M3.6 CI Baseline Ready
 - [ ] M3.7 Catalog Start Gate (Definition of Ready)
 

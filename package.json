@@ -11,7 +11,9 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,ts}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,ts}\"",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check": "bun run lint && bun run typecheck && bun run test",
+    "check:full": "bun run check && bun run format:check"
   },
   "dependencies": {
     "next": "16.2.9",

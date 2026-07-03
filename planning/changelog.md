@@ -9,6 +9,24 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (5)
+
+### Added
+
+* Menambahkan standard command quality gate harian di `package.json`: `check` (`lint + typecheck + test`) dan `check:full` (`check + format:check`).
+* Mencatat keputusan finalisasi M3.3 pada `planning/decisions.md` (Decision 010).
+
+### Changed
+
+* Memperbarui `README.md` agar daftar script development mencerminkan baseline terbaru M3.3.
+* Memperbarui `PROJECT_STATE.md` untuk menandai M3.3 selesai dan memindahkan next action ke M3.4.
+
+### Verified
+
+* Validasi lokal lolos: `bun run check` dan `bun run check:full`.
+
+---
+
 ## 2026-07-03 (4)
 
 ### Added

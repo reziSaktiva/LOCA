@@ -194,3 +194,27 @@ Alasan:
 Dampak:
 
 `package.json`, `bun.lock`, `.prettierrc.json`, `.prettierignore`, `vitest.config.ts`, `src/shared/kernel/engineering-baseline-smoke.test.ts`, `PROJECT_STATE.md`, `planning/changelog.md`.
+
+---
+
+## Decision 010
+
+Judul:
+
+Finalisasi standardisasi script quality gate M3.3.
+
+Keputusan:
+
+* Menetapkan command standar harian `bun run check` sebagai pintu tunggal quality gate minimum (`lint + typecheck + test`).
+* Menetapkan command tambahan `bun run check:full` untuk validasi lengkap lokal (`check + format:check`).
+* Menyelesaikan status M3.3 menjadi completed karena seluruh exit criteria quality gate minimum sudah lolos konsisten di lokal.
+
+Alasan:
+
+* Workflow satu perintah mengurangi variasi eksekusi manual dan membuat quality gate lebih konsisten sebelum commit/PR.
+* Pemisahan `check` dan `check:full` menjaga kecepatan iterasi (minimum gate tetap cepat), sambil tetap menyediakan validasi format saat dibutuhkan.
+* Exit criteria M3.3 mensyaratkan script minimum terstandar dan lolos lokal; kondisi ini sudah terpenuhi.
+
+Dampak:
+
+`package.json`, `README.md`, `PROJECT_STATE.md`, `planning/changelog.md`.

@@ -71,7 +71,13 @@ bun install
 bun dev
 ```
 
-Script yang tersedia saat ini: `dev`, `build`, `start`, `lint`. Script `typecheck` dan `test` akan distandarkan pada M3.3 — Engineering Baseline Ready (lihat `PROJECT_STATE.md`).
+Script yang tersedia saat ini:
+
+- `dev`, `build`, `start`
+- `lint`, `typecheck`, `test`
+- `format`, `format:check`
+- `check` (lint + typecheck + test)
+- `check:full` (check + format:check)
 
 Package manager resmi proyek adalah **Bun** (lihat `docs/08-technical-stack.md` dan `planning/decisions.md` Decision 008).
 

@@ -169,3 +169,28 @@ Alasan:
 Dampak:
 
 `docs/08-technical-stack.md` (§21 Development Tools), `context/ctx-technical-context.md`, `README.md`, `PROJECT_STATE.md` (Open Decisions -> Latest Decisions), `planning/questions.md` (pertanyaan dihapus karena sudah terjawab).
+
+---
+
+## Decision 009
+
+Judul:
+
+Inisialisasi baseline engineering M3.3 (lint, format, typecheck, test scaffold).
+
+Keputusan:
+
+* Baseline engineering untuk M3.3 bagian pertama diaktifkan dengan menambahkan `Prettier` dan `Vitest` sebagai tool resmi quality gate lokal.
+* Script kualitas minimum distandarkan di `package.json`: `lint`, `typecheck`, `test` (ditambah script pendukung `format`, `format:check`, `test:watch`).
+* Ruang lingkup `format`/`format:check` dibatasi ke source dan file konfigurasi inti agar tidak memaksa reformat dokumen/markdown legacy yang belum menjadi target task saat ini.
+* Test scaffold awal dibuat via `vitest.config.ts` dan smoke test `src/shared/kernel/engineering-baseline-smoke.test.ts` untuk memastikan pipeline test siap dipakai.
+
+Alasan:
+
+* Exit criteria M3.3 menuntut baseline quality gate minimum dapat dijalankan lokal secara konsisten.
+* Menyiapkan formatter + test scaffold sejak awal mengurangi drift style dan memudahkan vertical slice berikutnya tanpa setup ulang.
+* Pembatasan target formatter dipilih agar perubahan tetap kecil, fokus, dan tidak menimbulkan noise review lintas file non-prioritas.
+
+Dampak:
+
+`package.json`, `bun.lock`, `.prettierrc.json`, `.prettierignore`, `vitest.config.ts`, `src/shared/kernel/engineering-baseline-smoke.test.ts`, `PROJECT_STATE.md`, `planning/changelog.md`.

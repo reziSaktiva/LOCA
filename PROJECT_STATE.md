@@ -94,6 +94,7 @@ Memulai fase implementasi dengan fondasi engineering yang siap dipakai developme
   - `PENDING -> WAITING_PAYMENT -> PAID -> PROCESSING -> SHIPPED -> DELIVERED -> COMPLETED` (+ `CANCELLED` path).
 - Shipping status diselaraskan menggunakan `PICKED_UP`.
 - Package manager resmi proyek: **Bun** (bukan pnpm). Lihat `planning/decisions.md` Decision 008.
+- Baseline engineering M3.3 bagian pertama diaktifkan: `Prettier` + `Vitest`, script `typecheck`/`test`/`format`, dan smoke test awal. Lihat `planning/decisions.md` Decision 009.
 
 ---
 
@@ -153,8 +154,8 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan sinkronisasi terbaru (Decision 006).
-- `planning/changelog.md` memuat audit update tanggal 2026-07-02.
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 009** (baseline engineering M3.3 bagian pertama).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-03** (entry 4).
 
 ## Agent Governance
 
@@ -166,6 +167,7 @@ Belum diputuskan:
 
 - ✅ **M3.1 — Folder Structure Ready**: struktur folder `src/modules/<module>/{presentation,application,domain,infrastructure,public}` (11 module MVP) dan `src/shared/{kernel,infrastructure,events,analytics,ui}` sudah dibuat sesuai `docs/04-system-architecture.md`. Import boundary rules ditegakkan otomatis lewat `import/no-restricted-paths` di `eslint.config.mjs` (terverifikasi lolos `lint` + `tsc --noEmit`, dan terbukti menangkap pelanggaran cross-layer/cross-module saat diuji manual). Detail: `planning/decisions.md` Decision 007.
 - ✅ **M3.2 — Bootstrap Workspace Ready**: project Next.js (App Router) + TypeScript + Tailwind CSS terverifikasi berjalan di lokal dengan Bun (`bun install`, `bun dev`, `bun run build`, `bun run lint`, `tsc --noEmit` — semua lolos tanpa warning). Boilerplate default `create-next-app` (metadata title, konten marketing `page.tsx`) dibersihkan agar mencerminkan identitas project sementara (`Loca`), tanpa membangun fitur `homepage` module (ditunda ke fase implementasi module sesuai roadmap).
+- ⏳ **M3.3 — Engineering Baseline Ready (In Progress)**: bagian pertama (inisialisasi baseline engineering) sudah selesai — `prettier` + `vitest` terpasang, script kualitas minimum tersedia (`lint`, `typecheck`, `test`), smoke test awal tersedia, dan verifikasi lokal lolos (`bun run lint`, `bun run typecheck`, `bun run test`, `bun run format:check`). Detail: `planning/decisions.md` Decision 009.
 
 ---
 
@@ -183,10 +185,10 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
    - Sinkronkan setup awal workspace dengan stack resmi proyek.
    - Exit criteria: project Next.js berhasil dijalankan di lokal. — Tercapai.
 
-3. **M3.3 — Engineering Baseline Ready**
-   - Inisialisasi baseline engineering: lint, format, type-safety, test scaffold.
-   - Standarisasi script kualitas minimum (`lint`, `typecheck`, `test`).
-   - Exit criteria: semua quality script minimum lolos di lokal.
+3. **M3.3 — Engineering Baseline Ready** (Sedang Berjalan)
+   - ✅ Inisialisasi baseline engineering: lint, format, type-safety, test scaffold.
+   - ⏳ Standarisasi script kualitas minimum (`lint`, `typecheck`, `test`) untuk workflow harian.
+   - ⏳ Exit criteria: semua quality script minimum lolos di lokal (sudah lolos untuk baseline saat ini; finalisasi M3.3 tetap berjalan).
 
 4. **M3.4 — Data & Auth Plumbing Ready**
    - Setup integrasi Supabase Auth.

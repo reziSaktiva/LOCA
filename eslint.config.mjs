@@ -55,7 +55,9 @@ const moduleBoundaryZones = [
   {
     target: "./src/app/**/*",
     from: MODULES.flatMap((mod) =>
-      ["application", "domain", "infrastructure"].map((layer) => `./src/modules/${mod}/${layer}/**/*`),
+      ["application", "domain", "infrastructure"].map(
+        (layer) => `./src/modules/${mod}/${layer}/**/*`,
+      ),
     ),
     message:
       "Route/page di src/app hanya boleh memanggil module lewat presentation atau public, tidak boleh langsung ke application/domain/infrastructure.",

@@ -9,6 +9,22 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (3)
+
+### Changed
+
+* Membersihkan boilerplate default `create-next-app` di `src/app/layout.tsx` (metadata title/description) dan `src/app/page.tsx` (konten marketing Next.js/Vercel diganti placeholder minimal identitas project).
+
+### Verified
+
+* Milestone **M3.2 — Bootstrap Workspace Ready** selesai: `bun install`, `bun dev`, `bun run build`, `bun run lint`, `tsc --noEmit` seluruhnya lolos tanpa warning.
+
+### Notes
+
+* Konten `page.tsx` sengaja dibuat minimal (bukan desain homepage final) — desain UI baru masuk di M3.5 (UI Foundation) dan implementasi fitur `homepage` module di fase berikutnya, sesuai roadmap.
+
+---
+
 ## 2026-07-03 (2)
 
 ### Changed

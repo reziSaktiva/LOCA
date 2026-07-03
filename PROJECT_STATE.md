@@ -165,6 +165,7 @@ Belum diputuskan:
 ## Implementation State
 
 - ✅ **M3.1 — Folder Structure Ready**: struktur folder `src/modules/<module>/{presentation,application,domain,infrastructure,public}` (11 module MVP) dan `src/shared/{kernel,infrastructure,events,analytics,ui}` sudah dibuat sesuai `docs/04-system-architecture.md`. Import boundary rules ditegakkan otomatis lewat `import/no-restricted-paths` di `eslint.config.mjs` (terverifikasi lolos `lint` + `tsc --noEmit`, dan terbukti menangkap pelanggaran cross-layer/cross-module saat diuji manual). Detail: `planning/decisions.md` Decision 007.
+- ✅ **M3.2 — Bootstrap Workspace Ready**: project Next.js (App Router) + TypeScript + Tailwind CSS terverifikasi berjalan di lokal dengan Bun (`bun install`, `bun dev`, `bun run build`, `bun run lint`, `tsc --noEmit` — semua lolos tanpa warning). Boilerplate default `create-next-app` (metadata title, konten marketing `page.tsx`) dibersihkan agar mencerminkan identitas project sementara (`Loca`), tanpa membangun fitur `homepage` module (ditunda ke fase implementasi module sesuai roadmap).
 
 ---
 
@@ -177,10 +178,10 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
    - Tetapkan aturan import boundary antar layer/module.
    - Exit criteria: struktur folder + boundary rules disepakati sebagai acuan implementasi. — Tercapai, lihat `planning/decisions.md` Decision 007.
 
-2. **M3.2 — Bootstrap Workspace Ready**
+2. ✅ **M3.2 — Bootstrap Workspace Ready** (Selesai)
    - Bootstrap project Next.js sebagai baseline implementasi.
    - Sinkronkan setup awal workspace dengan stack resmi proyek.
-   - Exit criteria: project Next.js berhasil dijalankan di lokal.
+   - Exit criteria: project Next.js berhasil dijalankan di lokal. — Tercapai.
 
 3. **M3.3 — Engineering Baseline Ready**
    - Inisialisasi baseline engineering: lint, format, type-safety, test scaffold.
@@ -272,7 +273,7 @@ Status:
 Breakdown:
 
 - [x] M3.1 Folder Structure Ready
-- [ ] M3.2 Bootstrap Workspace Ready
+- [x] M3.2 Bootstrap Workspace Ready
 - [ ] M3.3 Engineering Baseline Ready
 - [ ] M3.4 Data & Auth Plumbing Ready
 - [ ] M3.5 UI Foundation Ready

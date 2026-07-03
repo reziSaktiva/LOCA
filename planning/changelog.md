@@ -9,6 +9,53 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (7)
+
+### Changed
+
+* Memindahkan 3 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) dari `.cursor/skills/` ke `.agents/skills/` sesuai konvensi Cursor terbaru.
+
+### Added
+
+* Menambahkan 2 skill baru dari registry `supabase/agent-skills`: `supabase` dan `supabase-postgres-best-practices`.
+* Menambahkan `skills-lock.json` di root project untuk tracking versi skill yang terpasang.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 012).
+
+---
+
+## 2026-07-03 (6)
+
+### Added
+
+* **Supabase Auth integration** — install `@supabase/supabase-js@2.110.0` dan `@supabase/ssr@0.12.0`.
+* `src/shared/infrastructure/supabase/client.ts` — browser client (`createBrowserClient`).
+* `src/shared/infrastructure/supabase/server.ts` — server client (`createServerClient`) dengan cookie handlers untuk Next.js App Router.
+* `src/middleware.ts` — Next.js middleware Proxy untuk refresh token otomatis via `getClaims()`.
+* **Prisma 7 + Supabase PostgreSQL baseline** — install `prisma@7.8.0`, `@prisma/adapter-pg@7.8.0`, `pg@8.22.0`.
+* `prisma.config.ts` — konfigurasi Prisma CLI: load `.env.local`, gunakan `DIRECT_URL` untuk migrations (bypass PgBouncer).
+* `prisma/schema.prisma` — schema baseline bersih, siap untuk penambahan model.
+* `src/shared/infrastructure/database/client.ts` — Prisma singleton dengan PgBouncer-compatible pooled connection via `@prisma/adapter-pg`.
+* `src/shared/infrastructure/env.ts` — diperluas dengan validasi `DATABASE_URL`.
+* `.env.example` — template env yang di-commit ke repo.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 011).
+
+### Changed
+
+* `.gitignore` — menambahkan `!.env.example` agar template tidak ter-ignore.
+* `.env.local` — diperluas dengan `DATABASE_URL` dan `DIRECT_URL`.
+
+### Verified
+
+* `bun run lint` dan `bun run typecheck` lolos bersih setelah setup.
+* `bunx prisma generate` berhasil menghasilkan client ke `src/generated/prisma/`.
+
+### Notes
+
+* Milestone **M3.4 — Data & Auth Plumbing Ready** selesai. Exit criteria terpenuhi: Supabase Auth dan database siap dipakai untuk pengembangan module.
+* Env vars aktual belum diisi — developer perlu mengisi `.env.local` dari Supabase Dashboard sebelum mulai development.
+
+---
+
 ## 2026-07-03 (5)
 
 ### Added

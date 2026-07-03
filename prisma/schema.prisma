@@ -1,0 +1,10 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // URL dikonfigurasi di prisma.config.ts (untuk Prisma CLI)
+  // Runtime menggunakan DATABASE_URL via driver adapter di shared/infrastructure/database/client.ts
+}

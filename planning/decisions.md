@@ -197,6 +197,61 @@ Dampak:
 
 ---
 
+## Decision 012
+
+Judul:
+
+Reorganisasi skills ke `.agents/skills/` dan penambahan skill Supabase.
+
+Keputusan:
+
+* Folder skills project dipindah dari `.cursor/skills/` ke `.agents/skills/` agar selaras dengan konvensi Cursor terbaru.
+* 3 core skill lama (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) tetap tersedia di lokasi baru.
+* 2 skill baru ditambahkan dari registry `supabase/agent-skills`: `supabase` dan `supabase-postgres-best-practices`.
+* File `skills-lock.json` ditambahkan di root project untuk tracking versi skill yang terpasang (mirip `package-lock.json`).
+
+Alasan:
+
+* Cursor menyediakan direktori `.agents/skills/` sebagai lokasi standar baru untuk project-level skills.
+* Skill `supabase` dan `supabase-postgres-best-practices` relevan langsung dengan M3.4 (Data & Auth Plumbing) dan fase implementasi database ke depan.
+* `skills-lock.json` memungkinkan reproducibility skill di environment berbeda.
+
+Dampak:
+
+* `PROJECT_STATE.md` (Agent Governance), `planning/changelog.md`.
+
+---
+
+## Decision 011
+
+Judul:
+
+Setup M3.4 — Data & Auth Plumbing dengan Supabase Auth + Prisma 7.
+
+Keputusan:
+
+* Supabase Auth diintegrasikan menggunakan `@supabase/ssr@0.12.0` (pengganti resmi `auth-helpers-nextjs`), dengan dua client utility:
+  - `src/shared/infrastructure/supabase/client.ts` — browser client (`createBrowserClient`)
+  - `src/shared/infrastructure/supabase/server.ts` — server client (`createServerClient` + cookie handlers)
+* Middleware Next.js di `src/middleware.ts` berfungsi sebagai Proxy untuk refresh token otomatis menggunakan `getClaims()` (bukan `getSession()`) sesuai spec Supabase Auth terbaru.
+* Prisma 7 disetup dengan `@prisma/adapter-pg` sebagai driver adapter wajib (breaking change Prisma 7):
+  - `prisma.config.ts` load dari `.env.local`, gunakan `DIRECT_URL` untuk CLI migrations
+  - `src/shared/infrastructure/database/client.ts` — Prisma singleton dengan PgBouncer-compatible pooled connection
+* Env vars distandarkan: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `DATABASE_URL` (pooled, port 6543), `DIRECT_URL` (direct, port 5432).
+* `.env.example` ditambahkan sebagai template yang di-commit ke repo (`.env.local` tetap di-ignore).
+
+Alasan:
+
+* Supabase Auth SSR terbaru mengharuskan `getClaims()` untuk validasi JWT secara lokal — lebih aman dari `getSession()` yang tidak memvalidasi ulang token di server.
+* Prisma 7 breaking change: driver adapter wajib — tidak bisa lagi `new PrismaClient()` tanpa adapter.
+* Pemisahan `DATABASE_URL` (pooled) dan `DIRECT_URL` (direct) diperlukan karena PgBouncer tidak kompatibel dengan DDL commands yang dijalankan Prisma CLI saat migrations.
+
+Dampak:
+
+* `package.json`, `bun.lock`, `.env.example`, `.gitignore`, `prisma/schema.prisma`, `prisma.config.ts`, `src/shared/infrastructure/env.ts`, `src/shared/infrastructure/supabase/`, `src/shared/infrastructure/database/`, `src/middleware.ts`, `PROJECT_STATE.md`.
+
+---
+
 ## Decision 010
 
 Judul:

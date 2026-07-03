@@ -96,6 +96,8 @@ Memulai fase implementasi dengan fondasi engineering yang siap dipakai developme
 - Package manager resmi proyek: **Bun** (bukan pnpm). Lihat `planning/decisions.md` Decision 008.
 - Baseline engineering M3.3 bagian pertama diaktifkan: `Prettier` + `Vitest`, script `typecheck`/`test`/`format`, dan smoke test awal. Lihat `planning/decisions.md` Decision 009.
 - Standard command quality gate M3.3 ditetapkan: `bun run check` (lint + typecheck + test) dan `bun run check:full` (check + format:check). Lihat `planning/decisions.md` Decision 010.
+- M3.4 plumbing selesai: Supabase Auth via `@supabase/ssr` (middleware proxy + browser/server client), Prisma 7 via `@prisma/adapter-pg` (pooled connection + env template). Lihat `planning/decisions.md` Decision 011.
+- Skills project dipindah ke `.agents/skills/`, 2 skill Supabase ditambahkan, tracking via `skills-lock.json`. Lihat `planning/decisions.md` Decision 012.
 
 ---
 
@@ -155,20 +157,21 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 010** (finalisasi standardisasi script quality gate M3.3).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-03** (entry 5).
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 012** (reorganisasi skills + penambahan skill Supabase).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-03** (entry 7).
 
 ## Agent Governance
 
 - ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
 - ✅ Folder `agents/` sudah berisi role profiles inti (`backend`, `frontend`, `database`, `security`, `qa`, `code-review`, `product`, `solution-architect`, `ui`) untuk mendukung eksekusi Phase 1.
-- ✅ Folder `.cursor/skills/` sudah berisi 3 core skill (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) sebagai fondasi cara kerja AI assistant di project ini.
+- ✅ Folder `.agents/skills/` sudah berisi 5 skill aktif: 3 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) + 2 skill baru dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012.
 
 ## Implementation State
 
 - ✅ **M3.1 — Folder Structure Ready**: struktur folder `src/modules/<module>/{presentation,application,domain,infrastructure,public}` (11 module MVP) dan `src/shared/{kernel,infrastructure,events,analytics,ui}` sudah dibuat sesuai `docs/04-system-architecture.md`. Import boundary rules ditegakkan otomatis lewat `import/no-restricted-paths` di `eslint.config.mjs` (terverifikasi lolos `lint` + `tsc --noEmit`, dan terbukti menangkap pelanggaran cross-layer/cross-module saat diuji manual). Detail: `planning/decisions.md` Decision 007.
 - ✅ **M3.2 — Bootstrap Workspace Ready**: project Next.js (App Router) + TypeScript + Tailwind CSS terverifikasi berjalan di lokal dengan Bun (`bun install`, `bun dev`, `bun run build`, `bun run lint`, `tsc --noEmit` — semua lolos tanpa warning). Boilerplate default `create-next-app` (metadata title, konten marketing `page.tsx`) dibersihkan agar mencerminkan identitas project sementara (`Loca`), tanpa membangun fitur `homepage` module (ditunda ke fase implementasi module sesuai roadmap).
 - ✅ **M3.3 — Engineering Baseline Ready**: baseline engineering selesai dan distandarkan untuk workflow harian — `prettier` + `vitest` aktif, script minimum `lint`/`typecheck`/`test` tersedia, command agregat `check` + `check:full` tersedia, dan seluruh gate minimum terverifikasi lolos di lokal. Detail: `planning/decisions.md` Decision 009-010.
+- ✅ **M3.4 — Data & Auth Plumbing Ready**: Supabase Auth (`@supabase/ssr@0.12.0`) dan Prisma 7 (`@prisma/adapter-pg`) terinstall dan terkonfigurasi. Browser/server Supabase client tersedia di `src/shared/infrastructure/supabase/`, Prisma singleton di `src/shared/infrastructure/database/`, dan Next.js middleware proxy untuk token refresh aktif di `src/middleware.ts`. Env template `.env.example` siap. Detail: `planning/decisions.md` Decision 011.
 
 ---
 
@@ -191,10 +194,10 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
    - ✅ Standarisasi script kualitas minimum (`lint`, `typecheck`, `test`) untuk workflow harian.
    - ✅ Exit criteria: semua quality script minimum lolos di lokal.
 
-4. **M3.4 — Data & Auth Plumbing Ready**
-   - Setup integrasi Supabase Auth.
-   - Setup integrasi Supabase PostgreSQL + Prisma baseline.
-   - Exit criteria: auth + database siap dipakai untuk pengembangan module.
+4. ✅ **M3.4 — Data & Auth Plumbing Ready** (Selesai)
+   - ✅ Setup integrasi Supabase Auth (`@supabase/ssr`, browser/server client, middleware proxy).
+   - ✅ Setup integrasi Supabase PostgreSQL + Prisma 7 baseline (driver adapter, singleton, env template).
+   - ✅ Exit criteria: auth + database siap dipakai untuk pengembangan module. — Tercapai.
 
 5. **M3.5 — UI Foundation Ready**
    - Setup fondasi UI sesuai keputusan pada `docs/09-design-system.md` dan `docs/08-technical-stack.md`.
@@ -278,7 +281,7 @@ Breakdown:
 - [x] M3.1 Folder Structure Ready
 - [x] M3.2 Bootstrap Workspace Ready
 - [x] M3.3 Engineering Baseline Ready
-- [ ] M3.4 Data & Auth Plumbing Ready
+- [x] M3.4 Data & Auth Plumbing Ready
 - [ ] M3.5 UI Foundation Ready
 - [ ] M3.6 CI Baseline Ready
 - [ ] M3.7 Catalog Start Gate (Definition of Ready)

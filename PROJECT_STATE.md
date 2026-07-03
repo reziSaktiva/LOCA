@@ -120,10 +120,10 @@ Belum diputuskan:
 
 ## Phase 1 Engineering
 
-- Folder structure implementasi final (nama akhir + import boundary enforcement)
 - Testing strategy detail per layer (unit/integration/e2e)
 - CI baseline (lint, typecheck, test minimum)
 - Deployment flow detail (preview, release, rollback)
+- Package manager final: `docs/08-technical-stack.md` menyebut pnpm, repo aktual memakai `bun.lock` — belum diputuskan.
 
 ## Operations
 
@@ -160,18 +160,55 @@ Belum diputuskan:
 
 - ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
 - ✅ Folder `agents/` sudah berisi role profiles inti (`backend`, `frontend`, `database`, `security`, `qa`, `code-review`, `product`, `solution-architect`, `ui`) untuk mendukung eksekusi Phase 1.
+- ✅ Folder `.cursor/skills/` sudah berisi 3 core skill (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) sebagai fondasi cara kerja AI assistant di project ini.
+
+## Implementation State
+
+- ✅ **M3.1 — Folder Structure Ready**: struktur folder `src/modules/<module>/{presentation,application,domain,infrastructure,public}` (11 module MVP) dan `src/shared/{kernel,infrastructure,events,analytics,ui}` sudah dibuat sesuai `docs/04-system-architecture.md`. Import boundary rules ditegakkan otomatis lewat `import/no-restricted-paths` di `eslint.config.mjs` (terverifikasi lolos `lint` + `tsc --noEmit`, dan terbukti menangkap pelanggaran cross-layer/cross-module saat diuji manual). Detail: `planning/decisions.md` Decision 007.
 
 ---
 
 # Next Action
 
-Eksekusi **Phase 1 — Project Foundation (Implementation Setup)**:
+Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
 
-1. Finalisasi struktur folder implementasi + import boundary enforcement.
-2. Inisialisasi baseline engineering (lint, format, type-safety, test scaffold).
-3. Setup auth + database integration sesuai keputusan final stack.
-4. Tetapkan baseline CI minimum (lint, typecheck, test).
-5. Menetapkan definition of ready untuk mulai build module pertama (`catalog`).
+1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
+   - Finalisasi struktur folder implementasi.
+   - Tetapkan aturan import boundary antar layer/module.
+   - Exit criteria: struktur folder + boundary rules disepakati sebagai acuan implementasi. — Tercapai, lihat `planning/decisions.md` Decision 007.
+
+2. **M3.2 — Bootstrap Workspace Ready**
+   - Bootstrap project Next.js sebagai baseline implementasi.
+   - Sinkronkan setup awal workspace dengan stack resmi proyek.
+   - Exit criteria: project Next.js berhasil dijalankan di lokal.
+
+3. **M3.3 — Engineering Baseline Ready**
+   - Inisialisasi baseline engineering: lint, format, type-safety, test scaffold.
+   - Standarisasi script kualitas minimum (`lint`, `typecheck`, `test`).
+   - Exit criteria: semua quality script minimum lolos di lokal.
+
+4. **M3.4 — Data & Auth Plumbing Ready**
+   - Setup integrasi Supabase Auth.
+   - Setup integrasi Supabase PostgreSQL + Prisma baseline.
+   - Exit criteria: auth + database siap dipakai untuk pengembangan module.
+
+5. **M3.5 — UI Foundation Ready**
+   - Setup fondasi UI sesuai keputusan pada `docs/09-design-system.md` dan `docs/08-technical-stack.md`.
+   - Tetapkan baseline layout, typography, color token, dan komponen dasar.
+   - Exit criteria: fondasi UI siap dipakai konsisten untuk implementasi module.
+
+6. **M3.6 — CI Baseline Ready**
+   - Tetapkan baseline CI minimum: lint, typecheck, test.
+   - Exit criteria: pipeline minimum berjalan hijau pada PR.
+
+7. **M3.7 — Catalog Start Gate (Definition of Ready)**
+   - Tetapkan Definition of Ready implementasi module pertama (`catalog`).
+   - Exit criteria:
+     - Feature backlog `catalog` telah disusun.
+     - Acceptance criteria tersedia.
+     - Dependency antar module telah diverifikasi.
+     - Seluruh kebutuhan implementasi terdokumentasi.
+     - Module `catalog` siap diimplementasikan menggunakan vertical slice.
 
 ---
 
@@ -232,8 +269,18 @@ Status:
 
 ## ⏳ Milestone 3 — Implementation Foundation (Next)
 
-Target:
+Breakdown:
 
-- Project bootstrap siap development harian.
-- Baseline quality gates berjalan.
-- Module implementation dapat dimulai tanpa ambiguity dokumen.
+- [x] M3.1 Folder Structure Ready
+- [ ] M3.2 Bootstrap Workspace Ready
+- [ ] M3.3 Engineering Baseline Ready
+- [ ] M3.4 Data & Auth Plumbing Ready
+- [ ] M3.5 UI Foundation Ready
+- [ ] M3.6 CI Baseline Ready
+- [ ] M3.7 Catalog Start Gate (Definition of Ready)
+
+Target Outcome:
+
+- Project bootstrap siap untuk development harian.
+- Baseline quality gates aktif dari lokal sampai CI.
+- Implementasi module pertama (`catalog`) dapat dimulai tanpa ambiguity dokumen.

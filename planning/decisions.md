@@ -125,3 +125,25 @@ Dokumen-dokumen tersebut diisi pada waktu yang berbeda sehingga muncul beberapa 
 Dampak:
 
 `00-project-foundation.md`, `03-functional-requirements.md`, `05-domain-modules.md`, `08-technical-stack.md`, `10-development-rules.md` diperbarui. Lihat `planning/changelog.md` untuk detail.
+
+---
+
+## Decision 007
+
+Judul:
+
+Materialisasi Folder Structure & Import Boundary Enforcement (M3.1).
+
+Keputusan:
+
+* Struktur folder target di `docs/04-system-architecture.md` §9 direalisasikan di `src/modules/<module>/{presentation,application,domain,infrastructure,public}` untuk 11 module MVP, dan `src/shared/{kernel,infrastructure,events,analytics,ui}`.
+* Aturan import boundary (§7-8 dokumen yang sama) ditegakkan otomatis lewat rule `import/no-restricted-paths` di `eslint.config.mjs`, memakai `eslint-plugin-import` yang sudah tersedia sebagai dependency transitif `eslint-config-next` (tidak menambah dependency baru).
+* Boundary yang ditegakkan: domain harus pure; infrastructure tidak boleh depend balik ke application/presentation; application tidak boleh depend ke presentation; presentation dilarang akses infrastructure langsung; route (`src/app`) tidak boleh melompati layer module; `shared/` tidak boleh depend ke `modules/`; antar module wajib lewat `public/`.
+
+Alasan:
+
+Exit criteria M3.1 mensyaratkan struktur folder dan boundary rules "disepakati sebagai acuan implementasi" — supaya benar-benar mengikat (bukan hanya dokumentasi naratif), aturan tersebut dijadikan lint rule yang gagal build bila dilanggar. Memakai `eslint-plugin-import` (sudah terpasang) dipilih dibanding menambah `eslint-plugin-boundaries` baru untuk menjaga dependency minimal sesuai `docs/10-development-rules.md` §22.
+
+Dampak:
+
+`eslint.config.mjs`, `src/modules/**`, `src/shared/**` (README + scaffold folder), `PROJECT_STATE.md` (M3.1 selesai). Sudah diverifikasi: `bun run lint` dan `tsc --noEmit` lolos, dan rule terbukti menangkap pelanggaran cross-layer/cross-module pada pengujian manual.

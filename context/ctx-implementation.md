@@ -5,13 +5,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 ## Current Phase
 
 - Phase 0 (Planning & Documentation): **completed**
-- Next target: **Phase 1 - Project Foundation (Implementation Setup)**
+- Phase 1 (Project Foundation / Implementation Setup): **in progress**
 - Current implementation progress: **0%** (belum masuk build module production)
 
 ## Current Focus
 
-- Documentation consistency hardening (selesai/sedang final pass).
-- Menyiapkan transisi dari dokumen ke eksekusi codebase.
+- `phase-1 implementation setup kickoff`
+- Menuntaskan fondasi implementasi agar siap development harian.
+- Next active item: **M3.5 - UI Foundation Ready**
 
 ## Completed (Planning Side)
 
@@ -28,17 +29,37 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Development rules
 - Development roadmap
 
-## Phase 1 (In Preparation)
+## Completed (Implementation Foundation)
+
+Sudah selesai pada Milestone 3:
+
+- **M3.1 - Folder Structure Ready**
+  - Struktur `src/modules/<module>/{presentation,application,domain,infrastructure,public}` untuk 11 module MVP.
+  - Struktur shared `src/shared/{kernel,infrastructure,events,analytics,ui}`.
+  - Import boundary rules aktif via ESLint (`import/no-restricted-paths`).
+- **M3.2 - Bootstrap Workspace Ready**
+  - Next.js App Router + TypeScript + Tailwind CSS bootstrap stabil di Bun.
+  - Command baseline lokal (`dev`, `build`, `lint`, `typecheck`) terverifikasi lolos.
+- **M3.3 - Engineering Baseline Ready**
+  - `Prettier` + `Vitest` aktif.
+  - Script standar: `lint`, `typecheck`, `test`, `check`, `check:full`.
+  - Quality gate minimum terverifikasi lolos.
+- **M3.4 - Data & Auth Plumbing Ready**
+  - Supabase Auth via `@supabase/ssr` (browser/server client + middleware proxy).
+  - Prisma 7 via `@prisma/adapter-pg` (pooled connection + singleton).
+  - Env template `.env.example` siap.
+
+## Phase 1 (Next Targets)
 
 Target setup awal:
 
-- Next.js project baseline
-- TypeScript, ESLint, Prettier, Tailwind, shadcn
-- Prisma + Supabase integration
-- Supabase Auth integration
-- Environment schema + config baseline
-- Folder structure final by module boundary
-- Shared utilities + error handling + logger
+- **M3.5 - UI Foundation Ready**
+  - Baseline layout, typography, color token, komponen dasar.
+  - Selaras dengan `docs/09-design-system.md` dan `docs/08-technical-stack.md`.
+- **M3.6 - CI Baseline Ready**
+  - Pipeline minimum: lint + typecheck + test.
+- **M3.7 - Catalog Start Gate (Definition of Ready)**
+  - Backlog catalog, acceptance criteria, verifikasi dependency antar module, dan readiness docs.
 
 ## Module Build Plan (High-Level)
 
@@ -50,12 +71,12 @@ Target setup awal:
 
 ### Auth Module
 
-- Status: Not Started (foundation planned in Phase 1)
+- Status: Foundation plumbing completed in Phase 1 (M3.4), fitur module belum dimulai
 - Scope awal: register/login/logout/reset + role guard
 
 ### Database
 
-- Status: Not Started
+- Status: Foundation plumbing completed in Phase 1 (M3.4), schema domain belum dimulai
 - Scope awal: schema baseline, migration strategy, repository contract
 
 ## Remaining Priority Flows

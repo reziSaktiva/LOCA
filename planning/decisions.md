@@ -147,3 +147,25 @@ Exit criteria M3.1 mensyaratkan struktur folder dan boundary rules "disepakati s
 Dampak:
 
 `eslint.config.mjs`, `src/modules/**`, `src/shared/**` (README + scaffold folder), `PROJECT_STATE.md` (M3.1 selesai). Sudah diverifikasi: `bun run lint` dan `tsc --noEmit` lolos, dan rule terbukti menangkap pelanggaran cross-layer/cross-module pada pengujian manual.
+
+---
+
+## Decision 008
+
+Judul:
+
+Package manager resmi proyek: Bun (bukan pnpm).
+
+Keputusan:
+
+* Bun ditetapkan sebagai package manager resmi proyek, menggantikan referensi pnpm di `docs/08-technical-stack.md`.
+
+Alasan:
+
+* Repo sudah dibootstrap dan berjalan memakai Bun (`bun.lock`, `package.json` memakai field khas Bun: `trustedDependencies`, `ignoreScripts`) sejak awal — tidak ada `pnpm-lock.yaml` yang pernah dibuat.
+* Menghindari migrasi lockfile yang tidak perlu menjelang M3.2 (Bootstrap Workspace Ready); mengikuti kondisi nyata repo lebih murah dan lebih rendah risiko dibanding memaksa pindah ke pnpm.
+* Bun tetap memenuhi prinsip pemilihan teknologi di `docs/08-technical-stack.md` §1 (stable, production-ready, komunitas aktif).
+
+Dampak:
+
+`docs/08-technical-stack.md` (§21 Development Tools), `context/ctx-technical-context.md`, `README.md`, `PROJECT_STATE.md` (Open Decisions -> Latest Decisions), `planning/questions.md` (pertanyaan dihapus karena sudah terjawab).

@@ -34,7 +34,6 @@ Setiap pertanyaan harus dijawab sebelum implementasi dimulai apabila berdampak p
 * API Contract.
 * Strategy caching.
 * Upload strategy.
-* Package manager final: `docs/08-technical-stack.md` menyebut pnpm, tetapi repo memakai `bun.lock`. Perlu diputuskan sebelum M3.2 (Bootstrap Workspace Ready).
 
 ---
 

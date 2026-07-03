@@ -214,7 +214,7 @@ React Query/SWR belum digunakan pada MVP.
 |------------|---------|
 | Cursor | AI IDE |
 | Git | Version Control |
-| pnpm | Package Manager |
+| Bun | Package Manager |
 
 ---
 

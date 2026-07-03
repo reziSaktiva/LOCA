@@ -93,6 +93,7 @@ Memulai fase implementasi dengan fondasi engineering yang siap dipakai developme
 - Kontrak status order diselaraskan ke model detail:
   - `PENDING -> WAITING_PAYMENT -> PAID -> PROCESSING -> SHIPPED -> DELIVERED -> COMPLETED` (+ `CANCELLED` path).
 - Shipping status diselaraskan menggunakan `PICKED_UP`.
+- Package manager resmi proyek: **Bun** (bukan pnpm). Lihat `planning/decisions.md` Decision 008.
 
 ---
 
@@ -123,7 +124,6 @@ Belum diputuskan:
 - Testing strategy detail per layer (unit/integration/e2e)
 - CI baseline (lint, typecheck, test minimum)
 - Deployment flow detail (preview, release, rollback)
-- Package manager final: `docs/08-technical-stack.md` menyebut pnpm, repo aktual memakai `bun.lock` — belum diputuskan.
 
 ## Operations
 

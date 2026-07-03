@@ -9,6 +9,20 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (2)
+
+### Changed
+
+* Memutuskan **Bun** sebagai package manager resmi proyek, menggantikan referensi pnpm di `docs/08-technical-stack.md` §21. Lihat `planning/decisions.md` (Decision 008).
+* Memperbarui `context/ctx-technical-context.md` dan `README.md` agar konsisten menyebut Bun.
+* Menghapus item "Package manager final" dari `planning/questions.md` (sudah terjawab) dan memindahkannya dari Open Decisions ke Latest Decisions di `PROJECT_STATE.md`.
+
+### Notes
+
+* Keputusan ini menutup mismatch yang dicatat pada entri 2026-07-03 sebelumnya, sebelum mulai M3.2 — Bootstrap Workspace Ready.
+
+---
+
 ## 2026-07-03
 
 ### Added

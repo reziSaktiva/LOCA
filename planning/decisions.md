@@ -273,3 +273,26 @@ Alasan:
 Dampak:
 
 `package.json`, `README.md`, `PROJECT_STATE.md`, `planning/changelog.md`.
+
+---
+
+## Decision 013
+
+Judul:
+
+Menambahkan skill `progress-sync` untuk otomasi pelaporan progress.
+
+Keputusan:
+
+* Menambahkan skill baru `.agents/skills/progress-sync/SKILL.md` yang mewajibkan agent memperbarui `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` di akhir setiap task implementasi (fitur, fix, setup engineering, milestone, refactor) secara otomatis tanpa harus diminta user.
+* Skill ini melengkapi (bukan menggantikan) `docs-sync` — `docs-sync` fokus ke perubahan spesifikasi/keputusan besar, `progress-sync` fokus ke pelaporan status implementasi rutin setiap task selesai.
+* Urutan update ditetapkan tetap: `PROJECT_STATE.md` -> `planning/changelog.md` -> `context/ctx-implementation.md`.
+
+Alasan:
+
+* Sebelumnya update ke 3 file status ini bergantung pada user secara manual meminta setiap kali, menyebabkan drift (mis. `context/ctx-implementation.md` sempat tertinggal beberapa milestone).
+* Skill memaksa agent menjadikan pelaporan status sebagai bagian dari Definition of Done task, bukan langkah opsional terpisah.
+
+Dampak:
+
+* `.agents/skills/progress-sync/SKILL.md` (baru), `PROJECT_STATE.md` (Agent Governance), `planning/changelog.md`.

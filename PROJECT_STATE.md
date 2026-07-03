@@ -164,7 +164,8 @@ Belum diputuskan:
 
 - ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
 - ✅ Folder `agents/` sudah berisi role profiles inti (`backend`, `frontend`, `database`, `security`, `qa`, `code-review`, `product`, `solution-architect`, `ui`) untuk mendukung eksekusi Phase 1.
-- ✅ Folder `.agents/skills/` sudah berisi 5 skill aktif: 3 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`) + 2 skill baru dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012.
+- ✅ Folder `.agents/skills/` sudah berisi 6 skill aktif: 4 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`, `progress-sync`) + 2 skill dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi skill registry via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012-013.
+- ✅ Skill `progress-sync` memaksa agent otomatis melaporkan progress task ke `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` di akhir setiap task implementasi, tanpa harus diminta user. Detail: `planning/decisions.md` Decision 013.
 
 ## Implementation State
 

@@ -9,6 +9,24 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-03 (8)
+
+### Added
+
+* Menambahkan skill baru `.agents/skills/progress-sync/SKILL.md` yang mewajibkan agent otomatis melaporkan progress task implementasi ke `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` tanpa harus diminta user — mencegah drift status antar dokumen.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 013).
+
+### Changed
+
+* Memperbarui `context/ctx-implementation.md` agar mencerminkan progress M3.1-M3.4 yang sudah selesai (sebelumnya masih menampilkan status "0%, belum dimulai" yang usang).
+* Memperbarui `PROJECT_STATE.md` (Agent Governance) untuk mencatat penambahan skill `progress-sync`.
+
+### Notes
+
+* Skill ini melengkapi `docs-sync`: `docs-sync` untuk perubahan spesifikasi/keputusan besar, `progress-sync` untuk pelaporan status implementasi rutin di akhir setiap task.
+
+---
+
 ## 2026-07-03 (7)
 
 ### Changed

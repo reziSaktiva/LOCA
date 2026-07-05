@@ -160,7 +160,7 @@ Belum diputuskan:
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
 - `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 016** (M3.6 CI Baseline).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-05** (entry 2).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-05** (entry 5).
 
 ## Agent Governance
 
@@ -176,7 +176,7 @@ Belum diputuskan:
 - ✅ **M3.3 — Engineering Baseline Ready**: baseline engineering selesai dan distandarkan untuk workflow harian — `prettier` + `vitest` aktif, script minimum `lint`/`typecheck`/`test` tersedia, command agregat `check` + `check:full` tersedia, dan seluruh gate minimum terverifikasi lolos di lokal. Detail: `planning/decisions.md` Decision 009-010.
 - ✅ **M3.4 — Data & Auth Plumbing Ready**: Supabase Auth (`@supabase/ssr@0.12.0`) dan Prisma 7 (`@prisma/adapter-pg`) terinstall dan terkonfigurasi. Browser/server Supabase client tersedia di `src/shared/infrastructure/supabase/`, Prisma singleton di `src/shared/infrastructure/database/`, dan Next.js proxy untuk token refresh aktif di `src/proxy.ts` (dimigrasi dari `middleware.ts` sesuai Next.js 16). Lihat `planning/decisions.md` Decision 015. Env template `.env.example` siap. Detail: `planning/decisions.md` Decision 011.
 - ✅ **M3.5 — UI Foundation Ready**: shadcn/ui (`base-nova`) diinisialisasi, 15 core components dari design system inventory diinstall ke `src/shared/ui/`, design tokens (semantic colors, radius scale, shadow) dikonfigurasi di `globals.css`, dependency stack UI dilengkapi (`lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`), provider pattern aktif di `src/app/providers.tsx`, barrel export tersedia di `src/shared/ui/index.ts`. Detail: `planning/decisions.md` Decision 014.
-- ⏳ **M3.6 — CI Baseline Ready (In Progress)**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`) dan kini menyertakan step `bunx --bun prisma generate` sebelum gate `bun run lint`, `bun run typecheck`, `bun run test` untuk memastikan Prisma client tersedia saat CI typecheck. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah teratasi, `bun install` berhasil, gate minimum lokal lolos via `bun run check`, dan `bun run check:full` kini kembali hijau setelah sinkronisasi formatting. Verifikasi akhir tetap menunggu pipeline PR hijau.
+- ✅ **M3.6 — CI Baseline Ready**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`) dan menyertakan step `bunx --bun prisma generate` sebelum gate `bun run lint`, `bun run typecheck`, `bun run test` untuk memastikan Prisma client tersedia saat CI typecheck. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah teratasi, `bun install` berhasil, gate minimum lokal lolos via `bun run check`, `bun run check:full` hijau setelah sinkronisasi formatting, dan pipeline minimum pada PR sudah hijau (exit criteria tercapai).
 
 ---
 
@@ -211,12 +211,12 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
    - ✅ Provider pattern aktif di `src/app/providers.tsx`, barrel export di `src/shared/ui/index.ts`.
    - ✅ Exit criteria: fondasi UI siap dipakai konsisten untuk implementasi module. — Tercapai.
 
-6. **M3.6 — CI Baseline Ready**
+6. ✅ **M3.6 — CI Baseline Ready** (Selesai)
    - ✅ Tetapkan baseline CI minimum: lint, typecheck, test.
    - ✅ Workflow CI dibuat: `.github/workflows/ci.yml` (PR + push main).
    - ✅ Verifikasi lokal gate minimum lolos: `bun install` + `bun run check`.
    - ✅ Verifikasi full local gate lolos: `bun run check:full`.
-   - Exit criteria: pipeline minimum berjalan hijau pada PR.
+   - ✅ Exit criteria: pipeline minimum berjalan hijau pada PR.
 
 7. **M3.7 — Catalog Start Gate (Definition of Ready)**
    - Tetapkan Definition of Ready implementasi module pertama (`catalog`).
@@ -293,7 +293,7 @@ Breakdown:
 - [x] M3.3 Engineering Baseline Ready
 - [x] M3.4 Data & Auth Plumbing Ready
 - [x] M3.5 UI Foundation Ready
-- [ ] M3.6 CI Baseline Ready
+- [x] M3.6 CI Baseline Ready
 - [ ] M3.7 Catalog Start Gate (Definition of Ready)
 
 Target Outcome:

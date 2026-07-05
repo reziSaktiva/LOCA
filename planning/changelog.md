@@ -9,6 +9,23 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-05 (5)
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md` untuk menandai **M3.6 — CI Baseline Ready** sebagai selesai: status implementation state berubah ke ✅, checklist Milestone 3 menandai M3.6 selesai, dan exit criteria dicatat telah terpenuhi.
+* Memperbarui `context/ctx-implementation.md` agar `Current Focus` berpindah ke **M3.7 — Catalog Start Gate** dan status M3.6 tercatat completed.
+
+### Verified
+
+* Pipeline minimum PR (`lint`, `typecheck`, `test`) berhasil hijau.
+
+### Notes
+
+* Fokus Phase 1 berikutnya: menutup **M3.7 — Catalog Start Gate (Definition of Ready)**.
+
+---
+
 ## 2026-07-05 (4)
 
 ### Changed

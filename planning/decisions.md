@@ -378,3 +378,31 @@ Alasan:
 Dampak:
 
 `.github/workflows/ci.yml`, `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.
+
+---
+
+## Decision 017
+
+Tanggal: 2026-07-05
+
+Judul:
+
+M3.7 Catalog Start Gate ditetapkan sebagai Definition of Ready implementasi module pertama.
+
+Keputusan:
+
+* Menetapkan paket readiness implementasi `catalog` pada `planning/backlog.md` mencakup:
+  - Feature backlog berbasis vertical slice (`catalog-category-management`, `catalog-product-lifecycle`, `catalog-variant-pricing-attributes`, `catalog-public-listing-search`, `catalog-product-media-seo`).
+  - Acceptance criteria eksplisit per feature.
+  - Verifikasi dependency antar module (`catalog -> inventory`, `catalog -> review`) dan downstream consumer (`homepage`, `cart`).
+  - Checklist Definition of Ready untuk kickoff Phase 2.
+* Menandai M3.7 sebagai completed di `PROJECT_STATE.md` dan memindahkan fokus berikutnya ke implementasi vertical slice `catalog`.
+
+Alasan:
+
+* Exit criteria M3.7 mensyaratkan backlog fitur, acceptance criteria, verifikasi dependency, dan dokumentasi kesiapan implementasi sebelum coding module pertama dimulai.
+* Menyepakati readiness package sebelum coding mengurangi ambiguity implementasi, mencegah scope drift, dan menjaga konsistensi dengan pendekatan spec-driven.
+
+Dampak:
+
+`planning/backlog.md`, `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.

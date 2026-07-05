@@ -9,6 +9,27 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-05 (6)
+
+### Added
+
+* Menambahkan paket **Catalog Start Gate (M3.7)** di `planning/backlog.md` berisi feature backlog vertical slice `catalog`, acceptance criteria per feature, verifikasi dependency antar module, dan readiness checklist (Definition of Ready).
+* Menambahkan keputusan baru di `planning/decisions.md` sebagai **Decision 017** untuk menetapkan M3.7 sebagai completion gate sebelum kickoff implementasi module `catalog`.
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md`:
+  - menandai **M3.7 — Catalog Start Gate** sebagai selesai,
+  - menutup **Milestone 3 — Implementation Foundation** sebagai completed,
+  - menggeser next action ke **M4.1 — Catalog Vertical Slice 01**.
+* Memperbarui `context/ctx-implementation.md` agar sinkron dengan status terbaru: M3.7 completed, fase berikutnya siap mulai implementasi `catalog`.
+
+### Notes
+
+* Exit criteria M3.7 terpenuhi seluruhnya: backlog, acceptance criteria, dependency verification, dan readiness dokumentasi `catalog`.
+
+---
+
 ## 2026-07-05 (5)
 
 ### Changed

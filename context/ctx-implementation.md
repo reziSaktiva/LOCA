@@ -55,6 +55,7 @@ Sudah selesai pada Milestone 3:
   - Provider pattern aktif (`src/app/providers.tsx`); barrel export di `src/shared/ui/index.ts`.
 - **M3.6 - CI Baseline Ready (in progress)**
   - Workflow CI minimum sudah ditambahkan: `.github/workflows/ci.yml`.
+  - Step `bunx --bun prisma generate` ditambahkan sebelum gate quality agar Prisma client tersedia saat CI menjalankan `typecheck`.
   - Trigger: `pull_request` + `push` ke `main`.
   - Gates: `lint`, `typecheck`, `test`.
   - Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah terselesaikan; `bun install` berhasil.

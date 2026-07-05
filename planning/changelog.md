@@ -9,6 +9,29 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-05
+
+### Added
+
+* Menambahkan baseline workflow CI di `.github/workflows/ci.yml` dengan trigger `pull_request` dan `push` ke `main`.
+* Menambahkan quality gates minimum CI: `bun run lint`, `bun run typecheck`, `bun run test`.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 016).
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md` untuk menandai progres M3.6 (workflow sudah dibuat, verifikasi lokal masih pending).
+* Memperbarui `context/ctx-implementation.md` agar snapshot implementasi mencerminkan status terbaru M3.6.
+
+### Verified
+
+* Verifikasi quality gate lokal belum bisa dijalankan karena `bun install --frozen-lockfile` gagal dengan `UNABLE_TO_VERIFY_LEAF_SIGNATURE` pada environment saat ini.
+
+### Notes
+
+* Exit criteria M3.6 tetap: pipeline minimum harus hijau pada PR. Verifikasi final dilakukan setelah isu SSL sertifikat pada environment lokal terselesaikan.
+
+---
+
 ## 2026-07-03 (10)
 
 ### Fixed

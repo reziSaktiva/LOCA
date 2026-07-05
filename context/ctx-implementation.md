@@ -12,7 +12,7 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - `phase-1 implementation setup kickoff`
 - Menuntaskan fondasi implementasi agar siap development harian.
-- Next active item: **M3.6 - CI Baseline Ready (in progress)**
+- Next active item: **M3.6 - CI Baseline Ready (final verification on PR)**
 
 ## Completed (Planning Side)
 
@@ -57,7 +57,10 @@ Sudah selesai pada Milestone 3:
   - Workflow CI minimum sudah ditambahkan: `.github/workflows/ci.yml`.
   - Trigger: `pull_request` + `push` ke `main`.
   - Gates: `lint`, `typecheck`, `test`.
-  - Verifikasi lokal sementara terblokir karena `bun install --frozen-lockfile` gagal `UNABLE_TO_VERIFY_LEAF_SIGNATURE`.
+  - Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah terselesaikan; `bun install` berhasil.
+  - Verifikasi gate minimum lokal (`bun run check`) sudah lolos.
+  - Verifikasi full lokal (`bun run check:full`) sudah kembali hijau setelah sinkronisasi formatting.
+  - Finalisasi M3.6 kini menunggu pipeline PR hijau.
 
 ## Phase 1 (Next Targets)
 
@@ -65,7 +68,7 @@ Target setup awal:
 
 - **M3.6 - CI Baseline Ready**
   - Pipeline minimum: lint + typecheck + test.
-  - Next: verifikasi pipeline hijau di PR setelah blocker SSL environment lokal terselesaikan.
+  - Next: verifikasi pipeline hijau di PR.
 - **M3.7 - Catalog Start Gate (Definition of Ready)**
   - Backlog catalog, acceptance criteria, verifikasi dependency antar module, dan readiness docs.
 

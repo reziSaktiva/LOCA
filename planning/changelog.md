@@ -9,6 +9,44 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-05 (3)
+
+### Changed
+
+* Menjalankan formatter pada scope resmi project (`src/**/*.{ts,tsx,css}` dan `*.{json,mjs,ts}`) untuk menyelesaikan formatting drift lintas file.
+* Memperbarui `PROJECT_STATE.md` dan `context/ctx-implementation.md` agar status M3.6 mencatat bahwa `check:full` sudah kembali hijau.
+
+### Verified
+
+* `bun run format` — berhasil menormalkan formatting pada seluruh file dalam scope formatter.
+* `bun run check:full` — lolos penuh (`lint`, `typecheck`, `test`, `format:check`).
+
+### Notes
+
+* Remaining exit criteria M3.6: pipeline PR harus hijau.
+
+---
+
+## 2026-07-05 (2)
+
+### Changed
+
+* Menyesuaikan script test di `package.json` agar Vitest dijalankan melalui runtime Bun (`bun --bun ./node_modules/vitest/vitest.mjs`) untuk menghindari error startup ESM pada environment Node saat ini.
+* Memperbarui `PROJECT_STATE.md` dan `context/ctx-implementation.md` agar status M3.6 mencerminkan blocker SSL lokal yang sudah selesai dan verifikasi gate minimum yang sudah lolos.
+
+### Verified
+
+* `bun install` — berhasil tanpa error `UNABLE_TO_VERIFY_LEAF_SIGNATURE`.
+* `bun run check` — lolos (`lint`, `typecheck`, `test`).
+* `bun run check:full` — masih gagal pada `format:check` karena formatting drift lintas file.
+
+### Notes
+
+* Exit criteria M3.6 tetap: pipeline minimum harus hijau pada PR.
+* Pekerjaan lanjutan disarankan: rapikan formatting drift agar `check:full` kembali hijau.
+
+---
+
 ## 2026-07-05
 
 ### Added

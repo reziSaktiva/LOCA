@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,ts}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,ts}\"",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "bun --bun ./node_modules/vitest/vitest.mjs run",
+    "test:watch": "bun --bun ./node_modules/vitest/vitest.mjs",
     "check": "bun run lint && bun run typecheck && bun run test",
     "check:full": "bun run check && bun run format:check"
   },

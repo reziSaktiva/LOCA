@@ -99,7 +99,7 @@ Memulai fase implementasi dengan fondasi engineering yang siap dipakai developme
 - M3.4 plumbing selesai: Supabase Auth via `@supabase/ssr` (middleware proxy + browser/server client), Prisma 7 via `@prisma/adapter-pg` (pooled connection + env template). Lihat `planning/decisions.md` Decision 011.
 - Skills project dipindah ke `.agents/skills/`, 2 skill Supabase ditambahkan, tracking via `skills-lock.json`. Lihat `planning/decisions.md` Decision 012.
 - M3.5 UI Foundation selesai: shadcn/ui `base-nova` + 15 core components di `src/shared/ui/`, design tokens (semantic colors: success/warning/error/info; radius scale: xs-xl; shadow: sm/md/lg) aktif di `globals.css`, dependency stack UI lengkap (lucide-react, motion, react-hook-form, zod, next-themes, sonner), provider pattern aktif. Lihat `planning/decisions.md` Decision 014.
-- Baseline workflow CI minimum ditetapkan di `.github/workflows/ci.yml` dengan gate `lint`, `typecheck`, `test` (trigger `pull_request` + `push main`) sebagai eksekusi M3.6. Verifikasi lokal sementara terblokir isu SSL sertifikat saat `bun install` di environment saat ini. Lihat `planning/decisions.md` Decision 016.
+- Baseline workflow CI minimum ditetapkan di `.github/workflows/ci.yml` dengan gate `lint`, `typecheck`, `test` (trigger `pull_request` + `push main`) sebagai eksekusi M3.6. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah terselesaikan; verifikasi gate minimum lokal kini lolos. Lihat `planning/decisions.md` Decision 016.
 
 ---
 
@@ -159,8 +159,8 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 014** (M3.5 UI Foundation).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-03** (entry 9).
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 016** (M3.6 CI Baseline).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-05** (entry 2).
 
 ## Agent Governance
 
@@ -176,7 +176,7 @@ Belum diputuskan:
 - ✅ **M3.3 — Engineering Baseline Ready**: baseline engineering selesai dan distandarkan untuk workflow harian — `prettier` + `vitest` aktif, script minimum `lint`/`typecheck`/`test` tersedia, command agregat `check` + `check:full` tersedia, dan seluruh gate minimum terverifikasi lolos di lokal. Detail: `planning/decisions.md` Decision 009-010.
 - ✅ **M3.4 — Data & Auth Plumbing Ready**: Supabase Auth (`@supabase/ssr@0.12.0`) dan Prisma 7 (`@prisma/adapter-pg`) terinstall dan terkonfigurasi. Browser/server Supabase client tersedia di `src/shared/infrastructure/supabase/`, Prisma singleton di `src/shared/infrastructure/database/`, dan Next.js proxy untuk token refresh aktif di `src/proxy.ts` (dimigrasi dari `middleware.ts` sesuai Next.js 16). Lihat `planning/decisions.md` Decision 015. Env template `.env.example` siap. Detail: `planning/decisions.md` Decision 011.
 - ✅ **M3.5 — UI Foundation Ready**: shadcn/ui (`base-nova`) diinisialisasi, 15 core components dari design system inventory diinstall ke `src/shared/ui/`, design tokens (semantic colors, radius scale, shadow) dikonfigurasi di `globals.css`, dependency stack UI dilengkapi (`lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`), provider pattern aktif di `src/app/providers.tsx`, barrel export tersedia di `src/shared/ui/index.ts`. Detail: `planning/decisions.md` Decision 014.
-- ⏳ **M3.6 — CI Baseline Ready (In Progress)**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`, gate `bun run lint`, `bun run typecheck`, `bun run test`). Verifikasi lokal terblokir sementara karena `bun install --frozen-lockfile` gagal dengan `UNABLE_TO_VERIFY_LEAF_SIGNATURE` pada environment ini.
+- ⏳ **M3.6 — CI Baseline Ready (In Progress)**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`, gate `bun run lint`, `bun run typecheck`, `bun run test`). Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah teratasi, `bun install` berhasil, gate minimum lokal lolos via `bun run check`, dan `bun run check:full` kini kembali hijau setelah sinkronisasi formatting. Verifikasi akhir tetap menunggu pipeline PR hijau.
 
 ---
 
@@ -214,7 +214,8 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
 6. **M3.6 — CI Baseline Ready**
    - ✅ Tetapkan baseline CI minimum: lint, typecheck, test.
    - ✅ Workflow CI dibuat: `.github/workflows/ci.yml` (PR + push main).
-   - ⏳ Verifikasi lokal gate CI pending (blocked SSL cert: `UNABLE_TO_VERIFY_LEAF_SIGNATURE` saat install dependency).
+   - ✅ Verifikasi lokal gate minimum lolos: `bun install` + `bun run check`.
+   - ✅ Verifikasi full local gate lolos: `bun run check:full`.
    - Exit criteria: pipeline minimum berjalan hijau pada PR.
 
 7. **M3.7 — Catalog Start Gate (Definition of Ready)**

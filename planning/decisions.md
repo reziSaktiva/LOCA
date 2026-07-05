@@ -351,3 +351,30 @@ Alasan:
 Dampak:
 
 `src/middleware.ts` (dihapus), `src/proxy.ts` (baru), `src/app/layout.tsx`.
+
+---
+
+## Decision 016
+
+Tanggal: 2026-07-05
+
+Judul:
+
+M3.6 CI baseline workflow ditetapkan dengan gate minimum lint, typecheck, test.
+
+Keputusan:
+
+* Menambahkan workflow GitHub Actions `.github/workflows/ci.yml` sebagai baseline CI project.
+* Trigger workflow pada `pull_request` dan `push` ke branch `main`.
+* Menjalankan gate minimum secara berurutan: `bun run lint`, `bun run typecheck`, `bun run test`.
+* Menetapkan `concurrency` untuk membatalkan run lama pada ref yang sama agar feedback CI lebih cepat.
+
+Alasan:
+
+* Exit criteria M3.6 mensyaratkan pipeline minimum aktif untuk PR.
+* Gate minimum harus konsisten dengan standar engineering yang sudah ditetapkan di script `package.json`.
+* Menjaga kualitas perubahan tetap terverifikasi otomatis sebelum merge.
+
+Dampak:
+
+`.github/workflows/ci.yml`, `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.

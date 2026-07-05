@@ -1,37 +1,37 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
 
-import { env } from './shared/infrastructure/env'
+import { env } from "./shared/infrastructure/env";
 
 export async function proxy(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
+  let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(env.supabase.url, env.supabase.publishableKey, {
     cookies: {
       getAll() {
-        return request.cookies.getAll()
+        return request.cookies.getAll();
       },
       setAll(cookiesToSet, cacheHeaders) {
-        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
 
-        supabaseResponse = NextResponse.next({ request })
+        supabaseResponse = NextResponse.next({ request });
 
         cookiesToSet.forEach(({ name, value, options }) =>
           supabaseResponse.cookies.set(name, value, options),
-        )
+        );
 
         Object.entries(cacheHeaders).forEach(([key, value]) =>
           supabaseResponse.headers.set(key, value),
-        )
+        );
       },
     },
-  })
+  });
 
   // Wajib gunakan getClaims(), bukan getSession().
   // getClaims() memvalidasi JWT signature secara lokal — aman untuk server code.
-  await supabase.auth.getClaims()
+  await supabase.auth.getClaims();
 
-  return supabaseResponse
+  return supabaseResponse;
 }
 
 export const config = {
@@ -43,6 +43,6 @@ export const config = {
      * - favicon.ico, sitemap.xml, robots.txt
      * - file statis (svg, png, jpg, jpeg, gif, webp)
      */
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-}
+};

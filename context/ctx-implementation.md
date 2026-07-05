@@ -12,7 +12,7 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - `phase-1 implementation setup kickoff`
 - Menuntaskan fondasi implementasi agar siap development harian.
-- Next active item: **M3.6 - CI Baseline Ready**
+- Next active item: **M3.7 - Catalog Start Gate (Definition of Ready)**
 
 ## Completed (Planning Side)
 
@@ -53,13 +53,20 @@ Sudah selesai pada Milestone 3:
   - Design tokens aktif: semantic colors (success/warning/error/info), radius scale (xs–xl), shadow (sm/md/lg).
   - Dependency stack UI: `lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`.
   - Provider pattern aktif (`src/app/providers.tsx`); barrel export di `src/shared/ui/index.ts`.
+- **M3.6 - CI Baseline Ready (completed)**
+  - Workflow CI minimum sudah ditambahkan: `.github/workflows/ci.yml`.
+  - Step `bunx --bun prisma generate` ditambahkan sebelum gate quality agar Prisma client tersedia saat CI menjalankan `typecheck`.
+  - Trigger: `pull_request` + `push` ke `main`.
+  - Gates: `lint`, `typecheck`, `test`.
+  - Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah terselesaikan; `bun install` berhasil.
+  - Verifikasi gate minimum lokal (`bun run check`) sudah lolos.
+  - Verifikasi full lokal (`bun run check:full`) sudah kembali hijau setelah sinkronisasi formatting.
+  - Pipeline minimum sudah hijau pada PR (exit criteria tercapai).
 
 ## Phase 1 (Next Targets)
 
 Target setup awal:
 
-- **M3.6 - CI Baseline Ready**
-  - Pipeline minimum: lint + typecheck + test.
 - **M3.7 - Catalog Start Gate (Definition of Ready)**
   - Backlog catalog, acceptance criteria, verifikasi dependency antar module, dan readiness docs.
 
@@ -101,7 +108,7 @@ Target setup awal:
 ## Open Decisions
 
 - Final branding assets (name, logo, color, typography, tone).
-- Final CI baseline (lint/typecheck/test minimum gates).
+- Branch protection policy agar status check CI wajib sebelum merge.
 - Detail testing strategy per layer (unit/integration/e2e granularity).
 - Detail deployment flow (preview/release/rollback).
 - SOP operasional order handling dan shipping SLA.

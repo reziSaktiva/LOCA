@@ -1,5 +1,5 @@
-export { Badge, badgeVariants } from "./badge"
-export { Button, buttonVariants } from "./button"
+export { Badge, badgeVariants } from "./badge";
+export { Button, buttonVariants } from "./button";
 export {
   Card,
   CardHeader,
@@ -8,9 +8,9 @@ export {
   CardAction,
   CardContent,
   CardFooter,
-} from "./card"
-export { Checkbox } from "./checkbox"
-export { Container } from "./container"
+} from "./card";
+export { Checkbox } from "./checkbox";
+export { Container } from "./container";
 export {
   Dialog,
   DialogTrigger,
@@ -22,7 +22,7 @@ export {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "./dialog"
+} from "./dialog";
 export {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -39,8 +39,8 @@ export {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from "./dropdown-menu"
-export { Input } from "./input"
+} from "./dropdown-menu";
+export { Input } from "./input";
 export {
   Pagination,
   PaginationContent,
@@ -49,8 +49,8 @@ export {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "./pagination"
-export { RadioGroup, RadioGroupItem } from "./radio-group"
+} from "./pagination";
+export { RadioGroup, RadioGroupItem } from "./radio-group";
 export {
   Select,
   SelectTrigger,
@@ -62,9 +62,9 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
-} from "./select"
-export { Toaster } from "./sonner"
-export { Switch } from "./switch"
+} from "./select";
+export { Toaster } from "./sonner";
+export { Switch } from "./switch";
 export {
   Table,
   TableHeader,
@@ -74,13 +74,7 @@ export {
   TableHead,
   TableCell,
   TableCaption,
-} from "./table"
-export {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-  tabsListVariants,
-} from "./tabs"
-export { Textarea } from "./textarea"
-export { cn } from "./utils"
+} from "./table";
+export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants } from "./tabs";
+export { Textarea } from "./textarea";
+export { cn } from "./utils";

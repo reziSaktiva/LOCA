@@ -9,6 +9,98 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-05 (5)
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md` untuk menandai **M3.6 — CI Baseline Ready** sebagai selesai: status implementation state berubah ke ✅, checklist Milestone 3 menandai M3.6 selesai, dan exit criteria dicatat telah terpenuhi.
+* Memperbarui `context/ctx-implementation.md` agar `Current Focus` berpindah ke **M3.7 — Catalog Start Gate** dan status M3.6 tercatat completed.
+
+### Verified
+
+* Pipeline minimum PR (`lint`, `typecheck`, `test`) berhasil hijau.
+
+### Notes
+
+* Fokus Phase 1 berikutnya: menutup **M3.7 — Catalog Start Gate (Definition of Ready)**.
+
+---
+
+## 2026-07-05 (4)
+
+### Changed
+
+* Memperbarui workflow CI di `.github/workflows/ci.yml` dengan step `Generate Prisma client` (`bunx --bun prisma generate`) sebelum `lint`, `typecheck`, dan `test`.
+* Menambahkan env dummy `DIRECT_URL` dan `DATABASE_URL` di step generate agar Prisma config tetap valid saat berjalan di environment CI.
+* Memperbarui `PROJECT_STATE.md` dan `context/ctx-implementation.md` untuk mencatat mitigasi error CI `Cannot find module '../../../generated/prisma/client'`.
+
+### Notes
+
+* Tujuan perubahan: memastikan Prisma client selalu tersedia pada job CI sebelum `tsc --noEmit` dijalankan.
+
+---
+
+## 2026-07-05 (3)
+
+### Changed
+
+* Menjalankan formatter pada scope resmi project (`src/**/*.{ts,tsx,css}` dan `*.{json,mjs,ts}`) untuk menyelesaikan formatting drift lintas file.
+* Memperbarui `PROJECT_STATE.md` dan `context/ctx-implementation.md` agar status M3.6 mencatat bahwa `check:full` sudah kembali hijau.
+
+### Verified
+
+* `bun run format` — berhasil menormalkan formatting pada seluruh file dalam scope formatter.
+* `bun run check:full` — lolos penuh (`lint`, `typecheck`, `test`, `format:check`).
+
+### Notes
+
+* Remaining exit criteria M3.6: pipeline PR harus hijau.
+
+---
+
+## 2026-07-05 (2)
+
+### Changed
+
+* Menyesuaikan script test di `package.json` agar Vitest dijalankan melalui runtime Bun (`bun --bun ./node_modules/vitest/vitest.mjs`) untuk menghindari error startup ESM pada environment Node saat ini.
+* Memperbarui `PROJECT_STATE.md` dan `context/ctx-implementation.md` agar status M3.6 mencerminkan blocker SSL lokal yang sudah selesai dan verifikasi gate minimum yang sudah lolos.
+
+### Verified
+
+* `bun install` — berhasil tanpa error `UNABLE_TO_VERIFY_LEAF_SIGNATURE`.
+* `bun run check` — lolos (`lint`, `typecheck`, `test`).
+* `bun run check:full` — masih gagal pada `format:check` karena formatting drift lintas file.
+
+### Notes
+
+* Exit criteria M3.6 tetap: pipeline minimum harus hijau pada PR.
+* Pekerjaan lanjutan disarankan: rapikan formatting drift agar `check:full` kembali hijau.
+
+---
+
+## 2026-07-05
+
+### Added
+
+* Menambahkan baseline workflow CI di `.github/workflows/ci.yml` dengan trigger `pull_request` dan `push` ke `main`.
+* Menambahkan quality gates minimum CI: `bun run lint`, `bun run typecheck`, `bun run test`.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 016).
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md` untuk menandai progres M3.6 (workflow sudah dibuat, verifikasi lokal masih pending).
+* Memperbarui `context/ctx-implementation.md` agar snapshot implementasi mencerminkan status terbaru M3.6.
+
+### Verified
+
+* Verifikasi quality gate lokal belum bisa dijalankan karena `bun install --frozen-lockfile` gagal dengan `UNABLE_TO_VERIFY_LEAF_SIGNATURE` pada environment saat ini.
+
+### Notes
+
+* Exit criteria M3.6 tetap: pipeline minimum harus hijau pada PR. Verifikasi final dilakukan setelah isu SSL sertifikat pada environment lokal terselesaikan.
+
+---
+
 ## 2026-07-03 (10)
 
 ### Fixed

@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 1 Kickoff (Implementation Setup In Progress)
+Status: Phase 1 Completed (Catalog Start Gate Ready)
 
 Current Version: v0.8
 
@@ -27,7 +27,8 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 # Current Phase
 
 ✅ Phase 0 — Planning & Documentation (Completed)
-⏳ Phase 1 — Project Foundation (Implementation Setup In Progress)
+✅ Phase 1 — Project Foundation (Completed)
+⏳ Phase 2 — Catalog Foundation (Ready to Start)
 
 Progress:
 
@@ -43,7 +44,7 @@ Progress:
 - [x] Design System
 - [x] Development Rules
 - [x] Development Roadmap
-- [ ] Phase 1 Implementation Setup
+- [x] Phase 1 Implementation Setup
 
 ---
 
@@ -51,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-1 implementation setup kickoff`
+`phase-2 catalog foundation kickoff prep`
 
 Tujuan:
 
-Memulai fase implementasi dengan fondasi engineering yang siap dipakai development harian, sambil menjaga konsistensi antara aturan agent, dokumentasi resmi, dan workflow eksekusi.
+Menutup milestone fondasi implementasi (M3.1-M3.7) agar modul pertama (`catalog`) dapat mulai dibangun lewat vertical slice tanpa ambiguity requirement.
 
 ---
 
@@ -100,6 +101,7 @@ Memulai fase implementasi dengan fondasi engineering yang siap dipakai developme
 - Skills project dipindah ke `.agents/skills/`, 2 skill Supabase ditambahkan, tracking via `skills-lock.json`. Lihat `planning/decisions.md` Decision 012.
 - M3.5 UI Foundation selesai: shadcn/ui `base-nova` + 15 core components di `src/shared/ui/`, design tokens (semantic colors: success/warning/error/info; radius scale: xs-xl; shadow: sm/md/lg) aktif di `globals.css`, dependency stack UI lengkap (lucide-react, motion, react-hook-form, zod, next-themes, sonner), provider pattern aktif. Lihat `planning/decisions.md` Decision 014.
 - Baseline workflow CI minimum ditetapkan di `.github/workflows/ci.yml` dengan step `Generate Prisma client` + gate `lint`, `typecheck`, `test` (trigger `pull_request` + `push main`) sebagai eksekusi M3.6. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah terselesaikan; verifikasi gate minimum lokal kini lolos. Lihat `planning/decisions.md` Decision 016.
+- M3.7 Catalog Start Gate selesai: backlog feature `catalog`, acceptance criteria, verifikasi dependency antar module, dan readiness checklist implementasi ditetapkan di `planning/backlog.md`. Module `catalog` dinyatakan siap untuk kickoff vertical slice. Lihat `planning/decisions.md` Decision 017.
 
 ---
 
@@ -159,8 +161,8 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 016** (M3.6 CI Baseline).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-05** (entry 5).
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 017** (M3.7 Catalog Start Gate).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-05** (entry 6).
 
 ## Agent Governance
 
@@ -177,12 +179,15 @@ Belum diputuskan:
 - ✅ **M3.4 — Data & Auth Plumbing Ready**: Supabase Auth (`@supabase/ssr@0.12.0`) dan Prisma 7 (`@prisma/adapter-pg`) terinstall dan terkonfigurasi. Browser/server Supabase client tersedia di `src/shared/infrastructure/supabase/`, Prisma singleton di `src/shared/infrastructure/database/`, dan Next.js proxy untuk token refresh aktif di `src/proxy.ts` (dimigrasi dari `middleware.ts` sesuai Next.js 16). Lihat `planning/decisions.md` Decision 015. Env template `.env.example` siap. Detail: `planning/decisions.md` Decision 011.
 - ✅ **M3.5 — UI Foundation Ready**: shadcn/ui (`base-nova`) diinisialisasi, 15 core components dari design system inventory diinstall ke `src/shared/ui/`, design tokens (semantic colors, radius scale, shadow) dikonfigurasi di `globals.css`, dependency stack UI dilengkapi (`lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`), provider pattern aktif di `src/app/providers.tsx`, barrel export tersedia di `src/shared/ui/index.ts`. Detail: `planning/decisions.md` Decision 014.
 - ✅ **M3.6 — CI Baseline Ready**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`) dan menyertakan step `bunx --bun prisma generate` sebelum gate `bun run lint`, `bun run typecheck`, `bun run test` untuk memastikan Prisma client tersedia saat CI typecheck. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah teratasi, `bun install` berhasil, gate minimum lokal lolos via `bun run check`, `bun run check:full` hijau setelah sinkronisasi formatting, dan pipeline minimum pada PR sudah hijau (exit criteria tercapai).
+- ✅ **M3.7 — Catalog Start Gate (Definition of Ready)**: readiness implementasi module `catalog` telah ditetapkan di `planning/backlog.md` mencakup feature backlog vertical slice, acceptance criteria per feature, verifikasi dependency lintas module (`inventory`, `review`, downstream `homepage`/`cart`), dan checklist DoR. Exit criteria M3.7 tercapai; `catalog` siap diimplementasikan. Detail: `planning/decisions.md` Decision 017.
 
 ---
 
 # Next Action
 
-Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
+**Milestone 3 — Implementation Foundation** sudah selesai.
+
+Langkah berikutnya:
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -218,14 +223,24 @@ Eksekusi **Milestone 3 — Implementation Foundation** secara bertahap:
    - ✅ Verifikasi full local gate lolos: `bun run check:full`.
    - ✅ Exit criteria: pipeline minimum berjalan hijau pada PR.
 
-7. **M3.7 — Catalog Start Gate (Definition of Ready)**
-   - Tetapkan Definition of Ready implementasi module pertama (`catalog`).
+7. ✅ **M3.7 — Catalog Start Gate (Definition of Ready)** (Selesai)
+   - ✅ Definition of Ready implementasi module pertama (`catalog`) ditetapkan.
+   - ✅ Feature backlog `catalog` disusun (vertical slice).
+   - ✅ Acceptance criteria tersedia.
+   - ✅ Dependency antar module diverifikasi.
+   - ✅ Kebutuhan implementasi terdokumentasi.
+   - ✅ Module `catalog` siap diimplementasikan menggunakan vertical slice.
+
+8. **M4.1 — Catalog Vertical Slice 01 (Category + Product Listing Public)**
+   - Mulai implementasi vertical slice pertama module `catalog`.
+   - Fokus awal:
+     - Domain + application service untuk category dan product listing publik.
+     - Public endpoint `GET /products` dan `GET /products/categories`.
+     - Validasi business invariant dasar katalog.
    - Exit criteria:
-     - Feature backlog `catalog` telah disusun.
-     - Acceptance criteria tersedia.
-     - Dependency antar module telah diverifikasi.
-     - Seluruh kebutuhan implementasi terdokumentasi.
-     - Module `catalog` siap diimplementasikan menggunakan vertical slice.
+     - Listing produk publik dasar berjalan.
+     - Endpoint kategori publik tersedia.
+     - Test dan quality gate minimum lolos.
 
 ---
 
@@ -243,7 +258,7 @@ System Design Readiness
 
 ```
 Implementation
-░░░░░░░░░░░░░░░░░░░░   0%
+██░░░░░░░░░░░░░░░░░░  10%
 ```
 
 ---
@@ -284,7 +299,7 @@ Status:
 
 ---
 
-## ⏳ Milestone 3 — Implementation Foundation (Next)
+## ✅ Milestone 3 — Implementation Foundation (Completed)
 
 Breakdown:
 
@@ -294,10 +309,10 @@ Breakdown:
 - [x] M3.4 Data & Auth Plumbing Ready
 - [x] M3.5 UI Foundation Ready
 - [x] M3.6 CI Baseline Ready
-- [ ] M3.7 Catalog Start Gate (Definition of Ready)
+- [x] M3.7 Catalog Start Gate (Definition of Ready)
 
 Target Outcome:
 
-- Project bootstrap siap untuk development harian.
-- Baseline quality gates aktif dari lokal sampai CI.
-- Implementasi module pertama (`catalog`) dapat dimulai tanpa ambiguity dokumen.
+- ✅ Project bootstrap siap untuk development harian.
+- ✅ Baseline quality gates aktif dari lokal sampai CI.
+- ✅ Implementasi module pertama (`catalog`) dapat dimulai tanpa ambiguity dokumen.

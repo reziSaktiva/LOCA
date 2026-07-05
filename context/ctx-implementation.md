@@ -5,14 +5,15 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 ## Current Phase
 
 - Phase 0 (Planning & Documentation): **completed**
-- Phase 1 (Project Foundation / Implementation Setup): **in progress**
-- Current implementation progress: **0%** (belum masuk build module production)
+- Phase 1 (Project Foundation / Implementation Setup): **completed**
+- Phase 2 (Catalog Foundation): **ready to start**
+- Current implementation progress: **10%** (fondasi implementasi selesai, build module production mulai fase berikutnya)
 
 ## Current Focus
 
-- `phase-1 implementation setup kickoff`
-- Menuntaskan fondasi implementasi agar siap development harian.
-- Next active item: **M3.7 - Catalog Start Gate (Definition of Ready)**
+- `phase-2 catalog foundation kickoff prep`
+- Memulai implementasi module `catalog` berbasis vertical slice setelah Definition of Ready selesai.
+- Next active item: **M4.1 - Catalog Vertical Slice 01 (Category + Product Listing Public)**
 
 ## Completed (Planning Side)
 
@@ -62,19 +63,25 @@ Sudah selesai pada Milestone 3:
   - Verifikasi gate minimum lokal (`bun run check`) sudah lolos.
   - Verifikasi full lokal (`bun run check:full`) sudah kembali hijau setelah sinkronisasi formatting.
   - Pipeline minimum sudah hijau pada PR (exit criteria tercapai).
+- **M3.7 - Catalog Start Gate (Definition of Ready) (completed)**
+  - Backlog feature `catalog` disusun per vertical slice di `planning/backlog.md`.
+  - Acceptance criteria untuk feature utama `catalog` tersedia.
+  - Dependency antar module diverifikasi (`catalog -> inventory`, `catalog -> review`, downstream `homepage` dan `cart`).
+  - Readiness checklist implementasi `catalog` dinyatakan lengkap; module siap kickoff implementasi.
 
-## Phase 1 (Next Targets)
+## Phase 2 (Next Targets)
 
 Target setup awal:
 
-- **M3.7 - Catalog Start Gate (Definition of Ready)**
-  - Backlog catalog, acceptance criteria, verifikasi dependency antar module, dan readiness docs.
+- **M4.1 - Catalog Vertical Slice 01 (Category + Product Listing Public)**
+  - Implementasi domain + application service dasar untuk category dan listing produk publik.
+  - Delivery endpoint awal: `GET /products` dan `GET /products/categories`.
 
 ## Module Build Plan (High-Level)
 
 ### Catalog Module
 
-- Status: Not Started
+- Status: Ready to Start (DoR completed)
 - Target phase: Phase 2
 - Deliverables: product/category/variant/detail/search/filter/sort
 
@@ -131,3 +138,7 @@ Module pertama (catalog) baru mulai jika:
 - folder boundaries final disepakati,
 - quality gates dasar (lint/typecheck/test baseline) tersedia,
 - context docs sinkron dengan dokumen utama.
+
+Status:
+
+- **Completed** pada M3.7 (lihat `planning/backlog.md` dan `planning/decisions.md` Decision 017).

@@ -6,14 +6,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **ready to start**
-- Current implementation progress: **10%** (fondasi implementasi selesai, build module production mulai fase berikutnya)
+- Phase 2 (Catalog Foundation): **in progress**
+- Current implementation progress: **20%** (vertical slice awal catalog public listing sudah berjalan)
 
 ## Current Focus
 
-- `phase-2 catalog foundation kickoff prep`
-- Memulai implementasi module `catalog` berbasis vertical slice setelah Definition of Ready selesai.
-- Next active item: **M4.1 - Catalog Vertical Slice 01 (Category + Product Listing Public)**
+- `phase-2 catalog vertical slice 01`
+- Vertical slice awal module `catalog` sudah diimplementasikan untuk read-path publik.
+- Next active item: **M4.2 - Catalog Product Lifecycle Dasar (Admin + Slug Detail Foundation)**
 
 ## Completed (Planning Side)
 
@@ -76,12 +76,19 @@ Target setup awal:
 - **M4.1 - Catalog Vertical Slice 01 (Category + Product Listing Public)**
   - Implementasi domain + application service dasar untuk category dan listing produk publik.
   - Delivery endpoint awal: `GET /products` dan `GET /products/categories`.
+- **Status M4.1: Completed**
+  - Domain invariant dasar katalog sudah aktif (`ACTIVE` + minimal 1 variant, archived/non-active tidak tampil publik).
+  - Endpoint publik aktif di App Router: `GET /api/v1/products` dan `GET /api/v1/products/categories`.
+  - Test domain + application untuk listing publik sudah ditambahkan dan lolos quality gate.
+
+- **M4.2 - Catalog Product Lifecycle Dasar (Admin + Slug Detail Foundation)**
+  - Target berikutnya: service dasar create/update/archive product, slug uniqueness, dan fondasi detail by slug.
 
 ## Module Build Plan (High-Level)
 
 ### Catalog Module
 
-- Status: Ready to Start (DoR completed)
+- Status: In Progress (M4.1 completed)
 - Target phase: Phase 2
 - Deliverables: product/category/variant/detail/search/filter/sort
 

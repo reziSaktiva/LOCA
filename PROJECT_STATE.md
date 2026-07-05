@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 1 Completed (Catalog Start Gate Ready)
+Status: Phase 2 In Progress (Catalog Vertical Slice Started)
 
 Current Version: v0.8
 
@@ -28,7 +28,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 
 ✅ Phase 0 — Planning & Documentation (Completed)
 ✅ Phase 1 — Project Foundation (Completed)
-⏳ Phase 2 — Catalog Foundation (Ready to Start)
+⏳ Phase 2 — Catalog Foundation (In Progress)
 
 Progress:
 
@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-2 catalog foundation kickoff prep`
+`phase-2 catalog vertical slice 01`
 
 Tujuan:
 
-Menutup milestone fondasi implementasi (M3.1-M3.7) agar modul pertama (`catalog`) dapat mulai dibangun lewat vertical slice tanpa ambiguity requirement.
+Menyelesaikan vertical slice awal module `catalog` untuk listing produk dan kategori publik sebagai fondasi API read-path katalog.
 
 ---
 
@@ -180,6 +180,7 @@ Belum diputuskan:
 - ✅ **M3.5 — UI Foundation Ready**: shadcn/ui (`base-nova`) diinisialisasi, 15 core components dari design system inventory diinstall ke `src/shared/ui/`, design tokens (semantic colors, radius scale, shadow) dikonfigurasi di `globals.css`, dependency stack UI dilengkapi (`lucide-react`, `motion`, `react-hook-form`, `zod`, `next-themes`, `sonner`), provider pattern aktif di `src/app/providers.tsx`, barrel export tersedia di `src/shared/ui/index.ts`. Detail: `planning/decisions.md` Decision 014.
 - ✅ **M3.6 — CI Baseline Ready**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`) dan menyertakan step `bunx --bun prisma generate` sebelum gate `bun run lint`, `bun run typecheck`, `bun run test` untuk memastikan Prisma client tersedia saat CI typecheck. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah teratasi, `bun install` berhasil, gate minimum lokal lolos via `bun run check`, `bun run check:full` hijau setelah sinkronisasi formatting, dan pipeline minimum pada PR sudah hijau (exit criteria tercapai).
 - ✅ **M3.7 — Catalog Start Gate (Definition of Ready)**: readiness implementasi module `catalog` telah ditetapkan di `planning/backlog.md` mencakup feature backlog vertical slice, acceptance criteria per feature, verifikasi dependency lintas module (`inventory`, `review`, downstream `homepage`/`cart`), dan checklist DoR. Exit criteria M3.7 tercapai; `catalog` siap diimplementasikan. Detail: `planning/decisions.md` Decision 017.
+- ✅ **M4.1 — Catalog Vertical Slice 01 (Category + Product Listing Public)**: module `catalog` mulai terimplementasi dengan struktur layer lengkap untuk read-path publik (`domain`, `application`, `infrastructure`, `public`, `presentation`), invariant dasar katalog (`ACTIVE` + minimal 1 variant, produk `ARCHIVED`/non-active tidak tampil), endpoint `GET /api/v1/products` (pagination/filter/sort dasar) dan `GET /api/v1/products/categories` (kategori aktif dengan produk publik), serta unit test domain+application. Exit criteria M4.1 tercapai dan quality gate minimum lolos (`bun run check`).
 
 ---
 
@@ -231,16 +232,22 @@ Langkah berikutnya:
    - ✅ Kebutuhan implementasi terdokumentasi.
    - ✅ Module `catalog` siap diimplementasikan menggunakan vertical slice.
 
-8. **M4.1 — Catalog Vertical Slice 01 (Category + Product Listing Public)**
-   - Mulai implementasi vertical slice pertama module `catalog`.
+8. ✅ **M4.1 — Catalog Vertical Slice 01 (Category + Product Listing Public)** (Selesai)
+   - ✅ Domain + application service untuk category dan product listing publik.
+   - ✅ Public endpoint `GET /api/v1/products` dan `GET /api/v1/products/categories`.
+   - ✅ Validasi business invariant dasar katalog.
+   - ✅ Exit criteria tercapai: listing publik berjalan, endpoint kategori tersedia, test + quality gate minimum lolos.
+
+9. **M4.2 — Catalog Product Lifecycle Dasar (Admin + Slug Detail Foundation)**
+   - Lanjutkan vertical slice `catalog-product-lifecycle`.
    - Fokus awal:
-     - Domain + application service untuk category dan product listing publik.
-     - Public endpoint `GET /products` dan `GET /products/categories`.
-     - Validasi business invariant dasar katalog.
+     - Service dasar create/update/archive product.
+     - Validasi slug unik dan invariant status lifecycle.
+     - Fondasi endpoint detail publik `GET /products/slug/{slug}`.
    - Exit criteria:
-     - Listing produk publik dasar berjalan.
-     - Endpoint kategori publik tersedia.
-     - Test dan quality gate minimum lolos.
+     - Rule lifecycle product dasar teruji.
+     - Kontrak detail by slug tersedia.
+     - Tetap lolos quality gate minimum.
 
 ---
 
@@ -258,7 +265,7 @@ System Design Readiness
 
 ```
 Implementation
-██░░░░░░░░░░░░░░░░░░  10%
+████░░░░░░░░░░░░░░░░  20%
 ```
 
 ---
@@ -316,3 +323,19 @@ Target Outcome:
 - ✅ Project bootstrap siap untuk development harian.
 - ✅ Baseline quality gates aktif dari lokal sampai CI.
 - ✅ Implementasi module pertama (`catalog`) dapat dimulai tanpa ambiguity dokumen.
+
+---
+
+## ⏳ Milestone 4 — Catalog Foundation (In Progress)
+
+Breakdown:
+
+- [x] M4.1 Catalog Vertical Slice 01 (Category + Product Listing Public)
+- [ ] M4.2 Catalog Product Lifecycle Dasar
+- [ ] M4.3 Catalog Variant Pricing & Attributes Dasar
+- [ ] M4.4 Catalog Public Search Endpoint
+
+Target Outcome:
+
+- API katalog publik dasar siap dipakai consumer awal.
+- Invariant domain katalog utama tervalidasi oleh test.

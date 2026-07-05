@@ -9,6 +9,38 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-05 (7)
+
+### Added
+
+* Menambahkan implementasi vertical slice awal module `catalog`:
+  - domain entity + invariant publik (`src/modules/catalog/domain/`),
+  - application service listing produk/kategori publik (`src/modules/catalog/application/`),
+  - in-memory repository seed awal (`src/modules/catalog/infrastructure/in-memory-catalog-repository.ts`),
+  - public facade + response helper (`src/modules/catalog/public/`, `src/modules/catalog/presentation/`),
+  - endpoint `GET /api/v1/products` dan `GET /api/v1/products/categories` (`src/app/api/v1/products/**`).
+* Menambahkan test baru untuk domain invariant dan application service katalog publik:
+  - `src/modules/catalog/domain/catalog-invariants.test.ts`
+  - `src/modules/catalog/application/catalog-public-listing.test.ts`
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md`:
+  - menandai **M4.1 — Catalog Vertical Slice 01** sebagai selesai,
+  - menggeser next action ke **M4.2 — Catalog Product Lifecycle Dasar**,
+  - membuka checkpoint **Milestone 4 — Catalog Foundation (In Progress)**.
+* Memperbarui `context/ctx-implementation.md` agar sinkron dengan status terbaru Phase 2 (M4.1 completed).
+
+### Verified
+
+* `bun run check` — lolos (`lint`, `typecheck`, `test`).
+
+### Notes
+
+* Implementasi M4.1 masih menggunakan repository in-memory sebagai fondasi vertical slice read-path publik; persistence Prisma akan dihubungkan di slice berikutnya.
+
+---
+
 ## 2026-07-05 (6)
 
 ### Added

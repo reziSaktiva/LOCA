@@ -1,3 +1,4 @@
+import { getProductBySlug } from "../application/get-product-by-slug";
 import { listPublicCategories } from "../application/list-public-categories";
 import { listPublicProducts } from "../application/list-public-products";
 import type { ListPublicProductsQuery } from "../domain/catalog-repository";
@@ -7,6 +8,18 @@ export type PublicProductCard = {
   id: string;
   name: string;
   slug: string;
+  categoryId: string;
+  priceFrom: number;
+  priceTo: number;
+  thumbnailUrl: string;
+};
+
+export type PublicProductDetail = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  brand: string;
   categoryId: string;
   priceFrom: number;
   priceTo: number;
@@ -103,4 +116,26 @@ export async function listPublicCategoriesForCatalog(): Promise<PublicCategory[]
     name: category.name,
     slug: category.slug,
   }));
+}
+
+export async function getPublicProductBySlug(
+  slug: string,
+): Promise<PublicProductDetail | null> {
+  const result = await getProductBySlug(repository, slug);
+
+  if (!result.found) {
+    return null;
+  }
+
+  return {
+    id: result.product.id,
+    name: result.product.name,
+    slug: result.product.slug,
+    description: result.product.description,
+    brand: result.product.brand,
+    categoryId: result.product.categoryId,
+    priceFrom: result.product.priceFrom,
+    priceTo: result.product.priceTo,
+    thumbnailUrl: result.product.thumbnailUrl,
+  };
 }

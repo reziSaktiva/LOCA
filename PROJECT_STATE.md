@@ -68,6 +68,8 @@ Menyelesaikan vertical slice awal module `catalog` untuk listing produk dan kate
 - Marketplace (Shopee & TikTok Shop) tetap digunakan sebagai channel penjualan.
 - Fokus utama MVP adalah membangun fondasi brand dan alur pembelian end-to-end yang stabil.
 - Produk diposisikan sebagai Sports Apparel Essentials untuk target market mahasiswa dan young professionals.
+- **Brand LOCA ditetapkan final**: nama brand, brand story (Lifestyle Movement), logo (Wordmark), color direction (Black + Off-White + 1 Accent), typography (Geometric Sans: Outfit/Plus Jakarta Sans), tone of voice (Confident & Minimal). Lihat `planning/decisions.md` Decision 018.
+- **SOP Operasional MVP ditetapkan**: KPI harian (Total Order + Revenue + Stok Habis), SOP order handling (3-step), SLA shipping (1-2 hari kerja). Lihat `planning/decisions.md` Decision 020.
 
 ---
 
@@ -102,6 +104,7 @@ Menyelesaikan vertical slice awal module `catalog` untuk listing produk dan kate
 - M3.5 UI Foundation selesai: shadcn/ui `base-nova` + 15 core components di `src/shared/ui/`, design tokens (semantic colors: success/warning/error/info; radius scale: xs-xl; shadow: sm/md/lg) aktif di `globals.css`, dependency stack UI lengkap (lucide-react, motion, react-hook-form, zod, next-themes, sonner), provider pattern aktif. Lihat `planning/decisions.md` Decision 014.
 - Baseline workflow CI minimum ditetapkan di `.github/workflows/ci.yml` dengan step `Generate Prisma client` + gate `lint`, `typecheck`, `test` (trigger `pull_request` + `push main`) sebagai eksekusi M3.6. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah terselesaikan; verifikasi gate minimum lokal kini lolos. Lihat `planning/decisions.md` Decision 016.
 - M3.7 Catalog Start Gate selesai: backlog feature `catalog`, acceptance criteria, verifikasi dependency antar module, dan readiness checklist implementasi ditetapkan di `planning/backlog.md`. Module `catalog` dinyatakan siap untuk kickoff vertical slice. Lihat `planning/decisions.md` Decision 017.
+- **Engineering policy ditetapkan**: testing strategy (unit domain + integration API), branch protection (CI gate wajib), deployment flow (manual deploy). Lihat `planning/decisions.md` Decision 019.
 
 ---
 
@@ -120,24 +123,18 @@ Belum diputuskan:
 
 ## Branding
 
-- Nama brand final
-- Logo final
-- Warna brand final
-- Typography brand final
-- Tone of voice final
-- Brand story final
+- Warna accent brand final (1 warna, ditetapkan saat produksi logo/brand asset)
+- Logo final (file asset)
+- Typography final (Outfit vs Plus Jakarta Sans — ditetapkan saat implementasi UI)
 
 ## Phase 1 Engineering
 
-- Testing strategy detail per layer (unit/integration/e2e)
-- Branch protection policy untuk mewajibkan status check CI sebelum merge
-- Deployment flow detail (preview, release, rollback)
+- Branch protection policy untuk mewajibkan status check CI sebelum merge (sudah disepakati CI gate, belum dikonfigurasi di GitHub repo settings)
+- Deployment flow detail (preview, release, rollback) — untuk fase post-MVP
 
 ## Operations
 
-- KPI dashboard prioritas awal
-- SOP operasional order handling
-- SLA internal untuk proses shipping
+- KPI dashboard kuantitatif target (conversion rate, AOV, repeat customer) — ditetapkan setelah operasional berjalan
 
 ---
 

@@ -9,6 +9,47 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-06 (8)
+
+### Added
+
+* Menetapkan **Branding Final LOCA** (Decision 018):
+  - Nama brand: **LOCA** (final).
+  - Logo: Wordmark — nama "LOCA" dengan typography kuat, clean, minimal.
+  - Color direction: Black + Off-White + 1 Accent Color.
+  - Typography: Geometric Sans (Outfit / Plus Jakarta Sans).
+  - Tone of voice: Confident & Minimal.
+  - Brand story: Lifestyle Movement.
+* Menetapkan **Engineering Policy** (Decision 019):
+  - Testing strategy: Unit test domain layer + Integration test API endpoint.
+  - Branch protection: CI gate wajib (lint + typecheck + test) sebelum merge ke `main`.
+  - Deployment flow: Manual deploy untuk saat ini.
+* Menetapkan **SOP Operasional MVP** (Decision 020):
+  - KPI harian: Total Order + Revenue + Stok Habis.
+  - SOP order handling: Terima order → Kemas → Drop ke kurir (simple 3-step).
+  - SLA shipping: 1-2 hari kerja setelah payment confirmed.
+
+### Changed
+
+* Memperbarui `docs/01-business.md`:
+  - Menambahkan Brand Identity section (nama, logo, color, typography, tone of voice).
+  - Menambahkan Brand Story Lifestyle Movement.
+  - Menambahkan Business Rules §Operational (SOP + SLA + KPI).
+  - Melengkapi Operational KPI di Success Metrics.
+* Memperbarui `docs/09-design-system.md`:
+  - Color System diperbarui dengan arah palette Black + Off-White + 1 Accent.
+  - Typography diperbarui dengan pilihan Geometric Sans (Outfit / Plus Jakarta Sans).
+* Memperbarui `PROJECT_STATE.md`:
+  - Latest Decisions: Business & Product dan Technical diperbarui.
+  - Open Decisions: dikurangi signifikan — item Branding, Engineering, dan Operations yang sudah diputuskan dipindahkan ke Latest Decisions.
+* Menambahkan Decision 018, 019, 020 di `planning/decisions.md`.
+
+### Notes
+
+* Warna accent final dan font final (Outfit vs Plus Jakarta Sans) masih ditetapkan saat produksi brand asset/implementasi UI — keduanya tidak memblokir implementasi kode saat ini.
+
+---
+
 ## 2026-07-05 (7)
 
 ### Added

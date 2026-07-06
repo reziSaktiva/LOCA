@@ -381,6 +381,90 @@ Dampak:
 
 ---
 
+## Decision 020
+
+Tanggal: 2026-07-06
+
+Judul:
+
+Penetapan SOP Operasional MVP (KPI Dashboard, Order Handling, SLA Shipping).
+
+Keputusan:
+
+* **KPI Dashboard Prioritas Awal**: Total Order + Revenue + Stok Habis. Dipilih sebagai data operasional minimum yang cukup untuk solo operator pada fase MVP.
+* **SOP Order Handling**: Simple 3-step — Terima order → Kemas → Drop ke kurir. Tanpa konfirmasi manual via WA atau otomasi penuh, sesuai asumsi operasional mandiri tanpa tim CS.
+* **SLA Internal Shipping**: 1-2 hari kerja setelah payment confirmed. Target realistis dan kompetitif untuk operasional mandiri tanpa gudang besar.
+
+Alasan:
+
+* Operasional dilakukan sendiri (solo operator) dengan penjualan awal yang masih kecil — SOP dan KPI harus sederhana agar tidak membebani.
+* SLA 1-2 hari kerja cukup untuk membangun kepercayaan customer tanpa memaksakan same-day yang berisiko gagal dipenuhi.
+* KPI Total Order + Revenue + Stok Habis cukup untuk mengambil keputusan operasional harian pada MVP.
+
+Dampak:
+
+* `docs/01-business.md` (Success Metrics + Business Rules Operational), `PROJECT_STATE.md`, `planning/changelog.md`.
+
+---
+
+## Decision 019
+
+Tanggal: 2026-07-06
+
+Judul:
+
+Penetapan Engineering Policy: Testing Strategy, Branch Protection, dan Deployment Flow.
+
+Keputusan:
+
+* **Testing Strategy per Layer**: Unit test domain layer + Integration test API endpoint. Unit test fokus pada business invariant dan logic di domain layer; integration test memvalidasi kontrak endpoint. E2E tidak diprioritaskan pada MVP.
+* **Branch Protection Policy**: CI harus hijau (lint + typecheck + test) sebelum merge ke `main`. Selaras dengan gate yang sudah ada di `.github/workflows/ci.yml`.
+* **Deployment Flow**: Deploy manual untuk sekarang — tidak ada auto-deploy ke production. Preview Vercel dari PR tetap aktif sebagai verifikasi visual sebelum deploy manual.
+
+Alasan:
+
+* Solo developer + MVP — testing strategy harus memberikan coverage bermakna (domain invariant + API contract) tanpa overhead penulisan E2E yang besar.
+* Branch protection CI-gate melindungi `main` dari broken code tanpa memerlukan peer review (solo project).
+* Deploy manual dipilih agar tidak ada perubahan tidak disengaja yang masuk production; developer tetap punya kontrol penuh saat awal operasional.
+
+Dampak:
+
+* `.github/workflows/ci.yml` (tidak ada perubahan file, ini adalah policy resmi yang mengikat workflow yang sudah ada), `PROJECT_STATE.md`, `planning/changelog.md`.
+
+---
+
+## Decision 018
+
+Tanggal: 2026-07-06
+
+Judul:
+
+Penetapan Branding Final LOCA.
+
+Keputusan:
+
+* **Nama Brand**: **LOCA** — nama brand final, bukan placeholder.
+* **Arah Logo**: Wordmark — nama "LOCA" dengan typography kuat, clean, minimal. Tanpa simbol tambahan.
+* **Color Direction**: Black + Off-White + 1 Accent Color. Palette timeless, premium, minimal yang cocok dengan brand personality Modern + Minimal.
+* **Typography**: Geometric Sans — **Outfit** atau **Plus Jakarta Sans** sebagai kandidat utama. Font yang clean, modern, readable, dan cocok untuk brand Sports Apparel generasi muda.
+* **Tone of Voice**: Confident & Minimal — kalimat pendek, to the point, tidak basa-basi. Berlaku untuk semua konten brand (produk, marketing, notifikasi).
+* **Brand Story**: Lifestyle Movement — LOCA bukan sekadar apparel, melainkan simbol dari mindset aktif dan disiplin. Customer membeli LOCA bukan hanya karena fungsi, tetapi karena ingin menjadi bagian dari lifestyle tersebut.
+
+Alasan:
+
+* Nama LOCA sudah digunakan sejak awal project dan memiliki karakter yang kuat, singkat, mudah diingat.
+* Wordmark dipilih karena selaras dengan brand personality minimal — typography yang kuat sudah cukup sebagai identitas visual.
+* Black + Off-White + Accent adalah palette paling timeless untuk brand apparel modern; mudah diaplikasikan ke produk fisik maupun digital.
+* Geometric Sans mendukung kesan modern dan clean tanpa terasa kaku; dapat diaplikasikan dari body text hingga display heading.
+* Tone Confident & Minimal mencerminkan brand promise "Simple. Comfortable. Confident." secara langsung.
+* Brand story Lifestyle Movement membedakan LOCA dari brand generik — menjadikan produk sebagai simbol identitas, bukan sekadar komoditas.
+
+Dampak:
+
+* `docs/01-business.md` (Brand Story, Brand Personality), `docs/09-design-system.md` (Color System, Typography), `PROJECT_STATE.md` (Open Decisions → Latest Decisions), `planning/changelog.md`.
+
+---
+
 ## Decision 017
 
 Tanggal: 2026-07-05

@@ -183,9 +183,9 @@ Belum diputuskan:
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai.
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1 dan M4.2 Catalog Foundation** sudah selesai.
 
-Langkah berikutnya:
+Next action: **M4.3 — Catalog Variant Pricing & Attributes Dasar**.
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -235,15 +235,22 @@ Langkah berikutnya:
    - ✅ Validasi business invariant dasar katalog.
    - ✅ Exit criteria tercapai: listing publik berjalan, endpoint kategori tersedia, test + quality gate minimum lolos.
 
-9. **M4.2 — Catalog Product Lifecycle Dasar (Admin + Slug Detail Foundation)**
-   - Lanjutkan vertical slice `catalog-product-lifecycle`.
+9. ✅ **M4.2 — Catalog Product Lifecycle Dasar** (Selesai)
+   - ✅ Lifecycle invariants: `canActivateProduct`, `isAllowedStatusTransition`, `isValidSlug`.
+   - ✅ Repository diperluas: `findProductBySlug`, `findProductById`, `existsProductWithSlug`, `createProduct`, `updateProduct`, `updateProductStatus`.
+   - ✅ Application service: `get-product-by-slug`, `manage-product-lifecycle` (create/update/archive).
+   - ✅ Public endpoint: `GET /api/v1/products/slug/[slug]`.
+   - ✅ 36 test lolos, quality gate minimum hijau.
+
+10. **M4.3 — Catalog Variant Pricing & Attributes Dasar**
+   - Lanjutkan vertical slice `catalog-variant-pricing-attributes`.
    - Fokus awal:
-     - Service dasar create/update/archive product.
-     - Validasi slug unik dan invariant status lifecycle.
-     - Fondasi endpoint detail publik `GET /products/slug/{slug}`.
+     - Service variant create/update, SKU uniqueness.
+     - Price invariant (tidak boleh negatif).
+     - Snapshot contract `getVariantSnapshot`.
    - Exit criteria:
-     - Rule lifecycle product dasar teruji.
-     - Kontrak detail by slug tersedia.
+     - Rule SKU unik + price invariant teruji.
+     - Kontrak `getVariantSnapshot` tersedia untuk consumer `cart`.
      - Tetap lolos quality gate minimum.
 
 ---
@@ -262,7 +269,7 @@ System Design Readiness
 
 ```
 Implementation
-████░░░░░░░░░░░░░░░░  20%
+█████░░░░░░░░░░░░░░░  25%
 ```
 
 ---
@@ -328,7 +335,7 @@ Target Outcome:
 Breakdown:
 
 - [x] M4.1 Catalog Vertical Slice 01 (Category + Product Listing Public)
-- [ ] M4.2 Catalog Product Lifecycle Dasar
+- [x] M4.2 Catalog Product Lifecycle Dasar
 - [ ] M4.3 Catalog Variant Pricing & Attributes Dasar
 - [ ] M4.4 Catalog Public Search Endpoint
 

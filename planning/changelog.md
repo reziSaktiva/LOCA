@@ -9,6 +9,40 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-06 (9)
+
+### Added
+
+* Implementasi **M4.2 — Catalog Product Lifecycle Dasar**:
+  - `PRODUCT_STATUS_TRANSITIONS` map ditambahkan ke `catalog-entities.ts` (lifecycle DRAFT/ACTIVE/OUT_OF_STOCK/ARCHIVED).
+  - Field `description` dan `brand` ditambahkan ke `CatalogProduct` entity.
+  - Type `CreateProductCommand` dan `UpdateProductCommand` ditambahkan.
+  - Invariant baru di `catalog-invariants.ts`: `canActivateProduct`, `isAllowedStatusTransition`, `isValidSlug`.
+  - Repository contract diperluas: `findProductBySlug`, `findProductById`, `existsProductWithSlug`, `createProduct`, `updateProduct`, `updateProductStatus`.
+  - `InMemoryCatalogRepository` direfactor jadi instance-based; semua method baru diimplementasikan; seed data diperluas dengan field `description`/`brand`.
+  - Application service baru: `get-product-by-slug.ts` dan `manage-product-lifecycle.ts`.
+  - Public facade `catalog-public-service.ts` diperluas: `getPublicProductBySlug`, type `PublicProductDetail`.
+  - Endpoint publik baru: `GET /api/v1/products/slug/[slug]`.
+* Test baru:
+  - `catalog-invariants.test.ts` direnovasi total: helper `makeProduct`, 17 test case (isProductPubliclyListable, canActivateProduct, isAllowedStatusTransition, isValidSlug).
+  - `product-lifecycle.test.ts` baru: 14 test case (getProductBySlug, createProduct, updateProductStatus, archiveProduct).
+
+### Changed
+
+* Memperbarui `PROJECT_STATE.md`: M4.2 selesai, progress implementation 25%, next action ke M4.3.
+* Memperbarui `context/ctx-implementation.md`: M4.2 completed dicatat, Open Decisions diselesaikan.
+
+### Verified
+
+* `bun run check` — lolos (`lint`, `typecheck`, `test`). Total 36 test hijau.
+
+### Notes
+
+* Repository in-memory sekarang instance-based (bukan module-level) agar state antar test tidak bocor.
+* Endpoint detail publik hanya mengembalikan produk yang `isProductPubliclyListable` — ARCHIVED dan DRAFT tidak terekspos.
+
+---
+
 ## 2026-07-06 (8)
 
 ### Added

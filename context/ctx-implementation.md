@@ -7,13 +7,13 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **in progress**
-- Current implementation progress: **20%** (vertical slice awal catalog public listing sudah berjalan)
+- Current implementation progress: **25%** (M4.1 + M4.2 catalog lifecycle selesai)
 
 ## Current Focus
 
-- `phase-2 catalog vertical slice 01`
-- Vertical slice awal module `catalog` sudah diimplementasikan untuk read-path publik.
-- Next active item: **M4.2 - Catalog Product Lifecycle Dasar (Admin + Slug Detail Foundation)**
+- `phase-2 catalog vertical slice 02`
+- M4.2 — Catalog Product Lifecycle Dasar sudah selesai.
+- Next active item: **M4.3 - Catalog Variant Pricing & Attributes Dasar**
 
 ## Completed (Planning Side)
 
@@ -82,7 +82,20 @@ Target setup awal:
   - Test domain + application untuk listing publik sudah ditambahkan dan lolos quality gate.
 
 - **M4.2 - Catalog Product Lifecycle Dasar (Admin + Slug Detail Foundation)**
-  - Target berikutnya: service dasar create/update/archive product, slug uniqueness, dan fondasi detail by slug.
+  - Status: **Completed**
+  - Lifecycle invariants baru: `canActivateProduct`, `isAllowedStatusTransition`, `isValidSlug`.
+  - `CatalogProduct` entity diperluas: field `description` dan `brand` ditambahkan.
+  - `PRODUCT_STATUS_TRANSITIONS` map dipindahkan ke domain entities (DRAFT/ACTIVE/OUT_OF_STOCK/ARCHIVED).
+  - Repository contract diperluas: `findProductBySlug`, `findProductById`, `existsProductWithSlug`, `createProduct`, `updateProduct`, `updateProductStatus`.
+  - `InMemoryCatalogRepository` diupdate: instance-based (bukan module-level), semua method baru diimplementasikan.
+  - Application service baru: `get-product-by-slug.ts` dan `manage-product-lifecycle.ts` (create/update/archive/updateStatus).
+  - Public facade diperluas: `getPublicProductBySlug` tersedia di `catalog-public-service.ts`.
+  - Endpoint publik baru: `GET /api/v1/products/slug/[slug]`.
+  - Test: `catalog-invariants.test.ts` (direnovasi + diperluas, 17 test) dan `product-lifecycle.test.ts` baru (14 test). Total 36 test lolos.
+  - `bun run check` hijau.
+
+- **M4.3 - Catalog Variant Pricing & Attributes Dasar**
+  - Target berikutnya: service variant (create/update), SKU uniqueness, price invariant, snapshot contract.
 
 ## Module Build Plan (High-Level)
 
@@ -119,13 +132,7 @@ Target setup awal:
 - Belum diimplementasikan.
 - Integrasi Biteship + tracking status synchronization.
 
-## Open Decisions
-
-- Final branding assets (name, logo, color, typography, tone).
-- Branch protection policy agar status check CI wajib sebelum merge.
-- Detail testing strategy per layer (unit/integration/e2e granularity).
-- Detail deployment flow (preview/release/rollback).
-- SOP operasional order handling dan shipping SLA.
+- Open Decisions: sudah diselesaikan pada 2026-07-06 (branding, engineering policy, operations SOP). Lihat `planning/decisions.md` Decision 018-020.
 
 ## Backlog (Post-MVP / Lower Priority)
 

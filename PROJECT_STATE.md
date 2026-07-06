@@ -178,14 +178,15 @@ Belum diputuskan:
 - ✅ **M3.6 — CI Baseline Ready**: workflow CI minimum telah ditambahkan di `.github/workflows/ci.yml` (trigger `pull_request` + `push main`) dan menyertakan step `bunx --bun prisma generate` sebelum gate `bun run lint`, `bun run typecheck`, `bun run test` untuk memastikan Prisma client tersedia saat CI typecheck. Blocker SSL lokal (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) sudah teratasi, `bun install` berhasil, gate minimum lokal lolos via `bun run check`, `bun run check:full` hijau setelah sinkronisasi formatting, dan pipeline minimum pada PR sudah hijau (exit criteria tercapai).
 - ✅ **M3.7 — Catalog Start Gate (Definition of Ready)**: readiness implementasi module `catalog` telah ditetapkan di `planning/backlog.md` mencakup feature backlog vertical slice, acceptance criteria per feature, verifikasi dependency lintas module (`inventory`, `review`, downstream `homepage`/`cart`), dan checklist DoR. Exit criteria M3.7 tercapai; `catalog` siap diimplementasikan. Detail: `planning/decisions.md` Decision 017.
 - ✅ **M4.1 — Catalog Vertical Slice 01 (Category + Product Listing Public)**: module `catalog` mulai terimplementasi dengan struktur layer lengkap untuk read-path publik (`domain`, `application`, `infrastructure`, `public`, `presentation`), invariant dasar katalog (`ACTIVE` + minimal 1 variant, produk `ARCHIVED`/non-active tidak tampil), endpoint `GET /api/v1/products` (pagination/filter/sort dasar) dan `GET /api/v1/products/categories` (kategori aktif dengan produk publik), serta unit test domain+application. Exit criteria M4.1 tercapai dan quality gate minimum lolos (`bun run check`).
+- ✅ **M4.3 — Catalog Variant Pricing & Attributes Dasar**: type variant lengkap (`CatalogVariant`, `VariantSnapshot`, commands), invariant `isVariantPriceValid` + `isValidSku`, repository contract diperluas (findVariantsByProductId, existsVariantWithSku, createVariant, updateVariant, getVariantSnapshot), in-memory store dengan 7 seed variant + sync otomatis priceFrom/priceTo/variantCount, application service `manage-variant.ts` (create/update dengan 5 error code typed), public facade `getVariantSnapshotForCart` sebagai kontrak lintas module. 65 test lolos, `bun run check` hijau.
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1 dan M4.2 Catalog Foundation** sudah selesai.
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, dan M4.3 Catalog Foundation** sudah selesai.
 
-Next action: **M4.3 — Catalog Variant Pricing & Attributes Dasar**.
+Next action: **M4.4 — Catalog Public Search Endpoint**.
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -242,15 +243,17 @@ Next action: **M4.3 — Catalog Variant Pricing & Attributes Dasar**.
    - ✅ Public endpoint: `GET /api/v1/products/slug/[slug]`.
    - ✅ 36 test lolos, quality gate minimum hijau.
 
-10. **M4.3 — Catalog Variant Pricing & Attributes Dasar**
-   - Lanjutkan vertical slice `catalog-variant-pricing-attributes`.
-   - Fokus awal:
-     - Service variant create/update, SKU uniqueness.
-     - Price invariant (tidak boleh negatif).
-     - Snapshot contract `getVariantSnapshot`.
+10. ✅ **M4.3 — Catalog Variant Pricing & Attributes Dasar** (Selesai)
+   - ✅ Type variant: `CatalogVariant`, `VariantSnapshot`, `CreateVariantCommand`, `UpdateVariantCommand`.
+   - ✅ Invariant: `isVariantPriceValid` (price >= 0, finite), `isValidSku` (non-empty).
+   - ✅ Service variant `manage-variant.ts`: create/update dengan 5 typed error code.
+   - ✅ Kontrak `getVariantSnapshotForCart` tersedia di public facade untuk consumer `cart`.
+   - ✅ 65 test lolos, quality gate minimum hijau.
+
+11. **M4.4 — Catalog Public Search Endpoint**
+   - Implementasi endpoint `GET /api/v1/products/search` (full text + filter harga + kategori).
    - Exit criteria:
-     - Rule SKU unik + price invariant teruji.
-     - Kontrak `getVariantSnapshot` tersedia untuk consumer `cart`.
+     - Endpoint search aktif dan tervalidasi.
      - Tetap lolos quality gate minimum.
 
 ---
@@ -269,7 +272,7 @@ System Design Readiness
 
 ```
 Implementation
-█████░░░░░░░░░░░░░░░  25%
+██████░░░░░░░░░░░░░░  30%
 ```
 
 ---
@@ -336,7 +339,7 @@ Breakdown:
 
 - [x] M4.1 Catalog Vertical Slice 01 (Category + Product Listing Public)
 - [x] M4.2 Catalog Product Lifecycle Dasar
-- [ ] M4.3 Catalog Variant Pricing & Attributes Dasar
+- [x] M4.3 Catalog Variant Pricing & Attributes Dasar
 - [ ] M4.4 Catalog Public Search Endpoint
 
 Target Outcome:

@@ -381,6 +381,36 @@ Dampak:
 
 ---
 
+## Decision 021
+
+Tanggal:
+
+2026-07-06
+
+Judul:
+
+Aturan commit — agent tidak boleh commit otomatis tanpa persetujuan manusia.
+
+Keputusan:
+
+* Agent AI **dilarang melakukan `git commit` secara otomatis** setelah menyelesaikan task implementasi.
+* Alur yang diwajibkan: selesaikan pekerjaan → jalankan quality gate → laporkan hasil ke manusia → **tunggu instruksi commit eksplisit** sebelum menjalankan perintah git apapun yang bersifat permanen.
+* Aturan ini ditegakkan di dua tempat:
+  - `AGENTS.md` §7 (Git and Change Hygiene) — sebagai aturan operasional global agent.
+  - `.agents/skills/spec-driven-workflow/SKILL.md` — di bagian Batasan dan Definition of Done sebagai pengingat kontekstual saat task implementasi berjalan.
+
+Alasan:
+
+* Manusia perlu kesempatan memeriksa, menguji, dan menyetujui hasil kerja sebelum riwayat git tertulis secara permanen.
+* Commit yang terburu-buru atau tidak diinspeksi dapat memperkenalkan bug, pelanggaran convention, atau perubahan yang tidak dikehendaki ke dalam riwayat repo.
+* Memberi kontrol penuh ke pemilik repo atas kapan dan apa yang masuk ke commit history.
+
+Dampak:
+
+* `AGENTS.md`, `.agents/skills/spec-driven-workflow/SKILL.md`, `planning/changelog.md`.
+
+---
+
 ## Decision 020
 
 Tanggal: 2026-07-06

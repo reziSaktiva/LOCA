@@ -7,13 +7,13 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **in progress**
-- Current implementation progress: **25%** (M4.1 + M4.2 catalog lifecycle selesai)
+- Current implementation progress: **30%** (M4.1 + M4.2 + M4.3 catalog variant selesai)
 
 ## Current Focus
 
-- `phase-2 catalog vertical slice 02`
-- M4.2 — Catalog Product Lifecycle Dasar sudah selesai.
-- Next active item: **M4.3 - Catalog Variant Pricing & Attributes Dasar**
+- `phase-2 catalog vertical slice 03`
+- M4.3 — Catalog Variant Pricing & Attributes Dasar sudah selesai.
+- Next active item: **M4.4 — Catalog Public Search Endpoint**
 
 ## Completed (Planning Side)
 
@@ -95,7 +95,17 @@ Target setup awal:
   - `bun run check` hijau.
 
 - **M4.3 - Catalog Variant Pricing & Attributes Dasar**
-  - Target berikutnya: service variant (create/update), SKU uniqueness, price invariant, snapshot contract.
+  - Status: **Completed**
+  - Type baru: `CatalogVariantStatus`, `CatalogVariant`, `VariantSnapshot`, `CreateVariantCommand`, `UpdateVariantCommand`.
+  - Invariant baru: `isVariantPriceValid` (price >= 0, finite), `isValidSku` (non-empty setelah trim).
+  - Repository contract diperluas: `findVariantsByProductId`, `findVariantById`, `existsVariantWithSku`, `createVariant`, `updateVariant`, `getVariantSnapshot`.
+  - `InMemoryCatalogRepository` diperluas: variant store dengan 7 seed variant; sync `priceFrom`/`priceTo`/`variantCount` otomatis setelah mutasi.
+  - Application service: `manage-variant.ts` dengan error-typed result (5 error codes).
+  - Public facade: `getVariantSnapshotForCart` sebagai kontrak lintas module untuk consumer `cart`.
+  - 65 test lolos, `bun run check` hijau.
+
+- **M4.4 - Catalog Public Search Endpoint**
+  - Target berikutnya: endpoint `GET /api/v1/products/search` dengan full text + filter (kategori, harga, ukuran).
 
 ## Module Build Plan (High-Level)
 

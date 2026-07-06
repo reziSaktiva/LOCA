@@ -1,6 +1,7 @@
 import { getProductBySlug } from "../application/get-product-by-slug";
 import { listPublicCategories } from "../application/list-public-categories";
 import { listPublicProducts } from "../application/list-public-products";
+import type { VariantSnapshot } from "../domain/catalog-entities";
 import type { ListPublicProductsQuery } from "../domain/catalog-repository";
 import { InMemoryCatalogRepository } from "../infrastructure/in-memory-catalog-repository";
 
@@ -138,4 +139,14 @@ export async function getPublicProductBySlug(
     priceTo: result.product.priceTo,
     thumbnailUrl: result.product.thumbnailUrl,
   };
+}
+
+/**
+ * Mengambil snapshot varian untuk digunakan oleh consumer module lain (mis. cart).
+ * Kontrak ini adalah entry point lintas module — jangan ubah shape tanpa menyesuaikan consumer.
+ */
+export async function getVariantSnapshotForCart(
+  variantId: string,
+): Promise<VariantSnapshot | null> {
+  return repository.getVariantSnapshot(variantId);
 }

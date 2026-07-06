@@ -9,6 +9,35 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-06 (11)
+
+### Changed
+
+* `AGENTS.md` §7 (Git and Change Hygiene) — ditambahkan aturan eksplisit: agent tidak boleh commit otomatis setelah task selesai; wajib lapor hasil dan tunggu instruksi commit dari manusia.
+* `.agents/skills/spec-driven-workflow/SKILL.md` — dua tempat diperbarui:
+  - Bagian **Batasan untuk AI Assistant**: larangan commit otomatis ditambahkan secara eksplisit dengan alur kerja yang jelas (selesai → quality gate → lapor → tunggu).
+  - Bagian **Definition of Done**: checklist commit diubah menjadi kewajiban menunggu persetujuan manusia sebelum commit dilakukan.
+* Mencatat keputusan pada `planning/decisions.md` (Decision 021).
+
+---
+
+## 2026-07-06 (10)
+
+### Added
+
+* Implementasi **M4.3 — Catalog Variant Pricing & Attributes Dasar**:
+  - Type baru di `catalog-entities.ts`: `CatalogVariantStatus`, `CatalogVariant`, `VariantSnapshot`, `CreateVariantCommand`, `UpdateVariantCommand`.
+  - Invariant baru di `catalog-invariants.ts`: `isVariantPriceValid` (price >= 0, finite), `isValidSku` (non-empty setelah trim).
+  - Repository contract diperluas: `findVariantsByProductId`, `findVariantById`, `existsVariantWithSku`, `createVariant`, `updateVariant`, `getVariantSnapshot`.
+  - `InMemoryCatalogRepository` diperluas: in-memory variant store dengan seed 7 varian untuk 3 produk; semua method baru diimplementasikan; `createVariant`/`updateVariant` otomatis sync `priceFrom`/`priceTo`/`variantCount` di product induk.
+  - Application service baru: `manage-variant.ts` (`createVariant`, `updateVariant`) dengan error-typed result (`PRODUCT_NOT_FOUND`, `VARIANT_NOT_FOUND`, `SKU_INVALID`, `SKU_CONFLICT`, `PRICE_INVALID`).
+  - Public facade diperluas: `getVariantSnapshotForCart` tersedia di `catalog-public-service.ts` sebagai kontrak lintas module untuk consumer `cart`.
+* Test baru:
+  - `catalog-invariants.test.ts` diperluas: 10 test case baru (isVariantPriceValid, isValidSku). Total 27 test di file ini.
+  - `manage-variant.test.ts` baru: 20 test case (createVariant, updateVariant, getVariantSnapshot). Total 65 test lolos seluruh suite.
+
+---
+
 ## 2026-07-06 (9)
 
 ### Added

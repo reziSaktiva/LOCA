@@ -2,8 +2,12 @@ import type {
   CatalogCategory,
   CatalogProduct,
   CatalogProductStatus,
+  CatalogVariant,
   CreateProductCommand,
+  CreateVariantCommand,
   UpdateProductCommand,
+  UpdateVariantCommand,
+  VariantSnapshot,
 } from "../domain/catalog-entities";
 import type { CatalogRepository } from "../domain/catalog-repository";
 
@@ -87,10 +91,88 @@ const products: CatalogProduct[] = [
   },
 ];
 
+const variants: CatalogVariant[] = [
+  {
+    id: "var-run-socks-s",
+    productId: "prod-run-socks-pro",
+    sku: "LOCA-RSP-S",
+    price: 89000,
+    compareAtPrice: null,
+    variantLabel: "S",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-01T09:00:00.000Z"),
+  },
+  {
+    id: "var-run-socks-m",
+    productId: "prod-run-socks-pro",
+    sku: "LOCA-RSP-M",
+    price: 89000,
+    compareAtPrice: null,
+    variantLabel: "M",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-01T09:00:00.000Z"),
+  },
+  {
+    id: "var-run-socks-l",
+    productId: "prod-run-socks-pro",
+    sku: "LOCA-RSP-L",
+    price: 109000,
+    compareAtPrice: null,
+    variantLabel: "L",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-01T09:00:00.000Z"),
+  },
+  {
+    id: "var-perf-shorts-m",
+    productId: "prod-performance-shorts",
+    sku: "LOCA-PS-M",
+    price: 179000,
+    compareAtPrice: 219000,
+    variantLabel: "M",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-03T09:00:00.000Z"),
+  },
+  {
+    id: "var-perf-shorts-l",
+    productId: "prod-performance-shorts",
+    sku: "LOCA-PS-L",
+    price: 219000,
+    compareAtPrice: null,
+    variantLabel: "L",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-03T09:00:00.000Z"),
+  },
+  {
+    id: "var-core-boxer-m",
+    productId: "prod-core-boxer",
+    sku: "LOCA-CB-M",
+    price: 99000,
+    compareAtPrice: null,
+    variantLabel: "M",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-04T09:00:00.000Z"),
+  },
+  {
+    id: "var-core-boxer-l",
+    productId: "prod-core-boxer",
+    sku: "LOCA-CB-L",
+    price: 119000,
+    compareAtPrice: null,
+    variantLabel: "L",
+    status: "ACTIVE",
+    createdAt: new Date("2026-07-04T09:00:00.000Z"),
+  },
+];
+
 let idCounter = 100;
+let variantIdCounter = 200;
 
 function generateId(): string {
   return `prod-${++idCounter}`;
+}
+
+function generateVariantId(): string {
+  return `var-${++variantIdCounter}`;
 }
 
 function slugify(text: string): string {
@@ -104,6 +186,7 @@ function slugify(text: string): string {
 export class InMemoryCatalogRepository implements CatalogRepository {
   private categories: CatalogCategory[] = [...categories];
   private products: CatalogProduct[] = [...products];
+  private variants: CatalogVariant[] = [...variants];
 
   async listCategories(): Promise<CatalogCategory[]> {
     return this.categories;
@@ -174,5 +257,104 @@ export class InMemoryCatalogRepository implements CatalogRepository {
     const updated: CatalogProduct = { ...this.products[index]!, status };
     this.products[index] = updated;
     return updated;
+  }
+
+  async findVariantsByProductId(productId: string): Promise<CatalogVariant[]> {
+    return this.variants.filter((v) => v.productId === productId);
+  }
+
+  async findVariantById(id: string): Promise<CatalogVariant | null> {
+    return this.variants.find((v) => v.id === id) ?? null;
+  }
+
+  async existsVariantWithSku(sku: string, excludeId?: string): Promise<boolean> {
+    return this.variants.some((v) => v.sku === sku && v.id !== excludeId);
+  }
+
+  async createVariant(command: CreateVariantCommand): Promise<CatalogVariant> {
+    const variant: CatalogVariant = {
+      id: generateVariantId(),
+      productId: command.productId,
+      sku: command.sku,
+      price: command.price,
+      compareAtPrice: command.compareAtPrice ?? null,
+      variantLabel: command.variantLabel,
+      status: "ACTIVE",
+      createdAt: new Date(),
+    };
+
+    this.variants.push(variant);
+
+    const productIndex = this.products.findIndex((p) => p.id === command.productId);
+    if (productIndex !== -1) {
+      const product = this.products[productIndex]!;
+      const allVariants = this.variants.filter((v) => v.productId === command.productId);
+      const prices = allVariants.map((v) => v.price);
+      this.products[productIndex] = {
+        ...product,
+        variantCount: allVariants.length,
+        priceFrom: Math.min(...prices),
+        priceTo: Math.max(...prices),
+      };
+    }
+
+    return variant;
+  }
+
+  async updateVariant(command: UpdateVariantCommand): Promise<CatalogVariant> {
+    const index = this.variants.findIndex((v) => v.id === command.id);
+    if (index === -1) {
+      throw new Error(`Variant not found: ${command.id}`);
+    }
+
+    const existing = this.variants[index]!;
+    const updated: CatalogVariant = {
+      ...existing,
+      ...(command.sku !== undefined && { sku: command.sku }),
+      ...(command.price !== undefined && { price: command.price }),
+      ...(command.compareAtPrice !== undefined && { compareAtPrice: command.compareAtPrice }),
+      ...(command.variantLabel !== undefined && { variantLabel: command.variantLabel }),
+      ...(command.status !== undefined && { status: command.status }),
+    };
+
+    this.variants[index] = updated;
+
+    const productIndex = this.products.findIndex((p) => p.id === updated.productId);
+    if (productIndex !== -1) {
+      const product = this.products[productIndex]!;
+      const allVariants = this.variants.filter((v) => v.productId === updated.productId);
+      const prices = allVariants.map((v) => v.price);
+      this.products[productIndex] = {
+        ...product,
+        variantCount: allVariants.length,
+        priceFrom: Math.min(...prices),
+        priceTo: Math.max(...prices),
+      };
+    }
+
+    return updated;
+  }
+
+  async getVariantSnapshot(variantId: string): Promise<VariantSnapshot | null> {
+    const variant = this.variants.find((v) => v.id === variantId);
+    if (!variant) {
+      return null;
+    }
+
+    const product = this.products.find((p) => p.id === variant.productId);
+    if (!product) {
+      return null;
+    }
+
+    return {
+      variantId: variant.id,
+      sku: variant.sku,
+      productId: product.id,
+      productName: product.name,
+      price: variant.price,
+      compareAtPrice: variant.compareAtPrice,
+      thumbnailUrl: product.thumbnailUrl,
+      variantLabel: variant.variantLabel,
+    };
   }
 }

@@ -58,7 +58,7 @@ Task dianggap selesai jika **semua** berikut terpenuhi:
 - [ ] Test relevan lulus (prioritas: business logic > domain service > API > UI).
 - [ ] Responsive dan accessible.
 - [ ] Dokumentasi terkait diperbarui bila requirement/kontrak berubah — lihat skill `docs-sync`.
-- [ ] Commit message mengikuti Conventional Commits.
+- [ ] Laporkan hasil ke manusia dan **tunggu persetujuan** sebelum commit. Commit hanya dilakukan atas instruksi eksplisit, mengikuti format Conventional Commits.
 
 ## Batasan untuk AI Assistant
 
@@ -68,6 +68,7 @@ Jangan pernah:
 - Menambah dependency tanpa alasan jelas.
 - Membuat struktur folder baru di luar `docs/04-system-architecture.md` tanpa persetujuan eksplisit dari user.
 - Mengubah API contract tanpa memperbarui `docs/07-api-specification.md`.
+- **Melakukan `git commit` secara otomatis setelah task selesai.** Selesaikan pekerjaan → jalankan quality gate → laporkan hasil → **tunggu instruksi commit eksplisit dari manusia**. Manusia harus memeriksa dan menyetujui hasil kerja sebelum commit dilakukan.
 
 Jika requirement tidak jelas atau dokumen tidak cukup untuk menjawab, **tanyakan ke user** daripada berasumsi.
 

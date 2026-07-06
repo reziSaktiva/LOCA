@@ -4,7 +4,9 @@ import {
   canActivateProduct,
   isAllowedStatusTransition,
   isProductPubliclyListable,
+  isValidSku,
   isValidSlug,
+  isVariantPriceValid,
 } from "./catalog-invariants";
 import type { CatalogProduct } from "./catalog-entities";
 
@@ -109,5 +111,47 @@ describe("isValidSlug", () => {
 
   it("reject empty slug", () => {
     expect(isValidSlug("")).toBe(false);
+  });
+});
+
+describe("isVariantPriceValid", () => {
+  it("accept zero price", () => {
+    expect(isVariantPriceValid(0)).toBe(true);
+  });
+
+  it("accept positive price", () => {
+    expect(isVariantPriceValid(89000)).toBe(true);
+    expect(isVariantPriceValid(0.01)).toBe(true);
+  });
+
+  it("reject negative price", () => {
+    expect(isVariantPriceValid(-1)).toBe(false);
+    expect(isVariantPriceValid(-89000)).toBe(false);
+  });
+
+  it("reject NaN", () => {
+    expect(isVariantPriceValid(NaN)).toBe(false);
+  });
+
+  it("reject Infinity", () => {
+    expect(isVariantPriceValid(Infinity)).toBe(false);
+    expect(isVariantPriceValid(-Infinity)).toBe(false);
+  });
+});
+
+describe("isValidSku", () => {
+  it("accept non-empty SKU", () => {
+    expect(isValidSku("LOCA-RSP-S")).toBe(true);
+    expect(isValidSku("SKU001")).toBe(true);
+    expect(isValidSku("a")).toBe(true);
+  });
+
+  it("reject empty string", () => {
+    expect(isValidSku("")).toBe(false);
+  });
+
+  it("reject whitespace-only string", () => {
+    expect(isValidSku("   ")).toBe(false);
+    expect(isValidSku("\t")).toBe(false);
   });
 });

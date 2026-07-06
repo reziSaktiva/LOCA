@@ -9,6 +9,10 @@ export const PRODUCT_STATUS_TRANSITIONS: Record<CatalogProductStatus, CatalogPro
   ARCHIVED: [],
 };
 
+export const CATALOG_VARIANT_STATUSES = ["ACTIVE", "INACTIVE"] as const;
+
+export type CatalogVariantStatus = (typeof CATALOG_VARIANT_STATUSES)[number];
+
 export type CatalogCategory = {
   id: string;
   name: string;
@@ -31,6 +35,32 @@ export type CatalogProduct = {
   createdAt: Date;
 };
 
+export type CatalogVariant = {
+  id: string;
+  productId: string;
+  sku: string;
+  price: number;
+  compareAtPrice: number | null;
+  variantLabel: string;
+  status: CatalogVariantStatus;
+  createdAt: Date;
+};
+
+/**
+ * Snapshot immutable yang dikirim ke consumer lain (mis. cart) saat membaca data varian.
+ * Tidak berubah saat katalog diupdate — consumer bertanggung jawab menyimpan copy-nya sendiri.
+ */
+export type VariantSnapshot = {
+  variantId: string;
+  sku: string;
+  productId: string;
+  productName: string;
+  price: number;
+  compareAtPrice: number | null;
+  thumbnailUrl: string;
+  variantLabel: string;
+};
+
 export type CreateProductCommand = {
   name: string;
   slug: string;
@@ -46,4 +76,21 @@ export type UpdateProductCommand = {
   brand?: string;
   categoryId?: string;
   thumbnailUrl?: string;
+};
+
+export type CreateVariantCommand = {
+  productId: string;
+  sku: string;
+  price: number;
+  compareAtPrice?: number | null;
+  variantLabel: string;
+};
+
+export type UpdateVariantCommand = {
+  id: string;
+  sku?: string;
+  price?: number;
+  compareAtPrice?: number | null;
+  variantLabel?: string;
+  status?: CatalogVariantStatus;
 };

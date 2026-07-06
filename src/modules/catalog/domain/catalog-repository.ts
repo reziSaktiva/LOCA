@@ -2,8 +2,12 @@ import type {
   CatalogCategory,
   CatalogProduct,
   CatalogProductStatus,
+  CatalogVariant,
   CreateProductCommand,
+  CreateVariantCommand,
   UpdateProductCommand,
+  UpdateVariantCommand,
+  VariantSnapshot,
 } from "./catalog-entities";
 
 export type ListPublicProductsQuery = {
@@ -22,6 +26,7 @@ export type ListPublicProductsResult = {
 };
 
 export interface CatalogRepository {
+  // --- Product ---
   listCategories(): Promise<CatalogCategory[]>;
   listProducts(): Promise<CatalogProduct[]>;
   findProductBySlug(slug: string): Promise<CatalogProduct | null>;
@@ -30,4 +35,17 @@ export interface CatalogRepository {
   createProduct(command: CreateProductCommand): Promise<CatalogProduct>;
   updateProduct(command: UpdateProductCommand): Promise<CatalogProduct>;
   updateProductStatus(id: string, status: CatalogProductStatus): Promise<CatalogProduct>;
+
+  // --- Variant ---
+  findVariantsByProductId(productId: string): Promise<CatalogVariant[]>;
+  findVariantById(id: string): Promise<CatalogVariant | null>;
+  existsVariantWithSku(sku: string, excludeId?: string): Promise<boolean>;
+  createVariant(command: CreateVariantCommand): Promise<CatalogVariant>;
+  updateVariant(command: UpdateVariantCommand): Promise<CatalogVariant>;
+
+  /**
+   * Mengambil snapshot varian untuk consumer lain (mis. cart).
+   * Menggabungkan data varian + produk induknya menjadi satu kontrak baca-only.
+   */
+  getVariantSnapshot(variantId: string): Promise<VariantSnapshot | null>;
 }

@@ -9,6 +9,55 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-06 (13)
+
+### Planning
+
+- Menetapkan roadmap task berikutnya setelah M4.4 untuk menyelesaikan **Phase 2 (Catalog Foundation)** sepenuhnya.
+- Task baru didaftarkan di `PROJECT_STATE.md` (`Next Action` + `Milestone Checkpoint`):
+  - **M4.5 — Prisma Schema Catalog**: model `ProductCategory`, `Product`, `ProductVariant` ke `prisma/schema.prisma` + migration.
+  - **M4.6 — Prisma Catalog Repository**: `PrismaCatalogRepository` menggantikan in-memory; catalog terhubung ke database sungguhan.
+  - **M4.7 — Admin Catalog API**: endpoint admin CRUD product/variant/category dengan auth guard (PRODUCT-001–004, PVAR-001–003).
+  - **M4.8 — Product Media & SEO Dasar**: `ProductMedia` + `ProductSeo`; menutup backlog `catalog-product-media-seo`.
+- Keputusan untuk menyelesaikan Phase 2 sepenuhnya sebelum lanjut ke Phase 3 (Customer & Homepage).
+
+### Notes
+
+- Setelah M4.5–M4.8 selesai, semua Phase 2 exit criteria terpenuhi:
+  - ✅ Customer dapat melihat seluruh produk
+  - ✅ Product Detail selesai
+  - ✅ Search berjalan
+  - ✅ Admin dapat mengelola katalog
+- Phase 3 berikutnya: Auth module → Customer → Homepage.
+
+---
+
+## 2026-07-06 (12)
+
+### Added
+
+- Implementasi **M4.4 — Catalog Public Search Endpoint**:
+  - Application service baru `src/modules/catalog/application/search-public-products.ts`:
+    - `SearchPublicProductsQuery` type (`q` required, pagination/sort/filter optional).
+    - Full-text search mencakup `name`, `description`, DAN `brand` (berbeda dari listing yang hanya `name`).
+    - Filter: category, minPrice, maxPrice, pagination, sort.
+    - Typed error result: `QUERY_EMPTY` jika `q` kosong/whitespace.
+  - Public facade di `catalog-public-service.ts`: `searchPublicProductsFromSearchParams` + `SearchProductsResult` type.
+  - Route handler baru: `src/app/api/v1/products/search/route.ts` (`GET /api/v1/products/search`); mengembalikan HTTP 400 jika `q` kosong.
+  - Test file baru `search-public-products.test.ts`: 13 test case (match name/description/brand, case-insensitive, filter, pagination, sort, empty result, error QUERY_EMPTY).
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) lolos — 78 test, 6 test file, 0 error.
+
+### Notes
+
+- M4.4 adalah milestone terakhir Catalog Foundation (M4.1–M4.4 selesai).
+- Search endpoint dibedakan dari listing: `q` wajib, scope lebih luas (name+description+brand).
+- Next: mulai module berikutnya (Auth/Inventory) atau lanjut ke catalog admin CRUD + Prisma persistence.
+
+---
+
 ## 2026-07-06 (11)
 
 ### Changed

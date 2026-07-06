@@ -1,6 +1,10 @@
 import { getProductBySlug } from "../application/get-product-by-slug";
 import { listPublicCategories } from "../application/list-public-categories";
 import { listPublicProducts } from "../application/list-public-products";
+import {
+  searchPublicProducts,
+  type SearchError,
+} from "../application/search-public-products";
 import type { VariantSnapshot } from "../domain/catalog-entities";
 import type { ListPublicProductsQuery } from "../domain/catalog-repository";
 import { InMemoryCatalogRepository } from "../infrastructure/in-memory-catalog-repository";
@@ -138,6 +142,59 @@ export async function getPublicProductBySlug(
     priceFrom: result.product.priceFrom,
     priceTo: result.product.priceTo,
     thumbnailUrl: result.product.thumbnailUrl,
+  };
+}
+
+export type SearchProductsResult =
+  | {
+      success: true;
+      items: PublicProductCard[];
+      pagination: { page: number; limit: number; total: number; totalPages: number };
+    }
+  | { success: false; error: SearchError };
+
+export async function searchPublicProductsFromSearchParams(
+  searchParams: URLSearchParams,
+): Promise<SearchProductsResult> {
+  const q = searchParams.get("q") ?? "";
+  const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
+  const limit = Math.min(parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT), MAX_LIMIT);
+  const category = searchParams.get("category") ?? undefined;
+  const minPrice = parseOptionalNumber(searchParams.get("minPrice"));
+  const maxPrice = parseOptionalNumber(searchParams.get("maxPrice"));
+  const sort = parseSort(searchParams.get("sort"));
+
+  const result = await searchPublicProducts(repository, {
+    q,
+    page,
+    limit,
+    category,
+    minPrice,
+    maxPrice,
+    sort,
+  });
+
+  if (!result.success) {
+    return { success: false, error: result.error };
+  }
+
+  return {
+    success: true,
+    items: result.result.items.map((product) => ({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      categoryId: product.categoryId,
+      priceFrom: product.priceFrom,
+      priceTo: product.priceTo,
+      thumbnailUrl: product.thumbnailUrl,
+    })) as PublicProductCard[],
+    pagination: {
+      page,
+      limit,
+      total: result.result.total,
+      totalPages: Math.ceil(result.result.total / limit),
+    },
   };
 }
 

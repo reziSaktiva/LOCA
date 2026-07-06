@@ -9,6 +9,29 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-06 (13)
+
+### Planning
+
+- Menetapkan roadmap task berikutnya setelah M4.4 untuk menyelesaikan **Phase 2 (Catalog Foundation)** sepenuhnya.
+- Task baru didaftarkan di `PROJECT_STATE.md` (`Next Action` + `Milestone Checkpoint`):
+  - **M4.5 — Prisma Schema Catalog**: model `ProductCategory`, `Product`, `ProductVariant` ke `prisma/schema.prisma` + migration.
+  - **M4.6 — Prisma Catalog Repository**: `PrismaCatalogRepository` menggantikan in-memory; catalog terhubung ke database sungguhan.
+  - **M4.7 — Admin Catalog API**: endpoint admin CRUD product/variant/category dengan auth guard (PRODUCT-001–004, PVAR-001–003).
+  - **M4.8 — Product Media & SEO Dasar**: `ProductMedia` + `ProductSeo`; menutup backlog `catalog-product-media-seo`.
+- Keputusan untuk menyelesaikan Phase 2 sepenuhnya sebelum lanjut ke Phase 3 (Customer & Homepage).
+
+### Notes
+
+- Setelah M4.5–M4.8 selesai, semua Phase 2 exit criteria terpenuhi:
+  - ✅ Customer dapat melihat seluruh produk
+  - ✅ Product Detail selesai
+  - ✅ Search berjalan
+  - ✅ Admin dapat mengelola katalog
+- Phase 3 berikutnya: Auth module → Customer → Homepage.
+
+---
+
 ## 2026-07-06 (12)
 
 ### Added

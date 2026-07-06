@@ -187,7 +187,7 @@ Belum diputuskan:
 
 **Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, dan M4.4 Catalog Foundation** sudah selesai.
 
-Next action: **Milestone 4 selesai** — seluruh Catalog Foundation API read-path publik tersedia. Langkah berikutnya: mulai module berikutnya (Auth atau Inventory) sesuai roadmap, atau tambah fitur lanjutan catalog (admin CRUD endpoint, Prisma persistence).
+Next action: **M4.5 — Prisma Schema Catalog** — menambahkan model `ProductCategory`, `Product`, `ProductVariant` ke `prisma/schema.prisma` dan menjalankan migration pertama catalog ke database.
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -256,6 +256,32 @@ Next action: **Milestone 4 selesai** — seluruh Catalog Foundation API read-pat
    - ✅ Public facade `searchPublicProductsFromSearchParams` di `catalog-public-service.ts`.
    - ✅ Endpoint `GET /api/v1/products/search` aktif; 400 jika `q` kosong.
    - ✅ 78 test lolos, `bun run check` hijau.
+
+12. **M4.5 — Prisma Schema Catalog**
+   - Tambahkan model `ProductCategory`, `Product`, `ProductVariant` ke `prisma/schema.prisma` sesuai `docs/06-data-model.md`.
+   - Jalankan Prisma migration pertama untuk catalog.
+   - Exit criteria: migration berhasil, `prisma generate` lolos, Prisma client menyertakan types catalog.
+
+13. **M4.6 — Prisma Catalog Repository**
+   - Implementasikan `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract.
+   - Gantikan `InMemoryCatalogRepository` di `catalog-public-service.ts` dengan `PrismaCatalogRepository`.
+   - Exit criteria: seluruh operasi catalog menggunakan database sungguhan; quality gate lolos.
+
+14. **M4.7 — Admin Catalog API**
+   - Endpoint admin dengan auth guard untuk mengelola catalog:
+     - `POST /api/v1/admin/products` — create product
+     - `PATCH /api/v1/admin/products/{id}` — update product
+     - `PATCH /api/v1/admin/products/{id}/status` — update status
+     - `DELETE /api/v1/admin/products/{id}` — archive product
+     - `POST /api/v1/admin/products/{productId}/variants` — create variant
+     - `PATCH /api/v1/admin/products/{productId}/variants/{id}` — update variant
+     - `POST /api/v1/admin/categories` — create category
+     - `PATCH /api/v1/admin/categories/{id}` — update category
+   - Exit criteria: admin dapat mengelola katalog via API; selaras dengan PRODUCT-001–004 dan PVAR-001–003.
+
+15. **M4.8 — Product Media & SEO Dasar**
+   - Tambahkan `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl) ke domain + Prisma schema.
+   - Exit criteria: backlog `catalog-product-media-seo` terpenuhi; thumbnail wajib ada saat produk dipublikasikan.
 
 ---
 
@@ -342,8 +368,15 @@ Breakdown:
 - [x] M4.2 Catalog Product Lifecycle Dasar
 - [x] M4.3 Catalog Variant Pricing & Attributes Dasar
 - [x] M4.4 Catalog Public Search Endpoint
+- [ ] M4.5 Prisma Schema Catalog
+- [ ] M4.6 Prisma Catalog Repository
+- [ ] M4.7 Admin Catalog API
+- [ ] M4.8 Product Media & SEO Dasar
 
 Target Outcome:
 
 - API katalog publik dasar siap dipakai consumer awal.
 - Invariant domain katalog utama tervalidasi oleh test.
+- Catalog terhubung ke database sungguhan (bukan in-memory).
+- Admin dapat mengelola produk, varian, dan kategori via API.
+- Phase 2 exit criteria terpenuhi sepenuhnya.

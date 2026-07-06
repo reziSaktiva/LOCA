@@ -6,15 +6,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.4 selesai)
+- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.4 selesai, M4.5–M4.8 planned)
 - Current implementation progress: **35%** (M4.1 + M4.2 + M4.3 + M4.4 catalog selesai)
 
 ## Current Focus
 
-- `phase-2 catalog vertical slice 04`
-- M4.4 — Catalog Public Search Endpoint sudah selesai.
-- Milestone 4 (Catalog Foundation) SELESAI.
-- Next active item: **Module berikutnya (Auth/Inventory) atau catalog admin CRUD + Prisma persistence**
+- `phase-2 catalog completion`
+- M4.4 selesai. Sisa Phase 2: M4.5 (Prisma Schema) → M4.6 (Prisma Repository) → M4.7 (Admin API) → M4.8 (Media & SEO).
+- Next active item: **M4.5 — Prisma Schema Catalog**
 
 ## Completed (Planning Side)
 
@@ -111,6 +110,26 @@ Target setup awal:
   - Public facade: `searchPublicProductsFromSearchParams` di `catalog-public-service.ts`.
   - Endpoint baru: `GET /api/v1/products/search` — HTTP 400 jika `q` kosong.
   - 78 test lolos, `bun run check` hijau.
+
+- **M4.5 - Prisma Schema Catalog** _(Planned)_
+  - Tambahkan model `ProductCategory`, `Product`, `ProductVariant` ke `prisma/schema.prisma` sesuai `docs/06-data-model.md`.
+  - Jalankan migration pertama catalog ke database.
+  - Exit criteria: migration lolos, `prisma generate` menghasilkan types catalog.
+
+- **M4.6 - Prisma Catalog Repository** _(Planned)_
+  - Implementasikan `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract.
+  - Gantikan `InMemoryCatalogRepository` di `catalog-public-service.ts`.
+  - Exit criteria: catalog terhubung database sungguhan; quality gate lolos.
+
+- **M4.7 - Admin Catalog API** _(Planned)_
+  - Endpoint admin CRUD product/variant/category dengan auth guard.
+  - Menutup PRODUCT-001–004 dan PVAR-001–003 dari functional requirements.
+  - Exit criteria: admin dapat mengelola katalog via API.
+
+- **M4.8 - Product Media & SEO Dasar** _(Planned)_
+  - `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl).
+  - Menutup backlog `catalog-product-media-seo`.
+  - Exit criteria: thumbnail wajib ada saat produk dipublikasikan.
 
 ## Module Build Plan (High-Level)
 

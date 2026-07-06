@@ -74,6 +74,7 @@ Untuk setiap task implementasi:
 - Gunakan Conventional Commits.
 - Buat perubahan sekecil mungkin per task agar mudah direview.
 - Jangan ubah scope di luar requirement tanpa mencatat keputusan.
+- **JANGAN commit secara otomatis setelah selesai mengerjakan task.** Selesaikan pekerjaan, jalankan quality gate, lalu tunggu instruksi eksplisit dari manusia sebelum melakukan commit. Manusia perlu memeriksa hasil kerja terlebih dahulu.
 
 ## 8) Documentation Sync Rules
 

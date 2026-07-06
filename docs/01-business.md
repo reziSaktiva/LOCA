@@ -73,6 +73,20 @@ Simple.
 Comfortable.
 Confident.
 
+### Brand Story
+
+LOCA bukan sekadar apparel. LOCA adalah simbol dari mindset aktif dan disiplin.
+
+Customer tidak membeli LOCA hanya karena fungsi. Mereka membeli LOCA karena ingin menjadi bagian dari lifestyle tersebut — generasi yang bergerak, yang tampil sederhana tapi percaya diri, yang tidak perlu label besar untuk terlihat berkelas.
+
+### Brand Identity
+
+- **Nama Brand**: LOCA
+- **Tipe Logo**: Wordmark — nama "LOCA" dengan typography kuat, clean, minimal.
+- **Color Direction**: Black + Off-White + 1 Accent Color.
+- **Typography**: Geometric Sans (Outfit / Plus Jakarta Sans).
+- **Tone of Voice**: Confident & Minimal — kalimat pendek, to the point, tidak basa-basi.
+
 ## 5. Target Market
 
 - Segment:
@@ -309,6 +323,12 @@ Integrasi marketplace akan dipertimbangkan pada fase pengembangan berikutnya.
 - Shopee dan TikTok Shop merupakan channel penjualan tambahan.
 - Pada fase MVP, setiap channel penjualan berjalan secara independen tanpa sinkronisasi produk, stok, maupun pesanan.
 
+### Operational
+
+- SOP order handling: Terima order → Kemas → Drop ke kurir (simple 3-step).
+- SLA internal shipping: 1-2 hari kerja setelah payment confirmed.
+- KPI operasional harian minimum: Total Order + Revenue + Stok Habis.
+
 ### Business
 
 - Fokus bisnis pada fase awal adalah membangun brand sekaligus menjual produk apparel essentials.
@@ -330,6 +350,9 @@ Integrasi marketplace akan dipertimbangkan pada fase pengembangan berikutnya.
 - Operational KPI
   - Admin dapat mengelola produk.
   - Admin dapat melihat order.
+  - Total Order harian terpantau.
+  - Revenue harian terpantau.
+  - Stok habis terdeteksi lebih awal.
 
 - Customer Experience KPI
   - Checkout mudah.

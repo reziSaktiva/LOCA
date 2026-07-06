@@ -35,22 +35,34 @@ Karakter brand yang harus tercermin di seluruh UI:
 
 ## 3. Color System
 
-| Token Group | Purpose | Example |
-|------------|---------|---------|
-| Primary | Aksi utama, CTA | `primary-500` |
-| Neutral | Teks, background, border | `neutral-100` |
-| Semantic Success | Status berhasil | `success-500` |
-| Semantic Warning | Status peringatan | `warning-500` |
-| Semantic Error | Status error/destructive | `error-500` |
-| Semantic Info | Status informasi | `info-500` |
+Arah palette brand LOCA: **Black + Off-White + 1 Accent Color**.
+
+Filosofi: timeless, premium, minimal — selaras dengan brand personality Modern + Minimal.
+
+| Token Group | Direction | Purpose | Example |
+|------------|-----------|---------|---------|
+| Primary | Black (#0A0A0A) + Off-White (#F5F5F0) | Aksi utama, CTA, background | `primary` |
+| Accent | 1 warna accent (TBD saat produksi logo) | Highlight, badge, active state | `accent` |
+| Neutral | Skala abu-abu dari Off-White ke Black | Teks, background, border | `neutral-100` |
+| Semantic Success | Hijau | Status berhasil | `success-500` |
+| Semantic Warning | Kuning/Amber | Status peringatan | `warning-500` |
+| Semantic Error | Merah | Status error/destructive | `error-500` |
+| Semantic Info | Biru | Status informasi | `info-500` |
 
 Catatan:
+- Nilai accent color final ditetapkan bersamaan dengan finalisasi logo/produksi brand asset.
 - Hindari penggunaan warna di luar token yang sudah didefinisikan.
 - Pastikan kontras warna memenuhi standar aksesibilitas.
 
 ---
 
 ## 4. Typography
+
+Font brand LOCA: **Geometric Sans**.
+
+Kandidat utama: **Outfit** atau **Plus Jakarta Sans**.
+
+Kriteria pemilihan: clean, modern, readable, cocok untuk brand Sports Apparel generasi muda (18-35). Font final ditetapkan saat produksi brand asset.
 
 | Element | Style |
 |--------|-------|

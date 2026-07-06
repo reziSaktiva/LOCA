@@ -9,6 +9,32 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-06 (12)
+
+### Added
+
+- Implementasi **M4.4 — Catalog Public Search Endpoint**:
+  - Application service baru `src/modules/catalog/application/search-public-products.ts`:
+    - `SearchPublicProductsQuery` type (`q` required, pagination/sort/filter optional).
+    - Full-text search mencakup `name`, `description`, DAN `brand` (berbeda dari listing yang hanya `name`).
+    - Filter: category, minPrice, maxPrice, pagination, sort.
+    - Typed error result: `QUERY_EMPTY` jika `q` kosong/whitespace.
+  - Public facade di `catalog-public-service.ts`: `searchPublicProductsFromSearchParams` + `SearchProductsResult` type.
+  - Route handler baru: `src/app/api/v1/products/search/route.ts` (`GET /api/v1/products/search`); mengembalikan HTTP 400 jika `q` kosong.
+  - Test file baru `search-public-products.test.ts`: 13 test case (match name/description/brand, case-insensitive, filter, pagination, sort, empty result, error QUERY_EMPTY).
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) lolos — 78 test, 6 test file, 0 error.
+
+### Notes
+
+- M4.4 adalah milestone terakhir Catalog Foundation (M4.1–M4.4 selesai).
+- Search endpoint dibedakan dari listing: `q` wajib, scope lebih luas (name+description+brand).
+- Next: mulai module berikutnya (Auth/Inventory) atau lanjut ke catalog admin CRUD + Prisma persistence.
+
+---
+
 ## 2026-07-06 (11)
 
 ### Changed

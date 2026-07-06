@@ -6,14 +6,15 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **in progress**
-- Current implementation progress: **30%** (M4.1 + M4.2 + M4.3 catalog variant selesai)
+- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.4 selesai)
+- Current implementation progress: **35%** (M4.1 + M4.2 + M4.3 + M4.4 catalog selesai)
 
 ## Current Focus
 
-- `phase-2 catalog vertical slice 03`
-- M4.3 — Catalog Variant Pricing & Attributes Dasar sudah selesai.
-- Next active item: **M4.4 — Catalog Public Search Endpoint**
+- `phase-2 catalog vertical slice 04`
+- M4.4 — Catalog Public Search Endpoint sudah selesai.
+- Milestone 4 (Catalog Foundation) SELESAI.
+- Next active item: **Module berikutnya (Auth/Inventory) atau catalog admin CRUD + Prisma persistence**
 
 ## Completed (Planning Side)
 
@@ -105,7 +106,11 @@ Target setup awal:
   - 65 test lolos, `bun run check` hijau.
 
 - **M4.4 - Catalog Public Search Endpoint**
-  - Target berikutnya: endpoint `GET /api/v1/products/search` dengan full text + filter (kategori, harga, ukuran).
+  - Status: **Completed**
+  - Application service: `search-public-products.ts` — full-text search (name+description+brand), filter category/minPrice/maxPrice, pagination, sort. Typed error `QUERY_EMPTY`.
+  - Public facade: `searchPublicProductsFromSearchParams` di `catalog-public-service.ts`.
+  - Endpoint baru: `GET /api/v1/products/search` — HTTP 400 jika `q` kosong.
+  - 78 test lolos, `bun run check` hijau.
 
 ## Module Build Plan (High-Level)
 

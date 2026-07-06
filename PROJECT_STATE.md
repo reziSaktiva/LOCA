@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-2 catalog vertical slice 01`
+`phase-2 catalog vertical slice 04`
 
 Tujuan:
 
-Menyelesaikan vertical slice awal module `catalog` untuk listing produk dan kategori publik sebagai fondasi API read-path katalog.
+M4.4 selesai — endpoint `GET /api/v1/products/search` aktif dengan full-text search (name+description+brand) dan filter (category, minPrice, maxPrice, pagination, sort). Next: M4.5 atau transisi ke module berikutnya.
 
 ---
 
@@ -179,14 +179,15 @@ Belum diputuskan:
 - ✅ **M3.7 — Catalog Start Gate (Definition of Ready)**: readiness implementasi module `catalog` telah ditetapkan di `planning/backlog.md` mencakup feature backlog vertical slice, acceptance criteria per feature, verifikasi dependency lintas module (`inventory`, `review`, downstream `homepage`/`cart`), dan checklist DoR. Exit criteria M3.7 tercapai; `catalog` siap diimplementasikan. Detail: `planning/decisions.md` Decision 017.
 - ✅ **M4.1 — Catalog Vertical Slice 01 (Category + Product Listing Public)**: module `catalog` mulai terimplementasi dengan struktur layer lengkap untuk read-path publik (`domain`, `application`, `infrastructure`, `public`, `presentation`), invariant dasar katalog (`ACTIVE` + minimal 1 variant, produk `ARCHIVED`/non-active tidak tampil), endpoint `GET /api/v1/products` (pagination/filter/sort dasar) dan `GET /api/v1/products/categories` (kategori aktif dengan produk publik), serta unit test domain+application. Exit criteria M4.1 tercapai dan quality gate minimum lolos (`bun run check`).
 - ✅ **M4.3 — Catalog Variant Pricing & Attributes Dasar**: type variant lengkap (`CatalogVariant`, `VariantSnapshot`, commands), invariant `isVariantPriceValid` + `isValidSku`, repository contract diperluas (findVariantsByProductId, existsVariantWithSku, createVariant, updateVariant, getVariantSnapshot), in-memory store dengan 7 seed variant + sync otomatis priceFrom/priceTo/variantCount, application service `manage-variant.ts` (create/update dengan 5 error code typed), public facade `getVariantSnapshotForCart` sebagai kontrak lintas module. 65 test lolos, `bun run check` hijau.
+- ✅ **M4.4 — Catalog Public Search Endpoint**: application service `search-public-products.ts` (full-text search: name+description+brand, filter category+minPrice+maxPrice, pagination, sort), public facade `searchPublicProductsFromSearchParams`, endpoint `GET /api/v1/products/search` aktif (400 jika q kosong). 78 test lolos, `bun run check` hijau.
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, dan M4.3 Catalog Foundation** sudah selesai.
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, dan M4.4 Catalog Foundation** sudah selesai.
 
-Next action: **M4.4 — Catalog Public Search Endpoint**.
+Next action: **Milestone 4 selesai** — seluruh Catalog Foundation API read-path publik tersedia. Langkah berikutnya: mulai module berikutnya (Auth atau Inventory) sesuai roadmap, atau tambah fitur lanjutan catalog (admin CRUD endpoint, Prisma persistence).
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -250,11 +251,11 @@ Next action: **M4.4 — Catalog Public Search Endpoint**.
    - ✅ Kontrak `getVariantSnapshotForCart` tersedia di public facade untuk consumer `cart`.
    - ✅ 65 test lolos, quality gate minimum hijau.
 
-11. **M4.4 — Catalog Public Search Endpoint**
-   - Implementasi endpoint `GET /api/v1/products/search` (full text + filter harga + kategori).
-   - Exit criteria:
-     - Endpoint search aktif dan tervalidasi.
-     - Tetap lolos quality gate minimum.
+11. ✅ **M4.4 — Catalog Public Search Endpoint** (Selesai)
+   - ✅ Application service `search-public-products.ts`: full-text search (name+description+brand), filter category/minPrice/maxPrice, pagination, sort.
+   - ✅ Public facade `searchPublicProductsFromSearchParams` di `catalog-public-service.ts`.
+   - ✅ Endpoint `GET /api/v1/products/search` aktif; 400 jika `q` kosong.
+   - ✅ 78 test lolos, `bun run check` hijau.
 
 ---
 
@@ -272,7 +273,7 @@ System Design Readiness
 
 ```
 Implementation
-██████░░░░░░░░░░░░░░  30%
+████████░░░░░░░░░░░░  35%
 ```
 
 ---
@@ -340,7 +341,7 @@ Breakdown:
 - [x] M4.1 Catalog Vertical Slice 01 (Category + Product Listing Public)
 - [x] M4.2 Catalog Product Lifecycle Dasar
 - [x] M4.3 Catalog Variant Pricing & Attributes Dasar
-- [ ] M4.4 Catalog Public Search Endpoint
+- [x] M4.4 Catalog Public Search Endpoint
 
 Target Outcome:
 

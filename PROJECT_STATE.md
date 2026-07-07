@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 2 Completed — Phase 3 Starting (Customer & Homepage)
+Status: Phase 3 In Progress — M5.1 Customer Auth Foundation Completed
 
 Current Version: v0.8
 
@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-2 catalog foundation complete`
+`phase-3 customer & homepage`
 
 Tujuan:
 
-M4.8 selesai — Product Media & SEO Dasar diimplementasikan. `ProductMedia` dan `ProductSeo` aktif di domain + Prisma schema + admin API. Invariant thumbnail wajib saat aktivasi produk. Phase 2 (Catalog Foundation) **selesai**. Next: Phase 3 (Customer & Homepage).
+M5.1 selesai — Customer Auth Foundation diimplementasikan. Module `auth` aktif dengan domain, application services, SupabaseAuthRepository, public facade, session guard `requireCustomer()`, dan API routes auth. Next: M5.2 Customer Profile & Address.
 
 ---
 
@@ -184,14 +184,15 @@ Belum diputuskan:
 - ✅ **M4.6 — Prisma Catalog Repository**: `PrismaCatalogRepository` di `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` mengimplementasikan seluruh `CatalogRepository` contract dengan Prisma client nyata. `createVariant`/`updateVariant` menggunakan `prisma.$transaction` untuk menjaga konsistensi denormalized fields. `InMemoryCatalogRepository` digantikan di public service; catalog kini terhubung ke database Supabase PostgreSQL sungguhan. `bun run check` hijau (78 test).
 - ✅ **M4.7 — Admin Catalog API**: Admin route handlers aktif di `src/app/api/v1/admin/` (products, variants, categories). Auth guard `requireAdmin()` di `src/shared/infrastructure/auth/admin-guard.ts` memverifikasi Supabase session + `app_metadata.role === "admin"`. `CatalogRepository` diperluas dengan category CRUD. Facade `catalog-admin-service.ts` mengekspos semua operasi admin. Import boundary dipatuhi. `bun run check` hijau (78 test).
 - ✅ **M4.8 — Product Media & SEO Dasar**: Enum `MediaOwnerType`/`ProductMediaType`, type `ProductMedia`/`ProductSeo` aktif di domain. Prisma model `ProductMedia` + `ProductSeo` ditambah, migration `20260707061153_catalog_media_seo` diapply ke Supabase. Application service `manage-product-media.ts` (addMedia, removeMedia, getProductSeo, upsertProductSeo). Invariant `canActivateProduct` diperluas: thumbnail wajib ada + minimal 1 variant. Admin routes: `GET/POST /api/v1/admin/products/[id]/media`, `DELETE /api/v1/admin/products/[id]/media/[mediaId]`, `GET/PUT /api/v1/admin/products/[id]/seo`. `bun run check` hijau (78 test).
+- ✅ **M5.1 — Customer Auth Foundation**: Module `auth` diimplementasikan. Domain layer: `CustomerAccount`, `AuthSession`, `AuthResult`, `AuthError`, `RegisterCustomerCommand`, `LoginCommand`, invariant `isValidEmail`/`isValidPassword`. Application services: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`, `get-current-session.ts`. Infrastructure: `SupabaseAuthRepository` (wraps Supabase `signUp`, `signInWithPassword`, `signOut`, `getUser`). Public facade: `customer-auth-service.ts`. Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/customer-guard.ts`. Shared helper: `src/shared/kernel/api-response.ts`. API routes aktif: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`. `bun run check` hijau (96 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.**
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.**
 
-Next action: **M5.1 — Customer Auth Foundation** — implementasi register/login/logout via Supabase Auth, `requireCustomer()` session guard, dan API routes auth.
+Next action: **M5.2 — Customer Profile & Address** — domain `CustomerProfile` + `CustomerAddress`, Prisma schema + migration, `PrismaCustomerRepository`, API routes `GET/PATCH /api/v1/customer/profile` dan `GET/POST/PATCH/DELETE /api/v1/customer/addresses`.
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -315,7 +316,7 @@ System Design Readiness
 
 ```
 Implementation
-████████████░░░░░░░░  60%
+█████████████░░░░░░░  65%
 ```
 
 ---
@@ -403,7 +404,7 @@ Target Outcome:
 
 Breakdown:
 
-- [ ] M5.1 Customer Auth Foundation
+- [x] M5.1 Customer Auth Foundation
 - [ ] M5.2 Customer Profile & Address
 - [ ] M5.3 Homepage Foundation
 
@@ -414,22 +415,10 @@ Target Outcome:
 - Homepage menampilkan data dinamis dari catalog (featured, new arrival, best seller).
 - Phase 3 exit criteria terpenuhi.
 
-### M5.1 — Customer Auth Foundation
+### ✅ M5.1 — Customer Auth Foundation (Completed)
 
-Scope:
-
-- Domain: `CustomerAccount` entity, invariant (email valid, password min length), `AuthResult` type.
-- Application service: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`.
-- Infrastructure: `SupabaseAuthRepository` (wrap Supabase Auth `signUp`, `signInWithPassword`, `signOut`).
-- Public facade: `customer-auth-service.ts`.
-- API routes: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`.
-- Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/`.
-
-Exit criteria:
-
-- Customer dapat register dan login; session aktif via Supabase Auth.
-- `requireCustomer()` memblokir request tanpa session valid.
-- Quality gate (`bun run check`) lolos.
+- Domain layer, application services, infrastructure, public facade, guard, API routes aktif.
+- 96 test lolos. `bun run check` hijau.
 
 ### M5.2 — Customer Profile & Address
 

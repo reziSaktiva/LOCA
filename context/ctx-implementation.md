@@ -6,14 +6,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.5 selesai, M4.6–M4.8 planned)
-- Current implementation progress: **40%** (M4.1 + M4.2 + M4.3 + M4.4 + M4.5 catalog selesai)
+- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.6 selesai, M4.7–M4.8 planned)
+- Current implementation progress: **45%** (M4.1 + M4.2 + M4.3 + M4.4 + M4.5 + M4.6 catalog selesai)
 
 ## Current Focus
 
 - `phase-2 catalog completion`
-- M4.5 selesai. Sisa Phase 2: M4.6 (Prisma Repository) → M4.7 (Admin API) → M4.8 (Media & SEO).
-- Next active item: **M4.6 — Prisma Catalog Repository**
+- M4.6 selesai. Sisa Phase 2: M4.7 (Admin API) → M4.8 (Media & SEO).
+- Next active item: **M4.7 — Admin Catalog API**
 
 ## Completed (Planning Side)
 
@@ -119,10 +119,12 @@ Target setup awal:
   - Migration `20260707030000_catalog_foundation` sudah diapply ke database Supabase.
   - `prisma generate` lolos; Prisma client menyertakan catalog types. 78 test lolos.
 
-- **M4.6 - Prisma Catalog Repository** _(Planned)_
-  - Implementasikan `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract.
-  - Gantikan `InMemoryCatalogRepository` di `catalog-public-service.ts`.
-  - Exit criteria: catalog terhubung database sungguhan; quality gate lolos.
+- **M4.6 - Prisma Catalog Repository**
+  - Status: **Completed**
+  - `PrismaCatalogRepository` di `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` mengimplementasikan seluruh `CatalogRepository` contract.
+  - `createVariant`/`updateVariant` menggunakan `prisma.$transaction` untuk menjaga konsistensi denormalized fields.
+  - `InMemoryCatalogRepository` digantikan di `catalog-public-service.ts`; catalog terhubung ke Supabase PostgreSQL.
+  - 78 test lolos, `bun run check` hijau.
 
 - **M4.7 - Admin Catalog API** _(Planned)_
   - Endpoint admin CRUD product/variant/category dengan auth guard.
@@ -138,9 +140,10 @@ Target setup awal:
 
 ### Catalog Module
 
-- Status: In Progress (M4.1–M4.5 completed)
+- Status: In Progress (M4.1–M4.6 completed)
 - Target phase: Phase 2
 - Deliverables: product/category/variant/detail/search/filter/sort
+- Database: terhubung ke Supabase PostgreSQL via `PrismaCatalogRepository`
 
 ### Auth Module
 
@@ -149,9 +152,9 @@ Target setup awal:
 
 ### Database
 
-- Status: Foundation plumbing completed in Phase 1 (M3.4), schema catalog selesai (M4.5)
+- Status: Foundation plumbing completed in Phase 1 (M3.4), schema catalog selesai (M4.5), Prisma Catalog Repository aktif (M4.6)
 - Scope awal: schema baseline, migration strategy, repository contract
-- Next: M4.6 Prisma Catalog Repository (koneksi database sungguhan)
+- Current: catalog terhubung ke database sungguhan via `PrismaCatalogRepository`
 
 ## Remaining Priority Flows
 

@@ -7,7 +7,7 @@ import {
 } from "../application/search-public-products";
 import type { VariantSnapshot } from "../domain/catalog-entities";
 import type { ListPublicProductsQuery } from "../domain/catalog-repository";
-import { InMemoryCatalogRepository } from "../infrastructure/in-memory-catalog-repository";
+import { PrismaCatalogRepository } from "../infrastructure/prisma-catalog-repository";
 
 export type PublicProductCard = {
   id: string;
@@ -37,7 +37,7 @@ export type PublicCategory = {
   slug: string;
 };
 
-const repository = new InMemoryCatalogRepository();
+const repository = new PrismaCatalogRepository();
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 12;
 const MAX_LIMIT = 100;

@@ -8,3 +8,153 @@ datasource db {
   // URL dikonfigurasi di prisma.config.ts (untuk Prisma CLI)
   // Runtime menggunakan DATABASE_URL via driver adapter di shared/infrastructure/database/client.ts
 }
+
+// ---------------------------------------------------------------------------
+// Catalog Module
+// ---------------------------------------------------------------------------
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  OUT_OF_STOCK
+  ARCHIVED
+}
+
+enum VariantStatus {
+  ACTIVE
+  INACTIVE
+}
+
+/// Kategori produk (socks, boxer, shorts, dsb.)
+model ProductCategory {
+  id       String  @id @default(cuid())
+  name     String
+  slug     String  @unique
+  isActive Boolean @default(true)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+
+  // Soft delete
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  deletedBy    String?
+  deleteReason String?
+
+  products Product[]
+
+  @@map("product_categories")
+}
+
+/// Entitas produk utama — aggregate root katalog.
+/// variantCount, priceFrom, priceTo, thumbnailUrl adalah denormalized fields
+/// yang di-sync setiap kali varian diubah agar read path efisien tanpa JOIN.
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  brand       String
+  description String
+  status      ProductStatus @default(DRAFT)
+  categoryId  String
+
+  // Denormalized untuk efisiensi read path (sync via application service)
+  variantCount Int    @default(0)
+  priceFrom    Float  @default(0)
+  priceTo      Float  @default(0)
+  thumbnailUrl String @default("")
+
+  // Audit
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+
+  // Soft delete
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  deletedBy    String?
+  deleteReason String?
+
+  category       ProductCategory @relation(fields: [categoryId], references: [id])
+  variants       ProductVariant[]
+  variantOptions VariantOption[]
+
+  // Pola akses: listing publik + admin queue
+  @@index([status, categoryId, createdAt])
+  @@map("products")
+}
+
+/// Unit jual nyata dengan SKU dan harga.
+model ProductVariant {
+  id             String        @id @default(cuid())
+  productId      String
+  sku            String        @unique
+  price          Float
+  compareAtPrice Float?
+  variantLabel   String
+  status         VariantStatus @default(ACTIVE)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+
+  // Soft delete
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  deletedBy    String?
+  deleteReason String?
+
+  product       Product        @relation(fields: [productId], references: [id])
+  variantValues VariantValue[]
+
+  @@index([productId])
+  @@map("product_variants")
+}
+
+/// Definisi dimensi varian pada level produk (mis. warna, ukuran, model).
+model VariantOption {
+  id           String @id @default(cuid())
+  productId    String
+  optionCode   String
+  optionName   String
+  displayOrder Int    @default(0)
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  product       Product        @relation(fields: [productId], references: [id])
+  variantValues VariantValue[]
+
+  @@index([productId])
+  @@map("variant_options")
+}
+
+/// Nilai option yang dipakai oleh varian tertentu (mis. color=black, size=L).
+model VariantValue {
+  id         String @id @default(cuid())
+  variantId  String
+  optionId   String
+  valueCode  String
+  valueLabel String
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+  option  VariantOption  @relation(fields: [optionId], references: [id])
+
+  @@index([variantId])
+  @@map("variant_values")
+}

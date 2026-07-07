@@ -27,7 +27,7 @@ Prioritas utama adalah menghasilkan MVP yang stabil sebelum mengembangkan fitur 
 
 # Phase 0 — Planning & Documentation
 
-Status: ✅ Completed
+Status: ✅ Completed (2026-06-30)
 
 Tujuan:
 
@@ -57,7 +57,7 @@ Exit Criteria:
 
 # Phase 1 — Project Foundation
 
-Status: ⏳ Planned
+Status: ✅ Completed (2026-07-06)
 
 Tujuan:
 
@@ -99,7 +99,7 @@ Exit Criteria:
 
 # Phase 2 — Catalog Foundation
 
-Status: ⏳ Planned
+Status: ✅ Completed (2026-07-07)
 
 Tujuan:
 
@@ -132,7 +132,7 @@ Exit Criteria:
 
 # Phase 3 — Customer & Homepage
 
-Status: ⏳ Planned
+Status: 🔄 In Progress
 
 Tujuan:
 

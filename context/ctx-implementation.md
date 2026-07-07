@@ -11,9 +11,9 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 ## Current Focus
 
-- `phase-3 cart & checkout foundation`
+- `phase-3 customer & homepage`
 - Phase 2 selesai. M4.8 (Product Media & SEO) sudah completed.
-- Next active item: **Phase 3 — Cart Foundation** (vertical slice: add item, view cart, update qty, remove item)
+- Next active item: **Phase 3 — Customer & Homepage** (Homepage foundation + Customer profile & address)
 
 ## Completed (Planning Side)
 
@@ -69,9 +69,40 @@ Sudah selesai pada Milestone 3:
   - Dependency antar module diverifikasi (`catalog -> inventory`, `catalog -> review`, downstream `homepage` dan `cart`).
   - Readiness checklist implementasi `catalog` dinyatakan lengkap; module siap kickoff implementasi.
 
-## Phase 2 (Next Targets)
+## Phase 3 (Next Targets)
 
-Target setup awal:
+Target Phase 3 — Customer & Homepage:
+
+- **M5.1 — Customer Auth Foundation** *(next)*
+  - Domain: `CustomerAccount` entity, invariant (email valid, password min length), `AuthResult` type.
+  - Application service: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`.
+  - Infrastructure: `SupabaseAuthRepository` (Supabase Auth `signUp`, `signInWithPassword`, `signOut`).
+  - Public facade: `customer-auth-service.ts`.
+  - API routes: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`.
+  - Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/`.
+  - Exit criteria: session aktif via Supabase Auth, `requireCustomer()` aktif, quality gate lolos.
+
+- **M5.2 — Customer Profile & Address**
+  - Domain: `CustomerProfile`, `CustomerAddress` entity + repository contract.
+  - Application service: `manage-customer-profile.ts`, `manage-customer-address.ts`.
+  - Prisma schema: model `CustomerProfile`, `CustomerAddress` + migration.
+  - Infrastructure: `PrismaCustomerRepository`.
+  - API routes: `GET/PATCH /api/v1/customer/profile`, `GET/POST/PATCH/DELETE /api/v1/customer/addresses`.
+  - Exit criteria: profil dan alamat dapat dikelola; default address logic aktif.
+
+- **M5.3 — Homepage Foundation**
+  - Application service: `get-homepage-data.ts` (composite dari catalog: featured, new arrival, best seller).
+  - Prisma schema: model `HomepageBanner` + migration.
+  - Infrastructure: `PrismaHomepageRepository`.
+  - API route: `GET /api/v1/homepage`.
+  - Admin route: `GET/POST/PATCH/DELETE /api/v1/admin/homepage/banners`.
+  - Exit criteria: homepage mengembalikan banner + produk dinamis; admin dapat kelola banner.
+
+---
+
+## Phase 2 Completed Targets
+
+Target setup awal (Phase 2 selesai):
 
 - **M4.1 - Catalog Vertical Slice 01 (Category + Product Listing Public)**
   - Implementasi domain + application service dasar untuk category dan listing produk publik.

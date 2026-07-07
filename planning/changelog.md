@@ -9,6 +9,35 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-07 (1)
+
+### Added
+
+- Implementasi **M4.5 — Prisma Schema Catalog**:
+  - Model `ProductCategory` di `prisma/schema.prisma` — `id`, `name`, `slug` (unique), `isActive`, audit fields, soft delete fields.
+  - Model `Product` (aggregate root) di `prisma/schema.prisma` — `id`, `name`, `slug` (unique), `brand`, `description`, `status` (enum ProductStatus), `categoryId` (FK), denormalized fields (`variantCount`, `priceFrom`, `priceTo`, `thumbnailUrl`), audit fields, soft delete fields. Index: `(status, categoryId, createdAt)`.
+  - Model `ProductVariant` di `prisma/schema.prisma` — `id`, `productId` (FK), `sku` (unique), `price`, `compareAtPrice`, `variantLabel`, `status` (enum VariantStatus), audit fields, soft delete fields. Index: `(productId)`.
+  - Model `VariantOption` di `prisma/schema.prisma` — `id`, `productId` (FK), `optionCode`, `optionName`, `displayOrder`, audit fields. Index: `(productId)`.
+  - Model `VariantValue` di `prisma/schema.prisma` — `id`, `variantId` (FK), `optionId` (FK), `valueCode`, `valueLabel`, audit fields. Index: `(variantId)`.
+  - Enum `ProductStatus`: `DRAFT`, `ACTIVE`, `OUT_OF_STOCK`, `ARCHIVED`.
+  - Enum `VariantStatus`: `ACTIVE`, `INACTIVE`.
+  - Migration SQL: `prisma/migrations/20260707030000_catalog_foundation/migration.sql`.
+  - Migration lock: `prisma/migrations/migration_lock.toml`.
+
+### Verified
+
+- `bunx --bun prisma generate` — lolos, Prisma client di `src/generated/prisma` menyertakan catalog types (`ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue`, `ProductStatus`, `VariantStatus`).
+- `bunx --bun prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script` — SQL valid, foreign key dan index sesuai dengan `docs/06-data-model.md`.
+- `bun run check` (lint + typecheck + test) — hijau, 78 test lolos.
+
+### Notes
+
+- Migration `20260707030000_catalog_foundation` **sudah diapply ke database Supabase** via `bunx --bun prisma migrate dev`. Database sekarang sudah memiliki tabel `product_categories`, `products`, `product_variants`, `variant_options`, `variant_values`.
+- `VariantOption` dan `VariantValue` diikutsertakan di M4.5 karena coupled erat dengan `Product`/`ProductVariant` sebagai bagian dari aggregate boundary catalog (`docs/06-data-model.md` section 7).
+- `ProductMedia` dan `ProductSeo` ditunda ke M4.8 sesuai roadmap.
+
+---
+
 ## 2026-07-06 (13)
 
 ### Planning

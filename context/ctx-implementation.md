@@ -6,14 +6,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.4 selesai, M4.5–M4.8 planned)
-- Current implementation progress: **35%** (M4.1 + M4.2 + M4.3 + M4.4 catalog selesai)
+- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.5 selesai, M4.6–M4.8 planned)
+- Current implementation progress: **40%** (M4.1 + M4.2 + M4.3 + M4.4 + M4.5 catalog selesai)
 
 ## Current Focus
 
 - `phase-2 catalog completion`
-- M4.4 selesai. Sisa Phase 2: M4.5 (Prisma Schema) → M4.6 (Prisma Repository) → M4.7 (Admin API) → M4.8 (Media & SEO).
-- Next active item: **M4.5 — Prisma Schema Catalog**
+- M4.5 selesai. Sisa Phase 2: M4.6 (Prisma Repository) → M4.7 (Admin API) → M4.8 (Media & SEO).
+- Next active item: **M4.6 — Prisma Catalog Repository**
 
 ## Completed (Planning Side)
 
@@ -111,10 +111,13 @@ Target setup awal:
   - Endpoint baru: `GET /api/v1/products/search` — HTTP 400 jika `q` kosong.
   - 78 test lolos, `bun run check` hijau.
 
-- **M4.5 - Prisma Schema Catalog** _(Planned)_
-  - Tambahkan model `ProductCategory`, `Product`, `ProductVariant` ke `prisma/schema.prisma` sesuai `docs/06-data-model.md`.
-  - Jalankan migration pertama catalog ke database.
-  - Exit criteria: migration lolos, `prisma generate` menghasilkan types catalog.
+- **M4.5 - Prisma Schema Catalog**
+  - Status: **Completed**
+  - Model `ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue` ditambahkan ke `prisma/schema.prisma`.
+  - Enum `ProductStatus` (DRAFT/ACTIVE/OUT_OF_STOCK/ARCHIVED) dan `VariantStatus` (ACTIVE/INACTIVE) aktif.
+  - Audit fields, soft delete fields, dan index pola akses bisnis sesuai `docs/06-data-model.md`.
+  - Migration `20260707030000_catalog_foundation` sudah diapply ke database Supabase.
+  - `prisma generate` lolos; Prisma client menyertakan catalog types. 78 test lolos.
 
 - **M4.6 - Prisma Catalog Repository** _(Planned)_
   - Implementasikan `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract.
@@ -135,7 +138,7 @@ Target setup awal:
 
 ### Catalog Module
 
-- Status: In Progress (M4.1 completed)
+- Status: In Progress (M4.1–M4.5 completed)
 - Target phase: Phase 2
 - Deliverables: product/category/variant/detail/search/filter/sort
 
@@ -146,8 +149,9 @@ Target setup awal:
 
 ### Database
 
-- Status: Foundation plumbing completed in Phase 1 (M3.4), schema domain belum dimulai
+- Status: Foundation plumbing completed in Phase 1 (M3.4), schema catalog selesai (M4.5)
 - Scope awal: schema baseline, migration strategy, repository contract
+- Next: M4.6 Prisma Catalog Repository (koneksi database sungguhan)
 
 ## Remaining Priority Flows
 

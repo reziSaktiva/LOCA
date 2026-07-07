@@ -6,14 +6,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.7 selesai, M4.8 planned)
-- Current implementation progress: **50%** (M4.1 + M4.2 + M4.3 + M4.4 + M4.5 + M4.6 + M4.7 catalog selesai)
+- Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
+- Current implementation progress: **60%** (M4.1–M4.8 catalog selesai, Phase 2 complete)
 
 ## Current Focus
 
-- `phase-2 catalog completion`
-- M4.7 selesai. Sisa Phase 2: M4.8 (Media & SEO).
-- Next active item: **M4.8 — Product Media & SEO Dasar**
+- `phase-3 cart & checkout foundation`
+- Phase 2 selesai. M4.8 (Product Media & SEO) sudah completed.
+- Next active item: **Phase 3 — Cart Foundation** (vertical slice: add item, view cart, update qty, remove item)
 
 ## Completed (Planning Side)
 
@@ -135,23 +135,24 @@ Target setup awal:
   - Admin routes aktif: products (GET/POST/PATCH/DELETE), product status, variants (GET/POST/PATCH), categories (GET/POST/PATCH).
   - 78 test lolos, `bun run check` hijau.
 
-- **M4.8 - Product Media & SEO Dasar** _(Planned)_
-  - `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl).
-  - Menutup backlog `catalog-product-media-seo`.
-  - Exit criteria: thumbnail wajib ada saat produk dipublikasikan.
-
-- **M4.8 - Product Media & SEO Dasar** _(Planned)_
-  - `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl).
-  - Menutup backlog `catalog-product-media-seo`.
-  - Exit criteria: thumbnail wajib ada saat produk dipublikasikan.
+- **M4.8 - Product Media & SEO Dasar**
+  - Status: **Completed**
+  - Enum baru: `MediaOwnerType` (`PRODUCT`/`VARIANT`), `ProductMediaType` (`IMAGE`/`VIDEO`/`THREE_SIXTY`/`MANUAL_PDF`).
+  - Type domain baru: `ProductMedia`, `ProductSeo`, `AddProductMediaCommand`, `UpsertProductSeoCommand`.
+  - Prisma model `ProductMedia` + `ProductSeo` + migration `20260707061153_catalog_media_seo` diapply ke Supabase.
+  - Application service `manage-product-media.ts`: 5 fungsi dengan typed errors.
+  - Invariant diperluas: thumbnail wajib ada saat produk diaktifkan (`CANNOT_ACTIVATE_WITHOUT_THUMBNAIL`).
+  - `thumbnailUrl` auto-sync saat media IMAGE pertama ditambahkan.
+  - Admin routes baru: `GET/POST /api/v1/admin/products/[id]/media`, `DELETE /api/v1/admin/products/[id]/media/[mediaId]`, `GET/PUT /api/v1/admin/products/[id]/seo`.
+  - 78 test lolos, `bun run check` hijau.
 
 ## Module Build Plan (High-Level)
 
 ### Catalog Module
 
-- Status: In Progress (M4.1–M4.7 completed, M4.8 remaining)
-- Target phase: Phase 2
-- Deliverables: product/category/variant/detail/search/filter/sort + admin CRUD API
+- Status: **Completed** (M4.1–M4.8 all done, Phase 2 selesai)
+- Target phase: Phase 2 ✅
+- Deliverables: product/category/variant/detail/search/filter/sort + admin CRUD API + media + SEO
 - Database: terhubung ke Supabase PostgreSQL via `PrismaCatalogRepository`
 
 ### Auth Module

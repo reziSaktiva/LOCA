@@ -1,5 +1,6 @@
 import { prisma } from "../../../shared/infrastructure/database/client";
 import type {
+  AddProductMediaCommand,
   CatalogCategory,
   CatalogProduct,
   CatalogProductStatus,
@@ -8,11 +9,16 @@ import type {
   CreateCategoryCommand,
   CreateProductCommand,
   CreateVariantCommand,
+  ProductMedia,
+  ProductMediaType,
+  ProductSeo,
   UpdateCategoryCommand,
   UpdateProductCommand,
   UpdateVariantCommand,
+  UpsertProductSeoCommand,
   VariantSnapshot,
 } from "../domain/catalog-entities";
+import type { MediaOwnerType } from "../domain/catalog-entities";
 import type { CatalogRepository } from "../domain/catalog-repository";
 
 // ---- Mappers ----------------------------------------------------------------
@@ -75,6 +81,44 @@ function toVariant(row: {
     variantLabel: row.variantLabel,
     status: row.status as CatalogVariantStatus,
     createdAt: row.createdAt,
+  };
+}
+
+function toMedia(row: {
+  id: string;
+  ownerType: string;
+  ownerId: string;
+  mediaType: string;
+  url: string;
+  altText: string;
+  sortOrder: number;
+  createdAt: Date;
+}): ProductMedia {
+  return {
+    id: row.id,
+    ownerType: row.ownerType as MediaOwnerType,
+    ownerId: row.ownerId,
+    mediaType: row.mediaType as ProductMediaType,
+    url: row.url,
+    altText: row.altText,
+    sortOrder: row.sortOrder,
+    createdAt: row.createdAt,
+  };
+}
+
+function toSeo(row: {
+  id: string;
+  productId: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
+}): ProductSeo {
+  return {
+    id: row.id,
+    productId: row.productId,
+    metaTitle: row.metaTitle,
+    metaDescription: row.metaDescription,
+    canonicalUrl: row.canonicalUrl,
   };
 }
 
@@ -295,6 +339,59 @@ export class PrismaCatalogRepository implements CatalogRepository {
       thumbnailUrl: row.product.thumbnailUrl,
       variantLabel: row.variantLabel,
     };
+  }
+
+  // --- Media ---
+
+  async listProductMedia(ownerType: string, ownerId: string): Promise<ProductMedia[]> {
+    const rows = await prisma.productMedia.findMany({
+      where: { ownerType: ownerType as MediaOwnerType, ownerId },
+      orderBy: { sortOrder: "asc" },
+    });
+    return rows.map(toMedia);
+  }
+
+  async addProductMedia(command: AddProductMediaCommand): Promise<ProductMedia> {
+    const row = await prisma.productMedia.create({
+      data: {
+        ownerType: command.ownerType,
+        ownerId: command.ownerId,
+        mediaType: command.mediaType,
+        url: command.url,
+        altText: command.altText ?? "",
+        sortOrder: command.sortOrder ?? 0,
+      },
+    });
+    return toMedia(row);
+  }
+
+  async removeProductMedia(mediaId: string): Promise<void> {
+    await prisma.productMedia.delete({ where: { id: mediaId } });
+  }
+
+  // --- SEO ---
+
+  async getProductSeo(productId: string): Promise<ProductSeo | null> {
+    const row = await prisma.productSeo.findUnique({ where: { productId } });
+    return row ? toSeo(row) : null;
+  }
+
+  async upsertProductSeo(command: UpsertProductSeoCommand): Promise<ProductSeo> {
+    const row = await prisma.productSeo.upsert({
+      where: { productId: command.productId },
+      create: {
+        productId: command.productId,
+        metaTitle: command.metaTitle,
+        metaDescription: command.metaDescription,
+        canonicalUrl: command.canonicalUrl,
+      },
+      update: {
+        metaTitle: command.metaTitle,
+        metaDescription: command.metaDescription,
+        canonicalUrl: command.canonicalUrl,
+      },
+    });
+    return toSeo(row);
   }
 
   // ---- Private helpers -------------------------------------------------------

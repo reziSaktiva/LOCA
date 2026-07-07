@@ -10,11 +10,27 @@ export function isProductPubliclyListable(product: CatalogProduct): boolean {
     return false;
   }
 
+  if (!product.thumbnailUrl) {
+    return false;
+  }
+
   return true;
 }
 
+export type ActivationBlockReason = "NO_VARIANT" | "NO_THUMBNAIL";
+
+/**
+ * Mengembalikan alasan produk tidak bisa diaktifkan, atau null jika sudah siap.
+ * Thumbnail wajib ada saat produk dipublikasikan (PRODUCT-010).
+ */
+export function getActivationBlockReason(product: CatalogProduct): ActivationBlockReason | null {
+  if (product.variantCount < 1) return "NO_VARIANT";
+  if (!product.thumbnailUrl) return "NO_THUMBNAIL";
+  return null;
+}
+
 export function canActivateProduct(product: CatalogProduct): boolean {
-  return product.variantCount >= 1;
+  return getActivationBlockReason(product) === null;
 }
 
 export function isAllowedStatusTransition(

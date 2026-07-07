@@ -1,3 +1,9 @@
+export const MEDIA_OWNER_TYPES = ["PRODUCT", "VARIANT"] as const;
+export type MediaOwnerType = (typeof MEDIA_OWNER_TYPES)[number];
+
+export const PRODUCT_MEDIA_TYPES = ["IMAGE", "VIDEO", "THREE_SIXTY", "MANUAL_PDF"] as const;
+export type ProductMediaType = (typeof PRODUCT_MEDIA_TYPES)[number];
+
 export const CATALOG_PRODUCT_STATUSES = ["DRAFT", "ACTIVE", "OUT_OF_STOCK", "ARCHIVED"] as const;
 
 export type CatalogProductStatus = (typeof CATALOG_PRODUCT_STATUSES)[number];
@@ -93,6 +99,41 @@ export type UpdateVariantCommand = {
   compareAtPrice?: number | null;
   variantLabel?: string;
   status?: CatalogVariantStatus;
+};
+
+export type ProductMedia = {
+  id: string;
+  ownerType: MediaOwnerType;
+  ownerId: string;
+  mediaType: ProductMediaType;
+  url: string;
+  altText: string;
+  sortOrder: number;
+  createdAt: Date;
+};
+
+export type ProductSeo = {
+  id: string;
+  productId: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
+};
+
+export type AddProductMediaCommand = {
+  ownerType: MediaOwnerType;
+  ownerId: string;
+  mediaType: ProductMediaType;
+  url: string;
+  altText?: string;
+  sortOrder?: number;
+};
+
+export type UpsertProductSeoCommand = {
+  productId: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
 };
 
 export type CreateCategoryCommand = {

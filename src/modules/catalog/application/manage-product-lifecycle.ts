@@ -5,7 +5,7 @@ import type {
   UpdateProductCommand,
 } from "../domain/catalog-entities";
 import {
-  canActivateProduct,
+  getActivationBlockReason,
   isAllowedStatusTransition,
   isValidSlug,
 } from "../domain/catalog-invariants";
@@ -16,7 +16,8 @@ export type ProductLifecycleError =
   | { code: "SLUG_CONFLICT"; message: string }
   | { code: "PRODUCT_NOT_FOUND"; message: string }
   | { code: "STATUS_TRANSITION_NOT_ALLOWED"; message: string }
-  | { code: "CANNOT_ACTIVATE_WITHOUT_VARIANT"; message: string };
+  | { code: "CANNOT_ACTIVATE_WITHOUT_VARIANT"; message: string }
+  | { code: "CANNOT_ACTIVATE_WITHOUT_THUMBNAIL"; message: string };
 
 export type ProductLifecycleResult<T> =
   | { success: true; product: T }
@@ -90,14 +91,26 @@ export async function updateProductStatus(
     };
   }
 
-  if (newStatus === "ACTIVE" && !canActivateProduct(existing)) {
-    return {
-      success: false,
-      error: {
-        code: "CANNOT_ACTIVATE_WITHOUT_VARIANT",
-        message: "Product tidak bisa diaktifkan tanpa minimal 1 variant.",
-      },
-    };
+  if (newStatus === "ACTIVE") {
+    const blockReason = getActivationBlockReason(existing);
+    if (blockReason === "NO_VARIANT") {
+      return {
+        success: false,
+        error: {
+          code: "CANNOT_ACTIVATE_WITHOUT_VARIANT",
+          message: "Product tidak bisa diaktifkan tanpa minimal 1 variant.",
+        },
+      };
+    }
+    if (blockReason === "NO_THUMBNAIL") {
+      return {
+        success: false,
+        error: {
+          code: "CANNOT_ACTIVATE_WITHOUT_THUMBNAIL",
+          message: "Product tidak bisa diaktifkan tanpa thumbnail. Tambahkan media thumbnail terlebih dahulu.",
+        },
+      };
+    }
   }
 
   const product = await repository.updateProductStatus(id, newStatus);

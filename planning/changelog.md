@@ -9,6 +9,40 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-07 (4)
+
+### Added
+
+- Implementasi **M4.8 — Product Media & SEO Dasar**:
+  - `src/modules/catalog/domain/catalog-entities.ts` — tambah enum `MediaOwnerType`, `ProductMediaType`; type `ProductMedia`, `ProductSeo`; commands `AddProductMediaCommand`, `UpsertProductSeoCommand`.
+  - `src/modules/catalog/domain/catalog-repository.ts` — perluas interface: `listProductMedia`, `addProductMedia`, `removeProductMedia`, `getProductSeo`, `upsertProductSeo`.
+  - `src/modules/catalog/domain/catalog-invariants.ts` — perluas `canActivateProduct`: sekarang mewajibkan thumbnail + minimal 1 variant; tambah `getActivationBlockReason` + `ActivationBlockReason` type; update `isProductPubliclyListable` agar memvalidasi thumbnail.
+  - `src/modules/catalog/application/manage-product-media.ts` — application service baru: `listProductMedia`, `addProductMedia`, `removeProductMedia`, `getProductSeo`, `upsertProductSeo` dengan typed errors (5 error codes).
+  - `src/modules/catalog/application/manage-product-lifecycle.ts` — error code baru `CANNOT_ACTIVATE_WITHOUT_THUMBNAIL`; gunakan `getActivationBlockReason` untuk pesan error yang lebih akurat.
+  - `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` — implementasi 5 method baru media & SEO via Prisma.
+  - `src/modules/catalog/infrastructure/in-memory-catalog-repository.ts` — implementasi 5 method baru media & SEO (in-memory store).
+  - `src/modules/catalog/public/catalog-admin-service.ts` — re-export types baru; tambah fungsi admin: `adminListProductMedia`, `adminAddProductMedia`, `adminRemoveProductMedia`, `adminGetProductSeo`, `adminUpsertProductSeo`.
+  - Admin route handlers baru:
+    - `GET/POST /api/v1/admin/products/[id]/media`
+    - `DELETE /api/v1/admin/products/[id]/media/[mediaId]`
+    - `GET/PUT /api/v1/admin/products/[id]/seo`
+  - Prisma schema: enum `MediaOwnerType` (`PRODUCT`/`VARIANT`) dan `ProductMediaType` (`IMAGE`/`VIDEO`/`THREE_SIXTY`/`MANUAL_PDF`); model `ProductMedia` dan `ProductSeo` ditambah; relasi `seo` ditambahkan ke `Product`.
+  - Migration `20260707061153_catalog_media_seo` diapply ke database Supabase.
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) — hijau, 78 test lolos, 0 error.
+- Migration Prisma berhasil diapply ke Supabase PostgreSQL.
+- `prisma generate` lolos; Prisma client menyertakan `ProductMedia` dan `ProductSeo`.
+
+### Notes
+
+- Invariant thumbnail wajib berlaku saat aktivasi: produk tidak bisa di-`ACTIVE` jika `thumbnailUrl` kosong + tidak ada variant. Error code `CANNOT_ACTIVATE_WITHOUT_THUMBNAIL` ditambah ke `ProductLifecycleError`.
+- `thumbnailUrl` di `Product` di-sync otomatis saat `addProductMedia` dipanggil dengan IMAGE pertama (sortOrder 0) dan produk belum memiliki thumbnail.
+- **Phase 2 (Catalog Foundation) dinyatakan selesai.** M4.1–M4.8 semua completed.
+
+---
+
 ## 2026-07-07 (3)
 
 ### Added

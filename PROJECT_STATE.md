@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 2 In Progress (Catalog Vertical Slice Started)
+Status: Phase 2 Completed — Phase 3 Starting (Cart & Checkout)
 
 Current Version: v0.8
 
@@ -28,7 +28,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 
 ✅ Phase 0 — Planning & Documentation (Completed)
 ✅ Phase 1 — Project Foundation (Completed)
-⏳ Phase 2 — Catalog Foundation (In Progress)
+✅ Phase 2 — Catalog Foundation (Completed)
 
 Progress:
 
@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-2 catalog vertical slice 07`
+`phase-2 catalog foundation complete`
 
 Tujuan:
 
-M4.7 selesai — Admin Catalog API diimplementasikan dengan auth guard. Admin dapat mengelola produk, varian, dan kategori via API. Next: M4.8 (Product Media & SEO Dasar).
+M4.8 selesai — Product Media & SEO Dasar diimplementasikan. `ProductMedia` dan `ProductSeo` aktif di domain + Prisma schema + admin API. Invariant thumbnail wajib saat aktivasi produk. Phase 2 (Catalog Foundation) **selesai**. Next: Phase 3 (Cart & Checkout Foundation).
 
 ---
 
@@ -183,14 +183,15 @@ Belum diputuskan:
 - ✅ **M4.5 — Prisma Schema Catalog**: model `ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue` ditambahkan ke `prisma/schema.prisma` sesuai `docs/06-data-model.md` (enum ProductStatus/VariantStatus, audit fields, soft delete fields, index pola akses bisnis). Migration `20260707030000_catalog_foundation` **sudah diapply ke database Supabase**. `prisma generate` lolos, Prisma client menyertakan catalog types. `bun run check` hijau (78 test).
 - ✅ **M4.6 — Prisma Catalog Repository**: `PrismaCatalogRepository` di `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` mengimplementasikan seluruh `CatalogRepository` contract dengan Prisma client nyata. `createVariant`/`updateVariant` menggunakan `prisma.$transaction` untuk menjaga konsistensi denormalized fields. `InMemoryCatalogRepository` digantikan di public service; catalog kini terhubung ke database Supabase PostgreSQL sungguhan. `bun run check` hijau (78 test).
 - ✅ **M4.7 — Admin Catalog API**: Admin route handlers aktif di `src/app/api/v1/admin/` (products, variants, categories). Auth guard `requireAdmin()` di `src/shared/infrastructure/auth/admin-guard.ts` memverifikasi Supabase session + `app_metadata.role === "admin"`. `CatalogRepository` diperluas dengan category CRUD. Facade `catalog-admin-service.ts` mengekspos semua operasi admin. Import boundary dipatuhi. `bun run check` hijau (78 test).
+- ✅ **M4.8 — Product Media & SEO Dasar**: Enum `MediaOwnerType`/`ProductMediaType`, type `ProductMedia`/`ProductSeo` aktif di domain. Prisma model `ProductMedia` + `ProductSeo` ditambah, migration `20260707061153_catalog_media_seo` diapply ke Supabase. Application service `manage-product-media.ts` (addMedia, removeMedia, getProductSeo, upsertProductSeo). Invariant `canActivateProduct` diperluas: thumbnail wajib ada + minimal 1 variant. Admin routes: `GET/POST /api/v1/admin/products/[id]/media`, `DELETE /api/v1/admin/products/[id]/media/[mediaId]`, `GET/PUT /api/v1/admin/products/[id]/seo`. `bun run check` hijau (78 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, M4.4, M4.5, M4.6, dan M4.7 Catalog Foundation** sudah selesai.
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.**
 
-Next action: **M4.8 — Product Media & SEO Dasar** — tambahkan `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl) ke domain + Prisma schema.
+Next action: **Phase 3 — Cart & Checkout Foundation** — mulai implementasi module `cart` (vertical slice: add item, view cart, update qty, remove item).
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -293,7 +294,7 @@ Next action: **M4.8 — Product Media & SEO Dasar** — tambahkan `ProductMedia`
   - `GET/PATCH /api/v1/admin/categories/[id]`
 - ✅ Exit criteria: admin dapat mengelola katalog via API; quality gate lolos (78 test).
 
-15. **M4.8 — Product Media & SEO Dasar**
+15. ✅ **M4.8 — Product Media & SEO Dasar**
 
 - Tambahkan `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl) ke domain + Prisma schema.
 - Exit criteria: backlog `catalog-product-media-seo` terpenuhi; thumbnail wajib ada saat produk dipublikasikan.
@@ -314,7 +315,7 @@ System Design Readiness
 
 ```
 Implementation
-██████████░░░░░░░░░░  50%
+████████████░░░░░░░░  60%
 ```
 
 ---
@@ -375,7 +376,7 @@ Target Outcome:
 
 ---
 
-## ⏳ Milestone 4 — Catalog Foundation (In Progress)
+## ✅ Milestone 4 — Catalog Foundation (Completed)
 
 Breakdown:
 
@@ -386,7 +387,7 @@ Breakdown:
 - [x] M4.5 Prisma Schema Catalog
 - [x] M4.6 Prisma Catalog Repository
 - [x] M4.7 Admin Catalog API
-- [ ] M4.8 Product Media & SEO Dasar
+- [x] M4.8 Product Media & SEO Dasar
 
 Target Outcome:
 

@@ -1,4 +1,5 @@
 import type {
+  AddProductMediaCommand,
   CatalogCategory,
   CatalogProduct,
   CatalogProductStatus,
@@ -6,11 +7,15 @@ import type {
   CreateCategoryCommand,
   CreateProductCommand,
   CreateVariantCommand,
+  ProductMedia,
+  ProductSeo,
   UpdateCategoryCommand,
   UpdateProductCommand,
   UpdateVariantCommand,
+  UpsertProductSeoCommand,
   VariantSnapshot,
 } from "../domain/catalog-entities";
+import type { MediaOwnerType } from "../domain/catalog-entities";
 import type { CatalogRepository } from "../domain/catalog-repository";
 
 const categories: CatalogCategory[] = [
@@ -169,6 +174,8 @@ const variants: CatalogVariant[] = [
 let idCounter = 100;
 let variantIdCounter = 200;
 let categoryIdCounter = 300;
+let mediaIdCounter = 400;
+let seoIdCounter = 500;
 
 function generateId(): string {
   return `prod-${++idCounter}`;
@@ -194,6 +201,8 @@ export class InMemoryCatalogRepository implements CatalogRepository {
   private categories: CatalogCategory[] = [...categories];
   private products: CatalogProduct[] = [...products];
   private variants: CatalogVariant[] = [...variants];
+  private media: ProductMedia[] = [];
+  private seoRecords: ProductSeo[] = [];
 
   async listCategories(): Promise<CatalogCategory[]> {
     return this.categories;
@@ -375,6 +384,59 @@ export class InMemoryCatalogRepository implements CatalogRepository {
     }
 
     return updated;
+  }
+
+  async listProductMedia(ownerType: string, ownerId: string): Promise<ProductMedia[]> {
+    return this.media
+      .filter((m) => m.ownerType === (ownerType as MediaOwnerType) && m.ownerId === ownerId)
+      .sort((a, b) => a.sortOrder - b.sortOrder);
+  }
+
+  async addProductMedia(command: AddProductMediaCommand): Promise<ProductMedia> {
+    const mediaItem: ProductMedia = {
+      id: `media-${++mediaIdCounter}`,
+      ownerType: command.ownerType,
+      ownerId: command.ownerId,
+      mediaType: command.mediaType,
+      url: command.url,
+      altText: command.altText ?? "",
+      sortOrder: command.sortOrder ?? 0,
+      createdAt: new Date(),
+    };
+    this.media.push(mediaItem);
+    return mediaItem;
+  }
+
+  async removeProductMedia(mediaId: string): Promise<void> {
+    this.media = this.media.filter((m) => m.id !== mediaId);
+  }
+
+  async getProductSeo(productId: string): Promise<ProductSeo | null> {
+    return this.seoRecords.find((s) => s.productId === productId) ?? null;
+  }
+
+  async upsertProductSeo(command: UpsertProductSeoCommand): Promise<ProductSeo> {
+    const existingIndex = this.seoRecords.findIndex((s) => s.productId === command.productId);
+    if (existingIndex !== -1) {
+      const updated: ProductSeo = {
+        ...this.seoRecords[existingIndex]!,
+        metaTitle: command.metaTitle,
+        metaDescription: command.metaDescription,
+        canonicalUrl: command.canonicalUrl,
+      };
+      this.seoRecords[existingIndex] = updated;
+      return updated;
+    }
+
+    const seo: ProductSeo = {
+      id: `seo-${++seoIdCounter}`,
+      productId: command.productId,
+      metaTitle: command.metaTitle,
+      metaDescription: command.metaDescription,
+      canonicalUrl: command.canonicalUrl,
+    };
+    this.seoRecords.push(seo);
+    return seo;
   }
 
   async getVariantSnapshot(variantId: string): Promise<VariantSnapshot | null> {

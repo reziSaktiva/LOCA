@@ -13,6 +13,18 @@ datasource db {
 // Catalog Module
 // ---------------------------------------------------------------------------
 
+enum MediaOwnerType {
+  PRODUCT
+  VARIANT
+}
+
+enum ProductMediaType {
+  IMAGE
+  VIDEO
+  THREE_SIXTY
+  MANUAL_PDF
+}
+
 enum ProductStatus {
   DRAFT
   ACTIVE
@@ -82,6 +94,7 @@ model Product {
   category       ProductCategory @relation(fields: [categoryId], references: [id])
   variants       ProductVariant[]
   variantOptions VariantOption[]
+  seo            ProductSeo?
 
   // Pola akses: listing publik + admin queue
   @@index([status, categoryId, createdAt])
@@ -136,6 +149,47 @@ model VariantOption {
 
   @@index([productId])
   @@map("variant_options")
+}
+
+/// Media katalog — dapat dimiliki oleh Product atau Variant.
+/// Mendukung IMAGE, VIDEO, THREE_SIXTY, MANUAL_PDF tanpa redesign entity.
+model ProductMedia {
+  id        String           @id @default(cuid())
+  ownerType MediaOwnerType
+  ownerId   String
+  mediaType ProductMediaType @default(IMAGE)
+  url       String
+  altText   String           @default("")
+  sortOrder Int              @default(0)
+
+  // Audit
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+
+  // Pola akses: semua media milik owner tertentu, diurutkan
+  @@index([ownerType, ownerId, sortOrder])
+  @@map("product_media")
+}
+
+/// Metadata SEO untuk halaman detail produk.
+model ProductSeo {
+  id              String  @id @default(cuid())
+  productId       String  @unique
+  metaTitle       String  @default("")
+  metaDescription String  @default("")
+  canonicalUrl    String  @default("")
+
+  // Audit
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("product_seo")
 }
 
 /// Nilai option yang dipakai oleh varian tertentu (mis. color=black, size=L).

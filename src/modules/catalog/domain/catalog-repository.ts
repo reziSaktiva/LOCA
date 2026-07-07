@@ -1,4 +1,5 @@
 import type {
+  AddProductMediaCommand,
   CatalogCategory,
   CatalogProduct,
   CatalogProductStatus,
@@ -6,9 +7,12 @@ import type {
   CreateCategoryCommand,
   CreateProductCommand,
   CreateVariantCommand,
+  ProductMedia,
+  ProductSeo,
   UpdateCategoryCommand,
   UpdateProductCommand,
   UpdateVariantCommand,
+  UpsertProductSeoCommand,
   VariantSnapshot,
 } from "./catalog-entities";
 
@@ -56,4 +60,13 @@ export interface CatalogRepository {
    * Menggabungkan data varian + produk induknya menjadi satu kontrak baca-only.
    */
   getVariantSnapshot(variantId: string): Promise<VariantSnapshot | null>;
+
+  // --- Media ---
+  listProductMedia(ownerType: string, ownerId: string): Promise<ProductMedia[]>;
+  addProductMedia(command: AddProductMediaCommand): Promise<ProductMedia>;
+  removeProductMedia(mediaId: string): Promise<void>;
+
+  // --- SEO ---
+  getProductSeo(productId: string): Promise<ProductSeo | null>;
+  upsertProductSeo(command: UpsertProductSeoCommand): Promise<ProductSeo>;
 }

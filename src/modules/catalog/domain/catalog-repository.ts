@@ -3,8 +3,10 @@ import type {
   CatalogProduct,
   CatalogProductStatus,
   CatalogVariant,
+  CreateCategoryCommand,
   CreateProductCommand,
   CreateVariantCommand,
+  UpdateCategoryCommand,
   UpdateProductCommand,
   UpdateVariantCommand,
   VariantSnapshot,
@@ -26,8 +28,14 @@ export type ListPublicProductsResult = {
 };
 
 export interface CatalogRepository {
-  // --- Product ---
+  // --- Category ---
   listCategories(): Promise<CatalogCategory[]>;
+  findCategoryById(id: string): Promise<CatalogCategory | null>;
+  existsCategoryWithSlug(slug: string, excludeId?: string): Promise<boolean>;
+  createCategory(command: CreateCategoryCommand): Promise<CatalogCategory>;
+  updateCategory(command: UpdateCategoryCommand): Promise<CatalogCategory>;
+
+  // --- Product ---
   listProducts(): Promise<CatalogProduct[]>;
   findProductBySlug(slug: string): Promise<CatalogProduct | null>;
   findProductById(id: string): Promise<CatalogProduct | null>;

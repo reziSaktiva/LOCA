@@ -3,8 +3,10 @@ import type {
   CatalogProduct,
   CatalogProductStatus,
   CatalogVariant,
+  CreateCategoryCommand,
   CreateProductCommand,
   CreateVariantCommand,
+  UpdateCategoryCommand,
   UpdateProductCommand,
   UpdateVariantCommand,
   VariantSnapshot,
@@ -166,6 +168,7 @@ const variants: CatalogVariant[] = [
 
 let idCounter = 100;
 let variantIdCounter = 200;
+let categoryIdCounter = 300;
 
 function generateId(): string {
   return `prod-${++idCounter}`;
@@ -173,6 +176,10 @@ function generateId(): string {
 
 function generateVariantId(): string {
   return `var-${++variantIdCounter}`;
+}
+
+function generateCategoryId(): string {
+  return `cat-${++categoryIdCounter}`;
 }
 
 function slugify(text: string): string {
@@ -190,6 +197,41 @@ export class InMemoryCatalogRepository implements CatalogRepository {
 
   async listCategories(): Promise<CatalogCategory[]> {
     return this.categories;
+  }
+
+  async findCategoryById(id: string): Promise<CatalogCategory | null> {
+    return this.categories.find((c) => c.id === id) ?? null;
+  }
+
+  async existsCategoryWithSlug(slug: string, excludeId?: string): Promise<boolean> {
+    return this.categories.some((c) => c.slug === slug && c.id !== excludeId);
+  }
+
+  async createCategory(command: CreateCategoryCommand): Promise<CatalogCategory> {
+    const category: CatalogCategory = {
+      id: generateCategoryId(),
+      name: command.name,
+      slug: command.slug,
+      isActive: true,
+    };
+    this.categories.push(category);
+    return category;
+  }
+
+  async updateCategory(command: UpdateCategoryCommand): Promise<CatalogCategory> {
+    const index = this.categories.findIndex((c) => c.id === command.id);
+    if (index === -1) {
+      throw new Error(`Category not found: ${command.id}`);
+    }
+    const existing = this.categories[index]!;
+    const updated: CatalogCategory = {
+      ...existing,
+      ...(command.name !== undefined && { name: command.name }),
+      ...(command.slug !== undefined && { slug: command.slug }),
+      ...(command.isActive !== undefined && { isActive: command.isActive }),
+    };
+    this.categories[index] = updated;
+    return updated;
   }
 
   async listProducts(): Promise<CatalogProduct[]> {

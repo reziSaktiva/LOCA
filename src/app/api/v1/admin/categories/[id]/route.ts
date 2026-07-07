@@ -1,0 +1,57 @@
+import { requireAdmin } from "@/shared/infrastructure/auth/admin-guard";
+import { apiError, apiSuccess } from "@/modules/catalog/presentation/api-response";
+import {
+  adminGetCategoryById,
+  adminUpdateCategory,
+  type UpdateCategoryCommand,
+} from "@/modules/catalog/public/catalog-admin-service";
+
+type RouteParams = { params: Promise<{ id: string }> };
+
+export async function GET(_request: Request, { params }: RouteParams) {
+  const guard = await requireAdmin();
+  if (!guard.authorized) {
+    const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
+    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+  }
+
+  const { id } = await params;
+
+  try {
+    const category = await adminGetCategoryById(id);
+    if (!category) {
+      return apiError({ code: "NOT_FOUND", message: `Category "${id}" tidak ditemukan.` }, 404);
+    }
+    return apiSuccess(category);
+  } catch {
+    return apiError({ code: "INTERNAL_ERROR", message: "Failed to fetch category" }, 500);
+  }
+}
+
+export async function PATCH(request: Request, { params }: RouteParams) {
+  const guard = await requireAdmin();
+  if (!guard.authorized) {
+    const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
+    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+  }
+
+  const { id } = await params;
+
+  try {
+    const body = (await request.json()) as Partial<Omit<UpdateCategoryCommand, "id">>;
+    const result = await adminUpdateCategory({ id, ...body });
+
+    if (!result.success) {
+      const statusMap: Record<string, number> = {
+        CATEGORY_NOT_FOUND: 404,
+        SLUG_INVALID: 400,
+        SLUG_CONFLICT: 409,
+      };
+      return apiError(result.error, statusMap[result.error.code] ?? 422);
+    }
+
+    return apiSuccess(result.category);
+  } catch {
+    return apiError({ code: "INTERNAL_ERROR", message: "Failed to update category" }, 500);
+  }
+}

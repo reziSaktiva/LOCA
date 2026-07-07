@@ -94,3 +94,15 @@ export type UpdateVariantCommand = {
   variantLabel?: string;
   status?: CatalogVariantStatus;
 };
+
+export type CreateCategoryCommand = {
+  name: string;
+  slug: string;
+};
+
+export type UpdateCategoryCommand = {
+  id: string;
+  name?: string;
+  slug?: string;
+  isActive?: boolean;
+};

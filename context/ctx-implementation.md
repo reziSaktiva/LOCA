@@ -7,13 +7,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
-- Current implementation progress: **60%** (M4.1–M4.8 catalog selesai, Phase 2 complete)
+- Phase 3 (Customer & Homepage): **in progress** (M5.1 selesai)
+- Current implementation progress: **65%** (M5.1 Customer Auth selesai)
 
 ## Current Focus
 
 - `phase-3 customer & homepage`
-- Phase 2 selesai. M4.8 (Product Media & SEO) sudah completed.
-- Next active item: **Phase 3 — Customer & Homepage** (Homepage foundation + Customer profile & address)
+- M5.1 (Customer Auth Foundation) sudah completed.
+- Next active item: **M5.2 — Customer Profile & Address** (Prisma schema CustomerProfile + CustomerAddress, PrismaCustomerRepository, API routes customer)
 
 ## Completed (Planning Side)
 
@@ -69,20 +70,16 @@ Sudah selesai pada Milestone 3:
   - Dependency antar module diverifikasi (`catalog -> inventory`, `catalog -> review`, downstream `homepage` dan `cart`).
   - Readiness checklist implementasi `catalog` dinyatakan lengkap; module siap kickoff implementasi.
 
-## Phase 3 (Next Targets)
+## Phase 3 (Targets)
 
 Target Phase 3 — Customer & Homepage:
 
-- **M5.1 — Customer Auth Foundation** *(next)*
-  - Domain: `CustomerAccount` entity, invariant (email valid, password min length), `AuthResult` type.
-  - Application service: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`.
-  - Infrastructure: `SupabaseAuthRepository` (Supabase Auth `signUp`, `signInWithPassword`, `signOut`).
-  - Public facade: `customer-auth-service.ts`.
-  - API routes: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`.
-  - Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/`.
-  - Exit criteria: session aktif via Supabase Auth, `requireCustomer()` aktif, quality gate lolos.
+- **M5.1 — Customer Auth Foundation** ✅ **Completed**
+  - Domain, application services, SupabaseAuthRepository, public facade, `requireCustomer()` guard aktif.
+  - API routes: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`.
+  - 96 test lolos. `bun run check` hijau.
 
-- **M5.2 — Customer Profile & Address**
+- **M5.2 — Customer Profile & Address** *(next)*
   - Domain: `CustomerProfile`, `CustomerAddress` entity + repository contract.
   - Application service: `manage-customer-profile.ts`, `manage-customer-address.ts`.
   - Prisma schema: model `CustomerProfile`, `CustomerAddress` + migration.
@@ -188,8 +185,8 @@ Target setup awal (Phase 2 selesai):
 
 ### Auth Module
 
-- Status: Foundation plumbing completed in Phase 1 (M3.4), fitur module belum dimulai
-- Scope awal: register/login/logout/reset + role guard
+- Status: **M5.1 Completed** — domain, application services, SupabaseAuthRepository, public facade, `requireCustomer()` guard, dan API routes auth aktif
+- 96 test lolos. Next: M5.2 Customer Profile & Address.
 
 ### Database
 

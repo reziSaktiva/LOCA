@@ -9,6 +9,44 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-07 (6)
+
+### Added
+
+- `src/modules/auth/domain/auth-entities.ts` — type `CustomerAccount`, `AuthSession`, `AuthResult<T>`, `AuthError`, `RegisterCustomerCommand`, `LoginCommand`.
+- `src/modules/auth/domain/auth-invariants.ts` — `isValidEmail`, `isValidPassword`, `MIN_PASSWORD_LENGTH`.
+- `src/modules/auth/domain/auth-repository.ts` — interface `AuthRepository` (register, login, logout, getCurrentSession).
+- `src/modules/auth/application/register-customer.ts` — validasi email+password, delegate ke repository.
+- `src/modules/auth/application/login-customer.ts` — validasi email, delegate ke repository.
+- `src/modules/auth/application/logout-customer.ts` — delegate ke repository.
+- `src/modules/auth/application/get-current-session.ts` — delegate ke repository.
+- `src/modules/auth/application/auth.test.ts` — 18 unit test (invariant + application service dengan mock repository).
+- `src/modules/auth/infrastructure/supabase-auth-repository.ts` — `SupabaseAuthRepository` wraps Supabase Auth `signUp`, `signInWithPassword`, `signOut`, `getUser`.
+- `src/modules/auth/public/customer-auth-service.ts` — public facade: `authRegisterCustomer`, `authLoginCustomer`, `authLogoutCustomer`, `authGetCurrentSession`.
+- `src/shared/infrastructure/auth/customer-guard.ts` — `requireCustomer()` guard (validasi JWT via `supabase.auth.getUser()`).
+- `src/shared/kernel/api-response.ts` — shared helper `apiSuccess` + `apiError` untuk route handlers.
+- `src/app/api/v1/auth/register/route.ts` — `POST /api/v1/auth/register` (public).
+- `src/app/api/v1/auth/login/route.ts` — `POST /api/v1/auth/login` (public).
+- `src/app/api/v1/auth/logout/route.ts` — `POST /api/v1/auth/logout` (requires customer session).
+- `src/app/api/v1/auth/me/route.ts` — `GET /api/v1/auth/me` (requires customer session).
+
+### Changed
+
+- `PROJECT_STATE.md` — M5.1 ditandai completed, Current Focus diperbarui ke M5.2, implementation progress 65%.
+- `context/ctx-implementation.md` — Auth module status diperbarui, next target digeser ke M5.2.
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) lolos — **96 test passed**.
+
+### Notes
+
+- `SupabaseAuthRepository` menggunakan `getUser()` (bukan `getSession()`) untuk validasi JWT server-side sesuai rekomendasi Supabase SSR.
+- `src/shared/kernel/api-response.ts` ditambahkan sebagai shared technical helper — dapat digunakan oleh route handlers lintas module tanpa melanggar boundary rules.
+- `.gitkeep` dihapus dari seluruh subfolder `src/modules/auth/` yang kini terisi file implementasi.
+
+---
+
 ## 2026-07-07 (5)
 
 ### Changed

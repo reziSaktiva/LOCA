@@ -9,6 +9,26 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-07 (5)
+
+### Changed
+
+- `docs/11-development-roadmap.md` — update status: Phase 0/1/2 ditandai ✅ Completed (dengan tanggal), Phase 3 ditandai 🔄 In Progress.
+- `PROJECT_STATE.md` — koreksi referensi phase berikutnya dari "Phase 3 Cart & Checkout" ke "Phase 3 Customer & Homepage" sesuai roadmap resmi; tambah Milestone 5 breakdown (M5.1–M5.3) dengan scope dan exit criteria per milestone.
+- `context/ctx-implementation.md` — Current Focus diperbarui ke Phase 3 Customer & Homepage; Phase 3 targets ditambahkan secara detail (M5.1–M5.3); section lama dipisah sebagai "Phase 2 Completed Targets".
+
+### Added
+
+- `planning/backlog.md` — backlog Phase 3 (M5.1–M5.3) ditambahkan: acceptance criteria, dependency, dan status per milestone.
+
+### Notes
+
+- Ditemukan inkonsistensi: `PROJECT_STATE.md` dan `context/ctx-implementation.md` sebelumnya menyebut next phase sebagai "Phase 3 Cart & Checkout", padahal `docs/11-development-roadmap.md` mendefinisikan Phase 3 = Customer & Homepage dan Phase 4 = Cart & Inventory. Inkonsistensi sudah dikoreksi.
+- Disepakati: Phase 3 mengikuti roadmap asli — Customer Auth dulu (M5.1), lalu Customer Profile & Address (M5.2), lalu Homepage Foundation (M5.3).
+- Task berikutnya: **M5.1 — Customer Auth Foundation**.
+
+---
+
 ## 2026-07-07 (4)
 
 ### Added

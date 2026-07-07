@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 2 Completed — Phase 3 Starting (Cart & Checkout)
+Status: Phase 2 Completed — Phase 3 Starting (Customer & Homepage)
 
 Current Version: v0.8
 
@@ -56,7 +56,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-M4.8 selesai — Product Media & SEO Dasar diimplementasikan. `ProductMedia` dan `ProductSeo` aktif di domain + Prisma schema + admin API. Invariant thumbnail wajib saat aktivasi produk. Phase 2 (Catalog Foundation) **selesai**. Next: Phase 3 (Cart & Checkout Foundation).
+M4.8 selesai — Product Media & SEO Dasar diimplementasikan. `ProductMedia` dan `ProductSeo` aktif di domain + Prisma schema + admin API. Invariant thumbnail wajib saat aktivasi produk. Phase 2 (Catalog Foundation) **selesai**. Next: Phase 3 (Customer & Homepage).
 
 ---
 
@@ -191,7 +191,7 @@ Belum diputuskan:
 
 **Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.**
 
-Next action: **Phase 3 — Cart & Checkout Foundation** — mulai implementasi module `cart` (vertical slice: add item, view cart, update qty, remove item).
+Next action: **M5.1 — Customer Auth Foundation** — implementasi register/login/logout via Supabase Auth, `requireCustomer()` session guard, dan API routes auth.
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -396,3 +396,70 @@ Target Outcome:
 - Catalog terhubung ke database sungguhan (bukan in-memory).
 - Admin dapat mengelola produk, varian, dan kategori via API.
 - Phase 2 exit criteria terpenuhi sepenuhnya.
+
+---
+
+## 🔄 Milestone 5 — Customer & Homepage (In Progress)
+
+Breakdown:
+
+- [ ] M5.1 Customer Auth Foundation
+- [ ] M5.2 Customer Profile & Address
+- [ ] M5.3 Homepage Foundation
+
+Target Outcome:
+
+- Customer dapat register, login, dan logout via Supabase Auth.
+- Customer dapat mengelola profil dan alamat pengiriman.
+- Homepage menampilkan data dinamis dari catalog (featured, new arrival, best seller).
+- Phase 3 exit criteria terpenuhi.
+
+### M5.1 — Customer Auth Foundation
+
+Scope:
+
+- Domain: `CustomerAccount` entity, invariant (email valid, password min length), `AuthResult` type.
+- Application service: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`.
+- Infrastructure: `SupabaseAuthRepository` (wrap Supabase Auth `signUp`, `signInWithPassword`, `signOut`).
+- Public facade: `customer-auth-service.ts`.
+- API routes: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`.
+- Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/`.
+
+Exit criteria:
+
+- Customer dapat register dan login; session aktif via Supabase Auth.
+- `requireCustomer()` memblokir request tanpa session valid.
+- Quality gate (`bun run check`) lolos.
+
+### M5.2 — Customer Profile & Address
+
+Scope:
+
+- Domain: `CustomerProfile`, `CustomerAddress` entity + repository contract.
+- Application service: `manage-customer-profile.ts`, `manage-customer-address.ts`.
+- Prisma schema: model `CustomerProfile`, `CustomerAddress` + migration.
+- Infrastructure: `PrismaCustomerRepository`.
+- API routes: `GET/PATCH /api/v1/customer/profile`, `GET/POST/PATCH/DELETE /api/v1/customer/addresses`.
+
+Exit criteria:
+
+- Customer dapat melihat dan mengubah profil.
+- Customer dapat menambah, mengubah, dan menghapus alamat.
+- Satu alamat dapat ditandai sebagai default.
+- Quality gate lolos.
+
+### M5.3 — Homepage Foundation
+
+Scope:
+
+- Application service: `get-homepage-data.ts` (composite dari catalog public service: featured, new arrival, best seller).
+- Prisma schema: model `HomepageBanner` (judul, subtitle, image, CTA, urutan, aktif/tidak) + migration.
+- Infrastructure: `PrismaHomepageRepository`.
+- API route: `GET /api/v1/homepage`.
+- Admin route: `GET/POST/PATCH/DELETE /api/v1/admin/homepage/banners`.
+
+Exit criteria:
+
+- Endpoint homepage mengembalikan banner aktif + produk featured/new arrival/best seller.
+- Admin dapat mengelola banner via API.
+- Quality gate lolos.

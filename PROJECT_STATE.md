@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-2 catalog vertical slice 05`
+`phase-2 catalog vertical slice 06`
 
 Tujuan:
 
-M4.5 selesai — Prisma schema catalog (`ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue`) aktif, migration SQL tersimpan di `prisma/migrations/`, `prisma generate` lolos, Prisma client menyertakan catalog types. Next: M4.6 (Prisma Catalog Repository).
+M4.6 selesai — `PrismaCatalogRepository` diimplementasikan dan menggantikan `InMemoryCatalogRepository` di public service. Catalog kini terhubung ke database Supabase PostgreSQL sungguhan. Next: M4.7 (Admin Catalog API).
 
 ---
 
@@ -181,14 +181,15 @@ Belum diputuskan:
 - ✅ **M4.3 — Catalog Variant Pricing & Attributes Dasar**: type variant lengkap (`CatalogVariant`, `VariantSnapshot`, commands), invariant `isVariantPriceValid` + `isValidSku`, repository contract diperluas (findVariantsByProductId, existsVariantWithSku, createVariant, updateVariant, getVariantSnapshot), in-memory store dengan 7 seed variant + sync otomatis priceFrom/priceTo/variantCount, application service `manage-variant.ts` (create/update dengan 5 error code typed), public facade `getVariantSnapshotForCart` sebagai kontrak lintas module. 65 test lolos, `bun run check` hijau.
 - ✅ **M4.4 — Catalog Public Search Endpoint**: application service `search-public-products.ts` (full-text search: name+description+brand, filter category+minPrice+maxPrice, pagination, sort), public facade `searchPublicProductsFromSearchParams`, endpoint `GET /api/v1/products/search` aktif (400 jika q kosong). 78 test lolos, `bun run check` hijau.
 - ✅ **M4.5 — Prisma Schema Catalog**: model `ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue` ditambahkan ke `prisma/schema.prisma` sesuai `docs/06-data-model.md` (enum ProductStatus/VariantStatus, audit fields, soft delete fields, index pola akses bisnis). Migration `20260707030000_catalog_foundation` **sudah diapply ke database Supabase**. `prisma generate` lolos, Prisma client menyertakan catalog types. `bun run check` hijau (78 test).
+- ✅ **M4.6 — Prisma Catalog Repository**: `PrismaCatalogRepository` di `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` mengimplementasikan seluruh `CatalogRepository` contract dengan Prisma client nyata. `createVariant`/`updateVariant` menggunakan `prisma.$transaction` untuk menjaga konsistensi denormalized fields. `InMemoryCatalogRepository` digantikan di public service; catalog kini terhubung ke database Supabase PostgreSQL sungguhan. `bun run check` hijau (78 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, M4.4, dan M4.5 Catalog Foundation** sudah selesai.
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, M4.4, M4.5, dan M4.6 Catalog Foundation** sudah selesai.
 
-Next action: **M4.6 — Prisma Catalog Repository** — implementasikan `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract, gantikan `InMemoryCatalogRepository` di `catalog-public-service.ts` dengan koneksi database sungguhan.
+Next action: **M4.7 — Admin Catalog API** — endpoint admin dengan auth guard untuk mengelola catalog (create/update/archive product, create/update variant, create/update category).
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -246,46 +247,52 @@ Next action: **M4.6 — Prisma Catalog Repository** — implementasikan `PrismaC
    - ✅ 36 test lolos, quality gate minimum hijau.
 
 10. ✅ **M4.3 — Catalog Variant Pricing & Attributes Dasar** (Selesai)
-   - ✅ Type variant: `CatalogVariant`, `VariantSnapshot`, `CreateVariantCommand`, `UpdateVariantCommand`.
-   - ✅ Invariant: `isVariantPriceValid` (price >= 0, finite), `isValidSku` (non-empty).
-   - ✅ Service variant `manage-variant.ts`: create/update dengan 5 typed error code.
-   - ✅ Kontrak `getVariantSnapshotForCart` tersedia di public facade untuk consumer `cart`.
-   - ✅ 65 test lolos, quality gate minimum hijau.
+
+- ✅ Type variant: `CatalogVariant`, `VariantSnapshot`, `CreateVariantCommand`, `UpdateVariantCommand`.
+- ✅ Invariant: `isVariantPriceValid` (price >= 0, finite), `isValidSku` (non-empty).
+- ✅ Service variant `manage-variant.ts`: create/update dengan 5 typed error code.
+- ✅ Kontrak `getVariantSnapshotForCart` tersedia di public facade untuk consumer `cart`.
+- ✅ 65 test lolos, quality gate minimum hijau.
 
 11. ✅ **M4.4 — Catalog Public Search Endpoint** (Selesai)
-   - ✅ Application service `search-public-products.ts`: full-text search (name+description+brand), filter category/minPrice/maxPrice, pagination, sort.
-   - ✅ Public facade `searchPublicProductsFromSearchParams` di `catalog-public-service.ts`.
-   - ✅ Endpoint `GET /api/v1/products/search` aktif; 400 jika `q` kosong.
-   - ✅ 78 test lolos, `bun run check` hijau.
+
+- ✅ Application service `search-public-products.ts`: full-text search (name+description+brand), filter category/minPrice/maxPrice, pagination, sort.
+- ✅ Public facade `searchPublicProductsFromSearchParams` di `catalog-public-service.ts`.
+- ✅ Endpoint `GET /api/v1/products/search` aktif; 400 jika `q` kosong.
+- ✅ 78 test lolos, `bun run check` hijau.
 
 12. ✅ **M4.5 — Prisma Schema Catalog** (Selesai)
-   - ✅ Model `ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue` ditambahkan ke `prisma/schema.prisma`.
-   - ✅ Enum `ProductStatus` (DRAFT/ACTIVE/OUT_OF_STOCK/ARCHIVED) dan `VariantStatus` (ACTIVE/INACTIVE) didefinisikan.
-   - ✅ Audit fields (`createdAt/By`, `updatedAt/By`), soft delete fields (`isDeleted`, `deletedAt/By`, `deleteReason`), dan index pola akses bisnis sesuai `docs/06-data-model.md`.
-   - ✅ Migration SQL tersimpan di `prisma/migrations/20260707030000_catalog_foundation/migration.sql`.
-   - ✅ `prisma generate` lolos, Prisma client menyertakan catalog types.
-   - ✅ `bun run check` hijau (78 test).
 
-13. **M4.6 — Prisma Catalog Repository**
-   - Implementasikan `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract.
-   - Gantikan `InMemoryCatalogRepository` di `catalog-public-service.ts` dengan `PrismaCatalogRepository`.
-   - Exit criteria: seluruh operasi catalog menggunakan database sungguhan; quality gate lolos.
+- ✅ Model `ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue` ditambahkan ke `prisma/schema.prisma`.
+- ✅ Enum `ProductStatus` (DRAFT/ACTIVE/OUT_OF_STOCK/ARCHIVED) dan `VariantStatus` (ACTIVE/INACTIVE) didefinisikan.
+- ✅ Audit fields (`createdAt/By`, `updatedAt/By`), soft delete fields (`isDeleted`, `deletedAt/By`, `deleteReason`), dan index pola akses bisnis sesuai `docs/06-data-model.md`.
+- ✅ Migration SQL tersimpan di `prisma/migrations/20260707030000_catalog_foundation/migration.sql`.
+- ✅ `prisma generate` lolos, Prisma client menyertakan catalog types.
+- ✅ `bun run check` hijau (78 test).
+
+13. ✅ **M4.6 — Prisma Catalog Repository**
+
+- ✅ `PrismaCatalogRepository` diimplementasikan di `src/modules/catalog/infrastructure/prisma-catalog-repository.ts`.
+- ✅ `InMemoryCatalogRepository` digantikan di `catalog-public-service.ts`; catalog terhubung ke database sungguhan.
+- ✅ Exit criteria: seluruh operasi catalog menggunakan database sungguhan; quality gate lolos (78 test).
 
 14. **M4.7 — Admin Catalog API**
-   - Endpoint admin dengan auth guard untuk mengelola catalog:
-     - `POST /api/v1/admin/products` — create product
-     - `PATCH /api/v1/admin/products/{id}` — update product
-     - `PATCH /api/v1/admin/products/{id}/status` — update status
-     - `DELETE /api/v1/admin/products/{id}` — archive product
-     - `POST /api/v1/admin/products/{productId}/variants` — create variant
-     - `PATCH /api/v1/admin/products/{productId}/variants/{id}` — update variant
-     - `POST /api/v1/admin/categories` — create category
-     - `PATCH /api/v1/admin/categories/{id}` — update category
-   - Exit criteria: admin dapat mengelola katalog via API; selaras dengan PRODUCT-001–004 dan PVAR-001–003.
+
+- Endpoint admin dengan auth guard untuk mengelola catalog:
+  - `POST /api/v1/admin/products` — create product
+  - `PATCH /api/v1/admin/products/{id}` — update product
+  - `PATCH /api/v1/admin/products/{id}/status` — update status
+  - `DELETE /api/v1/admin/products/{id}` — archive product
+  - `POST /api/v1/admin/products/{productId}/variants` — create variant
+  - `PATCH /api/v1/admin/products/{productId}/variants/{id}` — update variant
+  - `POST /api/v1/admin/categories` — create category
+  - `PATCH /api/v1/admin/categories/{id}` — update category
+- Exit criteria: admin dapat mengelola katalog via API; selaras dengan PRODUCT-001–004 dan PVAR-001–003.
 
 15. **M4.8 — Product Media & SEO Dasar**
-   - Tambahkan `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl) ke domain + Prisma schema.
-   - Exit criteria: backlog `catalog-product-media-seo` terpenuhi; thumbnail wajib ada saat produk dipublikasikan.
+
+- Tambahkan `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl) ke domain + Prisma schema.
+- Exit criteria: backlog `catalog-product-media-seo` terpenuhi; thumbnail wajib ada saat produk dipublikasikan.
 
 ---
 
@@ -373,7 +380,7 @@ Breakdown:
 - [x] M4.3 Catalog Variant Pricing & Attributes Dasar
 - [x] M4.4 Catalog Public Search Endpoint
 - [x] M4.5 Prisma Schema Catalog
-- [ ] M4.6 Prisma Catalog Repository
+- [x] M4.6 Prisma Catalog Repository
 - [ ] M4.7 Admin Catalog API
 - [ ] M4.8 Product Media & SEO Dasar
 

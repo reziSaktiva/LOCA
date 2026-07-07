@@ -9,6 +9,34 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-07 (2)
+
+### Added
+
+- Implementasi **M4.6 — Prisma Catalog Repository**:
+  - `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` — `PrismaCatalogRepository` yang mengimplementasikan seluruh `CatalogRepository` contract dengan Prisma client nyata.
+  - Mappers internal: `toCategory`, `toProduct`, `toVariant` untuk konversi Prisma row ke domain type.
+  - Semua method diimplementasikan: `listCategories`, `listProducts`, `findProductBySlug`, `findProductById`, `existsProductWithSlug`, `createProduct`, `updateProduct`, `updateProductStatus`, `findVariantsByProductId`, `findVariantById`, `existsVariantWithSku`, `createVariant`, `updateVariant`, `getVariantSnapshot`.
+  - `createVariant` dan `updateVariant` menggunakan `prisma.$transaction` untuk menjamin konsistensi denormalized fields (`variantCount`, `priceFrom`, `priceTo`) di tabel `products`.
+  - Helper privat `syncProductDenormalizedFields` untuk rekalkulasi dan sync di dalam transaksi.
+  - Soft delete aware: semua query menyertakan `isDeleted: false`.
+
+### Changed
+
+- `src/modules/catalog/public/catalog-public-service.ts` — ganti `InMemoryCatalogRepository` dengan `PrismaCatalogRepository`; module `catalog` sekarang terhubung ke database Supabase PostgreSQL sungguhan.
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) — hijau, 78 test lolos.
+- Tidak ada linter error di file baru maupun yang diubah.
+
+### Notes
+
+- `InMemoryCatalogRepository` tetap tersedia di `infrastructure/` untuk kebutuhan unit test (application service tests menggunakannya langsung dan tidak terpengaruh perubahan ini).
+- Exit criteria M4.6 tercapai: catalog terhubung ke database sungguhan, quality gate lolos.
+
+---
+
 ## 2026-07-07 (1)
 
 ### Added

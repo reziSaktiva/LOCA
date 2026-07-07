@@ -52,11 +52,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-2 catalog vertical slice 06`
+`phase-2 catalog vertical slice 07`
 
 Tujuan:
 
-M4.6 selesai — `PrismaCatalogRepository` diimplementasikan dan menggantikan `InMemoryCatalogRepository` di public service. Catalog kini terhubung ke database Supabase PostgreSQL sungguhan. Next: M4.7 (Admin Catalog API).
+M4.7 selesai — Admin Catalog API diimplementasikan dengan auth guard. Admin dapat mengelola produk, varian, dan kategori via API. Next: M4.8 (Product Media & SEO Dasar).
 
 ---
 
@@ -182,14 +182,15 @@ Belum diputuskan:
 - ✅ **M4.4 — Catalog Public Search Endpoint**: application service `search-public-products.ts` (full-text search: name+description+brand, filter category+minPrice+maxPrice, pagination, sort), public facade `searchPublicProductsFromSearchParams`, endpoint `GET /api/v1/products/search` aktif (400 jika q kosong). 78 test lolos, `bun run check` hijau.
 - ✅ **M4.5 — Prisma Schema Catalog**: model `ProductCategory`, `Product`, `ProductVariant`, `VariantOption`, `VariantValue` ditambahkan ke `prisma/schema.prisma` sesuai `docs/06-data-model.md` (enum ProductStatus/VariantStatus, audit fields, soft delete fields, index pola akses bisnis). Migration `20260707030000_catalog_foundation` **sudah diapply ke database Supabase**. `prisma generate` lolos, Prisma client menyertakan catalog types. `bun run check` hijau (78 test).
 - ✅ **M4.6 — Prisma Catalog Repository**: `PrismaCatalogRepository` di `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` mengimplementasikan seluruh `CatalogRepository` contract dengan Prisma client nyata. `createVariant`/`updateVariant` menggunakan `prisma.$transaction` untuk menjaga konsistensi denormalized fields. `InMemoryCatalogRepository` digantikan di public service; catalog kini terhubung ke database Supabase PostgreSQL sungguhan. `bun run check` hijau (78 test).
+- ✅ **M4.7 — Admin Catalog API**: Admin route handlers aktif di `src/app/api/v1/admin/` (products, variants, categories). Auth guard `requireAdmin()` di `src/shared/infrastructure/auth/admin-guard.ts` memverifikasi Supabase session + `app_metadata.role === "admin"`. `CatalogRepository` diperluas dengan category CRUD. Facade `catalog-admin-service.ts` mengekspos semua operasi admin. Import boundary dipatuhi. `bun run check` hijau (78 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, M4.4, M4.5, dan M4.6 Catalog Foundation** sudah selesai.
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1, M4.2, M4.3, M4.4, M4.5, M4.6, dan M4.7 Catalog Foundation** sudah selesai.
 
-Next action: **M4.7 — Admin Catalog API** — endpoint admin dengan auth guard untuk mengelola catalog (create/update/archive product, create/update variant, create/update category).
+Next action: **M4.8 — Product Media & SEO Dasar** — tambahkan `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl) ke domain + Prisma schema.
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -276,18 +277,21 @@ Next action: **M4.7 — Admin Catalog API** — endpoint admin dengan auth guard
 - ✅ `InMemoryCatalogRepository` digantikan di `catalog-public-service.ts`; catalog terhubung ke database sungguhan.
 - ✅ Exit criteria: seluruh operasi catalog menggunakan database sungguhan; quality gate lolos (78 test).
 
-14. **M4.7 — Admin Catalog API**
+14. ✅ **M4.7 — Admin Catalog API**
 
-- Endpoint admin dengan auth guard untuk mengelola catalog:
-  - `POST /api/v1/admin/products` — create product
-  - `PATCH /api/v1/admin/products/{id}` — update product
-  - `PATCH /api/v1/admin/products/{id}/status` — update status
-  - `DELETE /api/v1/admin/products/{id}` — archive product
-  - `POST /api/v1/admin/products/{productId}/variants` — create variant
-  - `PATCH /api/v1/admin/products/{productId}/variants/{id}` — update variant
-  - `POST /api/v1/admin/categories` — create category
-  - `PATCH /api/v1/admin/categories/{id}` — update category
-- Exit criteria: admin dapat mengelola katalog via API; selaras dengan PRODUCT-001–004 dan PVAR-001–003.
+- ✅ Auth guard `requireAdmin()` aktif di `src/shared/infrastructure/auth/admin-guard.ts`.
+- ✅ `CatalogRepository` diperluas: `findCategoryById`, `existsCategoryWithSlug`, `createCategory`, `updateCategory`.
+- ✅ Application service `manage-category.ts` (create/update dengan typed error).
+- ✅ Facade `catalog-admin-service.ts` dengan re-export types; semua admin operasi tersedia.
+- ✅ Admin routes aktif:
+  - `GET/POST /api/v1/admin/products`
+  - `GET/PATCH/DELETE /api/v1/admin/products/[id]`
+  - `PATCH /api/v1/admin/products/[id]/status`
+  - `GET/POST /api/v1/admin/products/[id]/variants`
+  - `PATCH /api/v1/admin/products/[id]/variants/[variantId]`
+  - `GET/POST /api/v1/admin/categories`
+  - `GET/PATCH /api/v1/admin/categories/[id]`
+- ✅ Exit criteria: admin dapat mengelola katalog via API; quality gate lolos (78 test).
 
 15. **M4.8 — Product Media & SEO Dasar**
 
@@ -310,7 +314,7 @@ System Design Readiness
 
 ```
 Implementation
-█████████░░░░░░░░░░░  40%
+██████████░░░░░░░░░░  50%
 ```
 
 ---
@@ -381,7 +385,7 @@ Breakdown:
 - [x] M4.4 Catalog Public Search Endpoint
 - [x] M4.5 Prisma Schema Catalog
 - [x] M4.6 Prisma Catalog Repository
-- [ ] M4.7 Admin Catalog API
+- [x] M4.7 Admin Catalog API
 - [ ] M4.8 Product Media & SEO Dasar
 
 Target Outcome:

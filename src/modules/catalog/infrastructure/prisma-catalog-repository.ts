@@ -5,8 +5,10 @@ import type {
   CatalogProductStatus,
   CatalogVariant,
   CatalogVariantStatus,
+  CreateCategoryCommand,
   CreateProductCommand,
   CreateVariantCommand,
+  UpdateCategoryCommand,
   UpdateProductCommand,
   UpdateVariantCommand,
   VariantSnapshot,
@@ -87,6 +89,47 @@ export class PrismaCatalogRepository implements CatalogRepository {
       orderBy: { name: "asc" },
     });
     return rows.map(toCategory);
+  }
+
+  async findCategoryById(id: string): Promise<CatalogCategory | null> {
+    const row = await prisma.productCategory.findFirst({
+      where: { id, isDeleted: false },
+    });
+    return row ? toCategory(row) : null;
+  }
+
+  async existsCategoryWithSlug(slug: string, excludeId?: string): Promise<boolean> {
+    const count = await prisma.productCategory.count({
+      where: {
+        slug,
+        isDeleted: false,
+        ...(excludeId !== undefined ? { id: { not: excludeId } } : {}),
+      },
+    });
+    return count > 0;
+  }
+
+  async createCategory(command: CreateCategoryCommand): Promise<CatalogCategory> {
+    const row = await prisma.productCategory.create({
+      data: {
+        name: command.name,
+        slug: command.slug,
+        isActive: true,
+      },
+    });
+    return toCategory(row);
+  }
+
+  async updateCategory(command: UpdateCategoryCommand): Promise<CatalogCategory> {
+    const row = await prisma.productCategory.update({
+      where: { id: command.id },
+      data: {
+        ...(command.name !== undefined && { name: command.name }),
+        ...(command.slug !== undefined && { slug: command.slug }),
+        ...(command.isActive !== undefined && { isActive: command.isActive }),
+      },
+    });
+    return toCategory(row);
   }
 
   // --- Product ---

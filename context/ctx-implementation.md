@@ -6,14 +6,14 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
-- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.6 selesai, M4.7–M4.8 planned)
-- Current implementation progress: **45%** (M4.1 + M4.2 + M4.3 + M4.4 + M4.5 + M4.6 catalog selesai)
+- Phase 2 (Catalog Foundation): **in progress** (M4.1–M4.7 selesai, M4.8 planned)
+- Current implementation progress: **50%** (M4.1 + M4.2 + M4.3 + M4.4 + M4.5 + M4.6 + M4.7 catalog selesai)
 
 ## Current Focus
 
 - `phase-2 catalog completion`
-- M4.6 selesai. Sisa Phase 2: M4.7 (Admin API) → M4.8 (Media & SEO).
-- Next active item: **M4.7 — Admin Catalog API**
+- M4.7 selesai. Sisa Phase 2: M4.8 (Media & SEO).
+- Next active item: **M4.8 — Product Media & SEO Dasar**
 
 ## Completed (Planning Side)
 
@@ -126,10 +126,19 @@ Target setup awal:
   - `InMemoryCatalogRepository` digantikan di `catalog-public-service.ts`; catalog terhubung ke Supabase PostgreSQL.
   - 78 test lolos, `bun run check` hijau.
 
-- **M4.7 - Admin Catalog API** _(Planned)_
-  - Endpoint admin CRUD product/variant/category dengan auth guard.
-  - Menutup PRODUCT-001–004 dan PVAR-001–003 dari functional requirements.
-  - Exit criteria: admin dapat mengelola katalog via API.
+- **M4.7 - Admin Catalog API**
+  - Status: **Completed**
+  - Auth guard `requireAdmin()` di `src/shared/infrastructure/auth/admin-guard.ts` (Supabase session + `app_metadata.role === "admin"`).
+  - `CatalogRepository` diperluas dengan category CRUD (`findCategoryById`, `existsCategoryWithSlug`, `createCategory`, `updateCategory`).
+  - Application service `manage-category.ts` dengan typed errors.
+  - Facade `catalog-admin-service.ts` dengan re-export types sesuai import boundary rules.
+  - Admin routes aktif: products (GET/POST/PATCH/DELETE), product status, variants (GET/POST/PATCH), categories (GET/POST/PATCH).
+  - 78 test lolos, `bun run check` hijau.
+
+- **M4.8 - Product Media & SEO Dasar** _(Planned)_
+  - `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl).
+  - Menutup backlog `catalog-product-media-seo`.
+  - Exit criteria: thumbnail wajib ada saat produk dipublikasikan.
 
 - **M4.8 - Product Media & SEO Dasar** _(Planned)_
   - `ProductMedia` (thumbnailUrl, gallery) dan `ProductSeo` (metaTitle, metaDescription, canonicalUrl).
@@ -140,9 +149,9 @@ Target setup awal:
 
 ### Catalog Module
 
-- Status: In Progress (M4.1–M4.6 completed)
+- Status: In Progress (M4.1–M4.7 completed, M4.8 remaining)
 - Target phase: Phase 2
-- Deliverables: product/category/variant/detail/search/filter/sort
+- Deliverables: product/category/variant/detail/search/filter/sort + admin CRUD API
 - Database: terhubung ke Supabase PostgreSQL via `PrismaCatalogRepository`
 
 ### Auth Module

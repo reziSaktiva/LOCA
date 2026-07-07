@@ -9,6 +9,39 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-07 (3)
+
+### Added
+
+- Implementasi **M4.7 — Admin Catalog API**:
+  - `src/modules/catalog/domain/catalog-entities.ts` — tambah `CreateCategoryCommand` dan `UpdateCategoryCommand`.
+  - `src/modules/catalog/domain/catalog-repository.ts` — perluas interface: `findCategoryById`, `existsCategoryWithSlug`, `createCategory`, `updateCategory`.
+  - `src/modules/catalog/infrastructure/in-memory-catalog-repository.ts` — implementasi 4 method baru (category CRUD).
+  - `src/modules/catalog/infrastructure/prisma-catalog-repository.ts` — implementasi 4 method baru (category CRUD via Prisma).
+  - `src/modules/catalog/application/manage-category.ts` — application service baru: `createCategory`, `updateCategory` dengan typed error (`CATEGORY_NOT_FOUND`, `SLUG_INVALID`, `SLUG_CONFLICT`).
+  - `src/shared/infrastructure/auth/admin-guard.ts` — utility `requireAdmin()`: verifikasi autentikasi + role admin via Supabase `app_metadata.role`.
+  - `src/modules/catalog/public/catalog-admin-service.ts` — admin facade baru dengan re-export types, fungsi: `adminListProducts`, `adminGetProductById`, `adminCreateProduct`, `adminUpdateProduct`, `adminUpdateProductStatus`, `adminArchiveProduct`, `adminGetVariantsByProduct`, `adminCreateVariant`, `adminUpdateVariant`, `adminListCategories`, `adminGetCategoryById`, `adminCreateCategory`, `adminUpdateCategory`.
+  - Admin route handlers:
+    - `GET/POST /api/v1/admin/products`
+    - `GET/PATCH/DELETE /api/v1/admin/products/[id]`
+    - `PATCH /api/v1/admin/products/[id]/status`
+    - `GET/POST /api/v1/admin/products/[id]/variants`
+    - `PATCH /api/v1/admin/products/[id]/variants/[variantId]`
+    - `GET/POST /api/v1/admin/categories`
+    - `GET/PATCH /api/v1/admin/categories/[id]`
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) — hijau, 78 test lolos, 0 error.
+
+### Notes
+
+- Semua admin endpoint dilindungi oleh `requireAdmin()` yang memverifikasi Supabase session + `app_metadata.role === "admin"`.
+- Import boundary dipatuhi: route handler hanya import dari `public` dan `presentation` layer.
+- M4.7 exit criteria terpenuhi.
+
+---
+
 ## 2026-07-07 (2)
 
 ### Added

@@ -199,6 +199,28 @@ export async function searchPublicProductsFromSearchParams(
 }
 
 /**
+ * Mengambil daftar produk aktif untuk ditampilkan di homepage.
+ * Kontrak ini adalah entry point lintas module untuk consumer `homepage`.
+ */
+export async function listActiveProductsForHomepage(limit: number): Promise<PublicProductCard[]> {
+  const result = await listPublicProducts(repository, {
+    page: 1,
+    limit,
+    sort: "-createdAt",
+  });
+
+  return result.items.map((product) => ({
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    categoryId: product.categoryId,
+    priceFrom: product.priceFrom,
+    priceTo: product.priceTo,
+    thumbnailUrl: product.thumbnailUrl,
+  }));
+}
+
+/**
  * Mengambil snapshot varian untuk digunakan oleh consumer module lain (mis. cart).
  * Kontrak ini adalah entry point lintas module — jangan ubah shape tanpa menyesuaikan consumer.
  */

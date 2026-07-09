@@ -246,6 +246,39 @@ model ProductSeo {
   @@map("product_seo")
 }
 
+// ---------------------------------------------------------------------------
+// Homepage Module
+// ---------------------------------------------------------------------------
+
+/// Hero/banner kampanye yang ditampilkan pada halaman utama.
+/// displayOrder menentukan urutan tampil; isActive mengontrol visibilitas publik.
+model HomepageBanner {
+  id           String  @id @default(cuid())
+  title        String
+  subtitle     String?
+  mediaUrl     String
+  ctaLabel     String?
+  ctaLink      String?
+  displayOrder Int     @default(0)
+  isActive     Boolean @default(true)
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  // Soft delete
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  deletedBy    String?
+  deleteReason String?
+
+  // Pola akses: tampil aktif berurutan + admin queue
+  @@index([isActive, displayOrder])
+  @@map("homepage_banners")
+}
+
 /// Nilai option yang dipakai oleh varian tertentu (mis. color=black, size=L).
 model VariantValue {
   id         String @id @default(cuid())

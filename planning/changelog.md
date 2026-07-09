@@ -9,6 +9,43 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-09 (2)
+
+### Added
+
+- `src/modules/homepage/domain/homepage-entities.ts` — type `HomepageBanner`, `CreateBannerCommand`, `UpdateBannerCommand`, `HomepageError`, `HomepageResult<T>`.
+- `src/modules/homepage/domain/homepage-invariants.ts` — `isValidBannerTitle` (2–200 karakter), `isValidMediaUrl` (valid http/https URL).
+- `src/modules/homepage/domain/homepage-repository.ts` — interface `HomepageRepository` (listActiveBanners, listAllBanners, findBannerById, createBanner, updateBanner, softDeleteBanner).
+- `src/modules/homepage/application/manage-banner.ts` — `listAllBanners`, `createBanner`, `updateBanner`, `deleteBanner` dengan typed error result.
+- `src/modules/homepage/application/get-homepage-data.ts` — `getHomepageData` (composite dari `HomepageCatalogPort`: featured, new arrival, best seller). Port pattern memungkinkan dependency catalog diinjeksikan tanpa coupling langsung.
+- `src/modules/homepage/application/homepage.test.ts` — 15 unit test (invariant, manage-banner, getHomepageData).
+- `src/modules/homepage/infrastructure/prisma-homepage-repository.ts` — `PrismaHomepageRepository` mengimplementasikan seluruh `HomepageRepository` contract dengan Prisma client.
+- `src/modules/homepage/public/homepage-service.ts` — public facade: `homepageGetData`, `homepageListAllBanners`, `homepageCreateBanner`, `homepageUpdateBanner`, `homepageDeleteBanner`. Menggunakan `listActiveProductsForHomepage` dari catalog public service (import boundary patuh).
+- `src/modules/catalog/public/catalog-public-service.ts` — method baru `listActiveProductsForHomepage(limit)` sebagai entry point lintas module untuk consumer `homepage`.
+- `src/app/api/v1/homepage/route.ts` — `GET /api/v1/homepage` (public, mengembalikan banners + featured/new arrivals/best sellers).
+- `src/app/api/v1/admin/homepage/banners/route.ts` — `GET /api/v1/admin/homepage/banners` (list all), `POST /api/v1/admin/homepage/banners` (create). Dilindungi `requireAdmin()`.
+- `src/app/api/v1/admin/homepage/banners/[id]/route.ts` — `PATCH /api/v1/admin/homepage/banners/[id]` (update), `DELETE /api/v1/admin/homepage/banners/[id]` (soft delete, 204). Dilindungi `requireAdmin()`.
+- Prisma schema: model `HomepageBanner` (title, subtitle, mediaUrl, ctaLabel, ctaLink, displayOrder, isActive, audit fields, soft delete fields, index `isActive+displayOrder`) ditambahkan ke `prisma/schema.prisma`.
+- Migration SQL `prisma/migrations/20260709130000_homepage_banner/migration.sql` dibuat (perlu diapply ke Supabase via `bunx prisma migrate deploy`).
+
+### Changed
+
+- `prisma/schema.prisma` — model `HomepageBanner` ditambahkan di section Homepage Module.
+- `src/modules/catalog/public/catalog-public-service.ts` — tambah `listActiveProductsForHomepage` sebagai public contract baru.
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) hijau.
+- 133 test lolos (naik dari 118, +15 test baru dari M5.3).
+- Import boundary violation ditemukan dan diselesaikan selama implementasi: homepage tidak boleh import dari layer internal catalog.
+
+### Notes
+
+- Best seller di M5.3 menggunakan fallback newest products karena modul `order` belum aktif. Akan diupdate saat order data tersedia.
+- Migration `20260709130000_homepage_banner` perlu diapply manual ke Supabase dari terminal lokal (tidak bisa dari sandbox karena network restriction).
+
+---
+
 ## 2026-07-09 (1)
 
 ### Added

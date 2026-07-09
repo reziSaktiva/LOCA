@@ -7,15 +7,16 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
-- Phase 3 (Customer & Homepage): **in progress** (M5.1–M5.2 selesai)
-- Current implementation progress: **70%** (M5.2 Customer Profile & Address selesai)
+- Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai)
+- Current implementation progress: **75%** (M5.3 Homepage Foundation selesai)
 
 ## Current Focus
 
-- `phase-3 customer & homepage`
+- Phase 3 selesai. Siap lanjut ke **Phase 4 — Cart & Checkout Foundation**.
 - M5.1 (Customer Auth Foundation) sudah completed.
 - M5.2 (Customer Profile & Address) sudah completed.
-- Next active item: **M5.3 — Homepage Foundation** (Prisma schema HomepageBanner, PrismaHomepageRepository, get-homepage-data service, API routes homepage + admin banner)
+- M5.3 (Homepage Foundation) sudah completed.
+- ⚠️ Action required: `bunx prisma migrate deploy` untuk apply migration `20260709130000_homepage_banner` ke Supabase.
 
 ## Completed (Planning Side)
 
@@ -89,13 +90,16 @@ Target Phase 3 — Customer & Homepage:
   - API routes: `GET/PATCH /api/v1/customers/me`, `GET/POST /api/v1/customers/addresses`, `PATCH/DELETE /api/v1/customers/addresses/[id]`.
   - 118 test lolos. `bun run check` hijau.
 
-- **M5.3 — Homepage Foundation** *(next)*
-  - Application service: `get-homepage-data.ts` (composite dari catalog: featured, new arrival, best seller).
-  - Prisma schema: model `HomepageBanner` + migration.
+- **M5.3 — Homepage Foundation** ✅ **Completed**
+  - Domain: `HomepageBanner` entity, invariant `isValidBannerTitle`/`isValidMediaUrl`, repository contract.
+  - Application service: `manage-banner.ts` (create/update/delete dengan typed errors), `get-homepage-data.ts` (composite via `HomepageCatalogPort`).
+  - Prisma schema: model `HomepageBanner` + migration `20260709130000_homepage_banner` (perlu diapply ke Supabase).
   - Infrastructure: `PrismaHomepageRepository`.
-  - API route: `GET /api/v1/homepage`.
-  - Admin route: `GET/POST/PATCH/DELETE /api/v1/admin/homepage/banners`.
-  - Exit criteria: homepage mengembalikan banner + produk dinamis; admin dapat kelola banner.
+  - Catalog public service diperluas: `listActiveProductsForHomepage(limit)` sebagai kontrak lintas module.
+  - Public facade: `homepage-service.ts`.
+  - API route publik: `GET /api/v1/homepage`.
+  - Admin routes: `GET/POST /api/v1/admin/homepage/banners`, `PATCH/DELETE /api/v1/admin/homepage/banners/[id]`.
+  - 133 test lolos. `bun run check` hijau.
 
 ---
 
@@ -194,7 +198,13 @@ Target setup awal (Phase 2 selesai):
 
 - Status: **M5.2 Completed** — domain, application services, PrismaCustomerRepository, public facade, dan API routes customer aktif.
 - Prisma models `CustomerProfile` + `CustomerAddress` sudah di-migrate ke Supabase.
-- 118 test lolos (total seluruh suite). Next: M5.3 Homepage Foundation.
+- 118 test lolos (total seluruh suite pada M5.2).
+
+### Homepage Module
+
+- Status: **M5.3 Completed** — domain, application services, PrismaHomepageRepository, public facade, dan API routes homepage aktif.
+- Prisma model `HomepageBanner` — migration perlu diapply ke Supabase (`bunx prisma migrate deploy`).
+- 133 test lolos (total seluruh suite pada M5.3). Phase 3 selesai.
 
 ### Database
 

@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 3 In Progress — M5.2 Customer Profile & Address Completed
+Status: Phase 3 In Progress — M5.3 Homepage Foundation Completed
 
 Current Version: v0.9
 
@@ -56,7 +56,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-M5.2 selesai — Customer Profile & Address diimplementasikan. Module `customer` aktif dengan domain, application services, `PrismaCustomerRepository`, public facade, dan API routes customer. Migration `20260709044351_customer_profile_and_address` sudah diapply ke Supabase. Next: M5.3 Homepage Foundation.
+M5.3 selesai — Homepage Foundation diimplementasikan. Module `homepage` aktif dengan domain, application services, `PrismaHomepageRepository`, public facade, API route publik `GET /api/v1/homepage`, dan admin routes banner. Migration `20260709130000_homepage_banner` perlu diapply ke Supabase. Catalog diperluas dengan `listActiveProductsForHomepage` sebagai kontrak lintas module. Next: Phase 3 selesai → siap lanjut ke Phase 4 (Cart & Checkout).
 
 ---
 
@@ -186,14 +186,17 @@ Belum diputuskan:
 - ✅ **M4.8 — Product Media & SEO Dasar**: Enum `MediaOwnerType`/`ProductMediaType`, type `ProductMedia`/`ProductSeo` aktif di domain. Prisma model `ProductMedia` + `ProductSeo` ditambah, migration `20260707061153_catalog_media_seo` diapply ke Supabase. Application service `manage-product-media.ts` (addMedia, removeMedia, getProductSeo, upsertProductSeo). Invariant `canActivateProduct` diperluas: thumbnail wajib ada + minimal 1 variant. Admin routes: `GET/POST /api/v1/admin/products/[id]/media`, `DELETE /api/v1/admin/products/[id]/media/[mediaId]`, `GET/PUT /api/v1/admin/products/[id]/seo`. `bun run check` hijau (78 test).
 - ✅ **M5.1 — Customer Auth Foundation**: Module `auth` diimplementasikan. Domain layer: `CustomerAccount`, `AuthSession`, `AuthResult`, `AuthError`, `RegisterCustomerCommand`, `LoginCommand`, invariant `isValidEmail`/`isValidPassword`. Application services: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`, `get-current-session.ts`. Infrastructure: `SupabaseAuthRepository` (wraps Supabase `signUp`, `signInWithPassword`, `signOut`, `getUser`). Public facade: `customer-auth-service.ts`. Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/customer-guard.ts`. Shared helper: `src/shared/kernel/api-response.ts`. API routes aktif: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`. `bun run check` hijau (96 test).
 - ✅ **M5.2 — Customer Profile & Address**: Module `customer` diimplementasikan. Domain layer: `CustomerProfile`, `CustomerAddress`, `UpsertCustomerProfileCommand`, `CreateAddressCommand`, `UpdateAddressCommand`, `CustomerError`, `CustomerResult`. Invariant: `isValidDisplayName`, `isValidPhone`. Application services: `manage-customer-profile.ts` (getProfile, upsertProfile), `manage-customer-address.ts` (list, create, update, delete). Infrastructure: `PrismaCustomerRepository` (upsert profile, CRUD address, clearDefault, softDelete). Public facade: `customer-service.ts`. Prisma models `CustomerProfile` + `CustomerAddress`, migration `20260709044351_customer_profile_and_address` sudah diapply ke Supabase. API routes: `GET/PATCH /api/v1/customers/me`, `GET/POST /api/v1/customers/addresses`, `PATCH/DELETE /api/v1/customers/addresses/[id]`. `bun run check` hijau (118 test).
+- ✅ **M5.3 — Homepage Foundation**: Module `homepage` diimplementasikan. Domain layer: `HomepageBanner`, `CreateBannerCommand`, `UpdateBannerCommand`, `HomepageError`, `HomepageResult`. Invariant: `isValidBannerTitle` (2–200 char), `isValidMediaUrl` (http/https valid). Application services: `manage-banner.ts` (create, update, delete dengan typed errors), `get-homepage-data.ts` (composite via `HomepageCatalogPort` — featured, new arrival, best seller). Infrastructure: `PrismaHomepageRepository`. Public facade: `homepage-service.ts` (menggunakan `listActiveProductsForHomepage` dari catalog public service — boundary patuh). Catalog diperluas: `listActiveProductsForHomepage(limit)` di `catalog-public-service.ts`. Prisma model `HomepageBanner`, migration `20260709130000_homepage_banner` (perlu diapply ke Supabase). API route: `GET /api/v1/homepage`. Admin routes: `GET/POST /api/v1/admin/homepage/banners`, `PATCH/DELETE /api/v1/admin/homepage/banners/[id]`. `bun run check` hijau (133 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.**
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.**
 
-Next action: **M5.3 — Homepage Foundation** — `HomepageBanner` Prisma schema + migration, `PrismaHomepageRepository`, application service `get-homepage-data.ts` (composite catalog), API route `GET /api/v1/homepage`, admin routes `GET/POST/PATCH/DELETE /api/v1/admin/homepage/banners`.
+⚠️ **Action required**: Apply migration `20260709130000_homepage_banner` ke Supabase dengan menjalankan `bunx prisma migrate deploy` dari terminal lokal (bukan sandbox) setelah branch ini di-merge.
+
+Next action: **Phase 3 selesai** — siap lanjut ke Phase 4 (Cart & Checkout Foundation).
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -317,7 +320,7 @@ System Design Readiness
 
 ```
 Implementation
-██████████████░░░░░░  70%
+███████████████░░░░░  75%
 ```
 
 ---
@@ -407,7 +410,7 @@ Breakdown:
 
 - [x] M5.1 Customer Auth Foundation
 - [x] M5.2 Customer Profile & Address
-- [ ] M5.3 Homepage Foundation
+- [x] M5.3 Homepage Foundation
 
 Target Outcome:
 

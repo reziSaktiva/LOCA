@@ -69,7 +69,7 @@ Phase 3 selesai penuh — M5.1 (Auth), M5.2 (Customer Profile & Address), M5.3 (
 - Marketplace (Shopee & TikTok Shop) tetap digunakan sebagai channel penjualan.
 - Fokus utama MVP adalah membangun fondasi brand dan alur pembelian end-to-end yang stabil.
 - Produk diposisikan sebagai Sports Apparel Essentials untuk target market mahasiswa dan young professionals.
-- **Brand LOCA ditetapkan final**: nama brand, brand story (Lifestyle Movement), logo (Wordmark), color direction (Black + Off-White + 1 Accent), typography (Geometric Sans: Outfit/Plus Jakarta Sans), tone of voice (Confident & Minimal). Lihat `planning/decisions.md` Decision 018.
+- **Brand LOCA ditetapkan final**: nama brand, brand story (Lifestyle Movement), logo (Wordmark), color direction (Black + Off-White + Cobalt Blue `#1D4ED8`), typography (**Plus Jakarta Sans**), tone of voice (Confident & Minimal). Lihat `planning/decisions.md` Decision 018 + 023.
 - **SOP Operasional MVP ditetapkan**: KPI harian (Total Order + Revenue + Stok Habis), SOP order handling (3-step), SLA shipping (1-2 hari kerja). Lihat `planning/decisions.md` Decision 020.
 
 ---
@@ -131,13 +131,11 @@ Belum diputuskan:
 
 ## Branding
 
-- Warna accent brand final (1 warna, ditetapkan saat produksi logo/brand asset)
-- Logo final (file asset)
-- Typography final (Outfit vs Plus Jakarta Sans — ditetapkan saat implementasi UI)
+- Logo final (file asset) — ditetapkan saat produksi brand asset
 
 ## Phase 1 Engineering
 
-- Branch protection policy untuk mewajibkan status check CI sebelum merge (sudah disepakati CI gate, belum dikonfigurasi di GitHub repo settings)
+- Branch protection policy — ✅ dikonfigurasi di GitHub repo settings (Ruleset "Protect main": Restrict deletions + Require status checks (lint/typecheck/test) + Block force pushes). Lihat Decision 024.
 - Deployment flow detail (preview, release, rollback) — untuk fase post-MVP
 
 ## Operations

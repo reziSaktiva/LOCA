@@ -1,5 +1,85 @@
 # Project Decisions
 
+## Decision 024
+
+Tanggal: 2026-07-09
+
+Judul:
+
+Aktivasi Branch Protection di GitHub Repository.
+
+Keputusan:
+
+* **Branch protection diaktifkan pada branch `main`** dengan rule berikut:
+  - Require status checks to pass before merging: `lint`, `typecheck`, `test` (dari CI workflow `.github/workflows/ci.yml`).
+  - Require branches to be up to date before merging: ✅
+  - Do not allow bypassing the above settings: ✅
+
+* **Cara konfigurasi** (via `gh` CLI setelah `gh auth login`):
+  ```bash
+  gh api repos/{owner}/{repo}/branches/main/protection \
+    --method PUT \
+    --field required_status_checks='{"strict":true,"contexts":["lint","typecheck","test"]}' \
+    --field enforce_admins=true \
+    --field required_pull_request_reviews=null \
+    --field restrictions=null
+  ```
+  Atau via GitHub UI: Settings → Branches → Add branch ruleset → pilih `main` → centang "Require status checks to pass".
+
+* Kebijakan ini selaras dengan Decision 019 (Engineering Policy) yang sudah menetapkan CI gate wajib sebelum merge ke `main`.
+
+Alasan:
+
+* Melindungi `main` dari broken code yang melewatkan quality gate.
+* Decision 019 sudah menetapkan kebijakan ini secara prinsip; Decision 024 adalah konfirmasi bahwa konfigurasi sudah diterapkan di GitHub Settings.
+
+Dampak:
+
+* GitHub repository settings (branch protection rule di `main`).
+* `PROJECT_STATE.md` — item "Branch protection" dipindahkan dari Open Decisions ke closed.
+
+---
+
+## Decision 023
+
+Tanggal: 2026-07-09
+
+Judul:
+
+Penetapan Typography Final dan Accent Color Final brand LOCA.
+
+Keputusan:
+
+* **Typography Final**: **Plus Jakarta Sans** (Humanist Geometric Sans, weight 200–800).
+  - Implementasi: `next/font/google` → `Plus_Jakarta_Sans`, CSS variable `--font-plus-jakarta-sans`.
+  - `--font-sans` dan `--font-heading` di `globals.css` diperbarui ke `var(--font-plus-jakarta-sans)`.
+  - File `src/app/layout.tsx` diperbarui: Geist Sans/Mono digantikan Plus Jakarta Sans.
+
+* **Accent Color Final**: **Cobalt Blue `#1D4ED8`**.
+  - Token baru `--brand-accent` / `--brand-accent-foreground` ditambahkan di `globals.css`.
+  - Light mode: `oklch(0.47 0.23 265)` ≈ `#1D4ED8`.
+  - Dark mode: `oklch(0.81 0.13 260)` ≈ `#93C5FD` (blue-300, lebih terang untuk kontras pada background gelap).
+  - Tailwind utility: `bg-brand-accent`, `text-brand-accent`, `border-brand-accent`.
+  - Penggunaan: highlight, badge, active state, link, interactive secondary element. Primary CTA tetap menggunakan `primary` (Black).
+
+* **Dokumen yang diperbarui**: `docs/09-design-system.md` §3 (Color System) dan §4 (Typography), `docs/01-business.md` §4 (Brand Identity).
+
+Alasan:
+
+* **Plus Jakarta Sans** dipilih karena: humanist geometric yang warm dan readable di semua ukuran, dibuat dengan estetika Indonesia (selaras dengan LOCA sebagai brand lokal), weight range 200–800 cukup untuk semua kebutuhan tipografi (display, heading, body, caption), dan familiar di kalangan target market Indonesia 18–35.
+* **Outfit** tidak dipilih karena: lebih rigid dan "tech-startup", kurang warm untuk consumer apparel brand.
+* **Cobalt Blue `#1D4ED8`** dipilih karena: active dan sporty tanpa terasa murah, pairs sempurna dengan Black + Off-White, WCAG AA compliant di atas Off-White (rasio kontras >4.5:1), timeless untuk sports brand, tidak terlalu corporate (lebih energetic dari navy).
+
+Dampak:
+
+* `src/app/layout.tsx` — ganti Geist ke Plus Jakarta Sans.
+* `src/app/globals.css` — update font token, tambah `--brand-accent` token.
+* `docs/09-design-system.md` — §3 Color System dan §4 Typography difinalisasi.
+* `docs/01-business.md` — §4 Brand Identity diperbarui dengan nilai final.
+* `PROJECT_STATE.md` — item "Typography final" dan "Warna accent brand final" dipindahkan dari Open Decisions ke Latest Decisions.
+
+---
+
 Dokumen ini mencatat keputusan penting yang telah disepakati selama proses pengembangan.
 
 ## Format

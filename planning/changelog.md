@@ -9,6 +9,33 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-09 (6)
+
+### Added
+
+- **Typography final ditetapkan: Plus Jakarta Sans** (Decision 023). `src/app/layout.tsx` diperbarui: Geist Sans/Mono diganti dengan `Plus_Jakarta_Sans` dari `next/font/google` (weight 200–800, display swap). CSS variable `--font-plus-jakarta-sans` aktif.
+- **Accent color final ditetapkan: Cobalt Blue `#1D4ED8`** (Decision 023). Token baru `--brand-accent` (`oklch(0.47 0.23 265)` light, `oklch(0.81 0.13 260)` dark) dan `--brand-accent-foreground` ditambahkan ke `src/app/globals.css`. Tailwind utility `bg-brand-accent`, `text-brand-accent`, `border-brand-accent` tersedia.
+- Decision 023 dicatat di `planning/decisions.md`.
+- Decision 024 dicatat di `planning/decisions.md` (Branch Protection policy konfirmasi + command konfigurasi).
+
+### Changed
+
+- `src/app/globals.css` — `--font-sans` dan `--font-heading` diperbarui ke `var(--font-plus-jakarta-sans)`, `--font-mono` dihapus (tidak digunakan). Brand accent token ditambahkan di `:root` dan `.dark`.
+- `docs/09-design-system.md` — §3 Color System: palette difinalisasi dengan nilai konkret (`#1D4ED8` Cobalt Blue, oklch token, dark mode variant, WCAG note). §4 Typography: Plus Jakarta Sans ditetapkan final, Outfit tidak dipilih, rationale dicatat.
+- `docs/01-business.md` — §4 Brand Identity: typography dan color diperbarui ke nilai final.
+- `PROJECT_STATE.md` — "Warna accent brand final" dan "Typography final" dihapus dari Open Decisions. "Branch protection policy" ditutup. Latest Decisions (Business & Product) diperbarui dengan nilai branding final.
+
+### Verified
+
+- `bun run check` (lint + typecheck + test) — **133 test passed**, hijau setelah perubahan font dan token warna.
+
+### Notes
+
+- Branch protection belum dikonfigurasi di GitHub Settings — memerlukan `gh auth login` terlebih dahulu. Lihat Decision 024 untuk command lengkap atau instruksi GitHub UI.
+- Cobalt Blue dark mode menggunakan blue-300 equivalent (`oklch(0.81 0.13 260)`) agar tetap kontras pada background gelap. Foreground berubah ke dark (`oklch(0.145 0 0)`) untuk aksesibilitas.
+
+---
+
 ## 2026-07-09 (5)
 
 ### Changed

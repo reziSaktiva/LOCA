@@ -83,8 +83,8 @@ Customer tidak membeli LOCA hanya karena fungsi. Mereka membeli LOCA karena ingi
 
 - **Nama Brand**: LOCA
 - **Tipe Logo**: Wordmark — nama "LOCA" dengan typography kuat, clean, minimal.
-- **Color Direction**: Black + Off-White + 1 Accent Color.
-- **Typography**: Geometric Sans (Outfit / Plus Jakarta Sans).
+- **Color Direction**: Black `#0A0A0A` + Off-White `#F5F5F0` + Cobalt Blue `#1D4ED8` (brand accent).
+- **Typography**: Plus Jakarta Sans (Geometric Humanist Sans, weight 200–800).
 - **Tone of Voice**: Confident & Minimal — kalimat pendek, to the point, tidak basa-basi.
 
 ## 5. Target Market

@@ -35,34 +35,48 @@ Karakter brand yang harus tercermin di seluruh UI:
 
 ## 3. Color System
 
-Arah palette brand LOCA: **Black + Off-White + 1 Accent Color**.
+Arah palette brand LOCA: **Black + Off-White + Cobalt Blue**.
 
 Filosofi: timeless, premium, minimal — selaras dengan brand personality Modern + Minimal.
 
-| Token Group | Direction | Purpose | Example |
-|------------|-----------|---------|---------|
-| Primary | Black (#0A0A0A) + Off-White (#F5F5F0) | Aksi utama, CTA, background | `primary` |
-| Accent | 1 warna accent (TBD saat produksi logo) | Highlight, badge, active state | `accent` |
+| Token Group | Value | Purpose | CSS Token |
+|------------|-------|---------|-----------|
+| Primary | Black `#0A0A0A` + Off-White `#F5F5F0` | Aksi utama, CTA, background | `primary` |
+| Brand Accent | Cobalt Blue `#1D4ED8` | Highlight, badge, active state, CTA sekunder | `brand-accent` |
 | Neutral | Skala abu-abu dari Off-White ke Black | Teks, background, border | `neutral-100` |
-| Semantic Success | Hijau | Status berhasil | `success-500` |
-| Semantic Warning | Kuning/Amber | Status peringatan | `warning-500` |
-| Semantic Error | Merah | Status error/destructive | `error-500` |
-| Semantic Info | Biru | Status informasi | `info-500` |
+| Semantic Success | Hijau | Status berhasil | `success` |
+| Semantic Warning | Kuning/Amber | Status peringatan | `warning` |
+| Semantic Error | Merah | Status error/destructive | `error` |
+| Semantic Info | Biru informasi | Status informasi | `info` |
+
+**Brand Accent — Cobalt Blue:**
+- Light mode: `#1D4ED8` → oklch: `oklch(0.47 0.23 265)`
+- Dark mode: `#93C5FD` (blue-300) → oklch: `oklch(0.81 0.13 260)` — lebih terang untuk kontras pada background gelap
+- Foreground on accent: `#FFFFFF`
+- Alasan: aktif dan sporty tanpa terasa murah, WCAG AA compliant di atas Off-White, pasangan sempurna untuk palet Black + Off-White brand LOCA.
 
 Catatan:
-- Nilai accent color final ditetapkan bersamaan dengan finalisasi logo/produksi brand asset.
 - Hindari penggunaan warna di luar token yang sudah didefinisikan.
-- Pastikan kontras warna memenuhi standar aksesibilitas.
+- Pastikan kontras warna memenuhi standar aksesibilitas WCAG AA minimum.
+- `brand-accent` dipakai untuk highlight, badge, active state, link, dan elemen interaktif sekunder. Primary CTA tetap menggunakan `primary` (Black).
 
 ---
 
 ## 4. Typography
 
-Font brand LOCA: **Geometric Sans**.
+Font brand LOCA: **Plus Jakarta Sans**.
 
-Kandidat utama: **Outfit** atau **Plus Jakarta Sans**.
+Alasan pemilihan:
+- Humanist geometric — clean, modern, tetap warm untuk consumer brand
+- Dibuat dengan estetika Indonesia, sangat sesuai untuk brand lokal
+- Weight range 200–800: cukup untuk display heading, subheading, body, caption
+- Excellent readability di semua ukuran
+- Familiar di kalangan target market Indonesia usia 18–35
 
-Kriteria pemilihan: clean, modern, readable, cocok untuk brand Sports Apparel generasi muda (18-35). Font final ditetapkan saat produksi brand asset.
+Implementasi:
+- `next/font/google` → `Plus_Jakarta_Sans`
+- CSS variable: `--font-plus-jakarta-sans`
+- Variable token: `--font-sans`, `--font-heading`
 
 | Element | Style |
 |--------|-------|

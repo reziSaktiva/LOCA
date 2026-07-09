@@ -442,18 +442,21 @@ Exit criteria:
 - ✅ Satu alamat dapat ditandai sebagai default.
 - ✅ Quality gate lolos (118 test).
 
-### M5.3 — Homepage Foundation
+### ✅ M5.3 — Homepage Foundation (Completed)
 
-Scope:
+Scope (selesai):
 
-- Application service: `get-homepage-data.ts` (composite dari catalog public service: featured, new arrival, best seller).
-- Prisma schema: model `HomepageBanner` (judul, subtitle, image, CTA, urutan, aktif/tidak) + migration.
+- Domain: `HomepageBanner` entity, invariant `isValidBannerTitle`/`isValidMediaUrl`, `HomepageRepository` contract.
+- Application service: `manage-banner.ts` (create/update/delete), `get-homepage-data.ts` (composite via `HomepageCatalogPort`).
+- Catalog diperluas: `listActiveProductsForHomepage(limit)` di `catalog-public-service.ts` sebagai cross-module contract.
+- Prisma schema: model `HomepageBanner` + migration `20260709130000_homepage_banner`.
 - Infrastructure: `PrismaHomepageRepository`.
+- Public facade: `homepage-service.ts`.
 - API route: `GET /api/v1/homepage`.
-- Admin route: `GET/POST/PATCH/DELETE /api/v1/admin/homepage/banners`.
+- Admin routes: `GET/POST /api/v1/admin/homepage/banners`, `PATCH/DELETE /api/v1/admin/homepage/banners/[id]`.
 
 Exit criteria:
 
-- Endpoint homepage mengembalikan banner aktif + produk featured/new arrival/best seller.
-- Admin dapat mengelola banner via API.
-- Quality gate lolos.
+- ✅ Endpoint homepage mengembalikan banner aktif + produk featured/new arrival/best seller.
+- ✅ Admin dapat mengelola banner via API.
+- ✅ Quality gate lolos (133 test).

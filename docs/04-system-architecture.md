@@ -165,12 +165,50 @@ Strategi struktur folder (target):
 
 ```text
 src/
-  app/                      # App Router (route segments, layout, page, api)
+  app/                          # App Router (route segments, layout, page, api)
+    (store)/                    # Customer-facing pages — layout dengan navbar + footer
+      page.tsx                  # / — Homepage
+      products/
+        page.tsx                # /products — Product listing
+        [slug]/
+          page.tsx              # /products/[slug] — Product detail
+      cart/
+        page.tsx                # /cart — Cart
+      checkout/
+        page.tsx                # /checkout — Checkout
+      orders/
+        page.tsx                # /orders — Order history
+        [id]/
+          page.tsx              # /orders/[id] — Order detail
+      account/
+        page.tsx                # /account — Profile & address
+      search/
+        page.tsx                # /search — Search results
+    (auth)/                     # Auth pages — layout minimalist tanpa navbar
+      login/
+        page.tsx                # /login
+      register/
+        page.tsx                # /register
+    (admin)/                    # Admin pages — layout dengan sidebar admin
+      dashboard/
+        page.tsx                # /admin/dashboard
+      products/
+        page.tsx                # /admin/products
+        [id]/
+          page.tsx              # /admin/products/[id]
+      orders/
+        page.tsx                # /admin/orders
+      inventory/
+        page.tsx                # /admin/inventory
+      homepage/
+        page.tsx                # /admin/homepage
+    api/
+      v1/                       # Seluruh API route handler
   modules/
     auth/
-      presentation/
+      presentation/             # Komponen & hooks terkait auth UI
       application/
-      public/                 # public service contract/module facade
+      public/                   # public service contract/module facade
       domain/
       infrastructure/
     catalog/
@@ -184,12 +222,24 @@ src/
     review/
     homepage/
   shared/
-    kernel/                 # base types, result, error, guard
-    infrastructure/         # db client, logger, env, config
-    events/                 # domain event contract & event dispatcher
-    analytics/              # tracking abstraction (PostHog, dsb.)
-    ui/                     # shared UI primitives bila dibutuhkan
+    kernel/                     # base types, result, error, guard
+    infrastructure/             # db client, logger, env, config
+    events/                     # domain event contract & event dispatcher
+    analytics/                  # tracking abstraction (PostHog, dsb.)
+    ui/                         # shared UI primitives (shadcn/ui components)
 ```
+
+Aturan route group:
+
+- `(store)` — layout dengan navbar customer, cart icon, account menu, footer. Accessible oleh Visitor dan Customer.
+- `(auth)` — layout minimalist tanpa navbar, hanya logo. Redirect ke `(store)` jika sudah login.
+- `(admin)` — layout dengan sidebar admin. Dilindungi `requireAdmin()`. Terpisah penuh dari halaman customer.
+
+Aturan `presentation/` layer per module:
+
+- Komponen yang spesifik untuk domain fitur disimpan di `src/modules/<module>/presentation/`.
+- Komponen yang dipakai lintas halaman tanpa domain spesifik disimpan di `src/shared/ui/`.
+- `src/app/(store|auth|admin)/` hanya berisi `page.tsx`, `layout.tsx`, dan `loading.tsx` — tidak mengandung komponen reusable.
 
 Setiap module menyimpan file berdasarkan flow fitur agar coupling antar module tetap rendah.
 

@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 3 In Progress — M5.3 Homepage Foundation Completed
+Status: Phase 3 Completed — Siap lanjut Phase 4 (Cart & Checkout)
 
 Current Version: v0.9
 
@@ -29,6 +29,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 ✅ Phase 0 — Planning & Documentation (Completed)
 ✅ Phase 1 — Project Foundation (Completed)
 ✅ Phase 2 — Catalog Foundation (Completed)
+✅ Phase 3 — Customer & Homepage (Completed)
 
 Progress:
 
@@ -52,11 +53,11 @@ Progress:
 
 Sedang mengerjakan:
 
-`phase-3 customer & homepage`
+`phase-4 cart & checkout`
 
 Tujuan:
 
-M5.3 selesai — Homepage Foundation diimplementasikan. Module `homepage` aktif dengan domain, application services, `PrismaHomepageRepository`, public facade, API route publik `GET /api/v1/homepage`, dan admin routes banner. Migration `20260709130000_homepage_banner` perlu diapply ke Supabase. Catalog diperluas dengan `listActiveProductsForHomepage` sebagai kontrak lintas module. Next: Phase 3 selesai → siap lanjut ke Phase 4 (Cart & Checkout).
+Phase 3 selesai penuh — M5.1 (Auth), M5.2 (Customer Profile & Address), M5.3 (Homepage Foundation) selesai. Migration `20260709130000_homepage_banner` sudah diapply ke Supabase. Next: kickoff Phase 4 — Cart & Checkout Foundation.
 
 ---
 
@@ -70,6 +71,13 @@ M5.3 selesai — Homepage Foundation diimplementasikan. Module `homepage` aktif 
 - Produk diposisikan sebagai Sports Apparel Essentials untuk target market mahasiswa dan young professionals.
 - **Brand LOCA ditetapkan final**: nama brand, brand story (Lifestyle Movement), logo (Wordmark), color direction (Black + Off-White + 1 Accent), typography (Geometric Sans: Outfit/Plus Jakarta Sans), tone of voice (Confident & Minimal). Lihat `planning/decisions.md` Decision 018.
 - **SOP Operasional MVP ditetapkan**: KPI harian (Total Order + Revenue + Stok Habis), SOP order handling (3-step), SLA shipping (1-2 hari kerja). Lihat `planning/decisions.md` Decision 020.
+
+---
+
+## Development Workflow
+
+- **Workflow diubah ke UI paralel per phase** (Decision 022, 2026-07-09): setelah backend sebuah phase selesai, milestone UI dikerjakan dalam phase yang sama sebelum pindah ke phase berikutnya. Sebelumnya UI hanya ada di Phase 8.
+- **Route group strategy ditetapkan**: `src/app/(store)/`, `(auth)/`, `(admin)/` dengan layout terpisah per audience. Lihat `docs/04-system-architecture.md` §9.
 
 ---
 
@@ -194,9 +202,25 @@ Belum diputuskan:
 
 **Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.**
 
-⚠️ **Action required**: Apply migration `20260709130000_homepage_banner` ke Supabase dengan menjalankan `bunx prisma migrate deploy` dari terminal lokal (bukan sandbox) setelah branch ini di-merge.
+Next action: **Phase 4 — Cart & Inventory** siap dimulai. Mulai dari **M6.1 — Inventory Domain Foundation**.
 
-Next action: **Phase 3 selesai** — siap lanjut ke Phase 4 (Cart & Checkout Foundation).
+Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
+
+Urutan milestone Phase 4:
+
+Backend:
+1. **M6.1 — Inventory Domain Foundation** — domain entities, invariants, repository contract, application services, public facade, Prisma schema + migration.
+2. **M6.2 — Admin Inventory API** — endpoint admin: lihat stok, adjustment, movement history.
+3. **M6.3 — Cart Domain Foundation** — domain entities (Cart, CartItem), invariants, port pattern (CartCatalogPort, CartInventoryPort), application services, Prisma schema + migration.
+4. **M6.4 — Cart Customer API** — endpoint customer: GET/POST/PATCH/DELETE cart + items.
+5. **M6.5 — Phase 4 Backend Exit Validation** — cross-module contracts, quality gate, kontrak Phase 5 terpasang.
+
+UI Catch-up (Phase 2–4):
+6. **M6.6 — UI Route Groups + Shared Layout** — setup `(store)`, `(auth)`, `(admin)` dengan layout masing-masing (Navbar, Footer, AdminSidebar).
+7. **M6.7 — UI: Homepage + Catalog + Product Detail** — halaman publik: `/`, `/products`, `/products/[slug]`, `/search`.
+8. **M6.8 — UI: Auth + Account + Cart** — halaman protected: `/login`, `/register`, `/account`, `/cart`.
+
+---
 
 1. ✅ **M3.1 — Folder Structure Ready** (Selesai)
    - Finalisasi struktur folder implementasi.
@@ -320,7 +344,7 @@ System Design Readiness
 
 ```
 Implementation
-███████████████░░░░░  75%
+████████████████░░░░  80%
 ```
 
 ---
@@ -404,7 +428,38 @@ Target Outcome:
 
 ---
 
-## 🔄 Milestone 5 — Customer & Homepage (In Progress)
+## 🔄 Milestone 6 — Cart, Inventory & UI Catch-up (In Progress)
+
+Breakdown — Backend:
+
+- [ ] M6.1 Inventory Domain Foundation
+- [ ] M6.2 Admin Inventory API
+- [ ] M6.3 Cart Domain Foundation
+- [ ] M6.4 Cart Customer API
+- [ ] M6.5 Phase 4 Backend Exit Validation
+
+Breakdown — UI Catch-up Phase 2–4:
+
+- [ ] M6.6 UI: Route Groups + Shared Layout
+- [ ] M6.7 UI: Homepage + Catalog + Product Detail
+- [ ] M6.8 UI: Auth + Account + Cart
+
+Target Outcome:
+
+Backend:
+- Customer dapat menambahkan produk ke cart via API.
+- Stok divalidasi real-time saat operasi cart.
+- Admin dapat mengelola stok via API.
+- Kontrak `getCartSnapshot` dan `reserveStock/commitStock/releaseStock` siap untuk Phase 5.
+
+UI:
+- Customer dapat browse, login, dan melihat cart di browser.
+- Halaman responsive (mobile-first), accessible, tidak ada halaman kosong.
+- Route groups aktif dengan layout terpisah per audience (Decision 022).
+
+---
+
+## ✅ Milestone 5 — Customer & Homepage (Completed)
 
 Breakdown:
 

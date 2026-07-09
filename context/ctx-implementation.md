@@ -7,16 +7,15 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
-- Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai)
-- Current implementation progress: **75%** (M5.3 Homepage Foundation selesai)
+- Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
+- Phase 4 (Cart & Inventory): **in progress** — planning selesai, siap mulai M6.1
+- Current implementation progress: **80%**
 
 ## Current Focus
 
-- Phase 3 selesai. Siap lanjut ke **Phase 4 — Cart & Checkout Foundation**.
-- M5.1 (Customer Auth Foundation) sudah completed.
-- M5.2 (Customer Profile & Address) sudah completed.
-- M5.3 (Homepage Foundation) sudah completed.
-- ⚠️ Action required: `bunx prisma migrate deploy` untuk apply migration `20260709130000_homepage_banner` ke Supabase.
+- Phase 4 — Cart & Inventory. Mulai dari **M6.1 — Inventory Domain Foundation**.
+- Workflow diubah ke **UI paralel per phase** (Decision 022): setelah backend M6.1–M6.5 selesai, lanjut ke UI milestone M6.6–M6.8.
+- Route group strategy ditetapkan: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9.
 
 ## Completed (Planning Side)
 
@@ -203,7 +202,7 @@ Target setup awal (Phase 2 selesai):
 ### Homepage Module
 
 - Status: **M5.3 Completed** — domain, application services, PrismaHomepageRepository, public facade, dan API routes homepage aktif.
-- Prisma model `HomepageBanner` — migration perlu diapply ke Supabase (`bunx prisma migrate deploy`).
+- Prisma model `HomepageBanner` + migration `20260709130000_homepage_banner` sudah diapply ke Supabase.
 - 133 test lolos (total seluruh suite pada M5.3). Phase 3 selesai.
 
 ### Database
@@ -212,24 +211,48 @@ Target setup awal (Phase 2 selesai):
 - Scope awal: schema baseline, migration strategy, repository contract
 - Current: catalog terhubung ke database sungguhan via `PrismaCatalogRepository`
 
+## Phase 4 (In Progress — Next Targets)
+
+### Inventory Module
+
+- Status: **Belum diimplementasikan**
+- Target: M6.1 (domain foundation) → M6.2 (admin API)
+- Milestone pertama: M6.1 — Inventory Domain Foundation
+
+### Cart Module
+
+- Status: **Belum diimplementasikan**
+- Target: M6.3 (domain foundation) → M6.4 (customer API)
+- Dependency: Inventory harus selesai dulu (CartInventoryPort)
+
+### UI — Phase 4 (Catch-up M6.6–M6.8)
+
+- Status: **Belum diimplementasikan**
+- Target setelah M6.5 (backend exit validation):
+  - M6.6: Route group setup + shared layout (Navbar, Footer, AdminSidebar)
+  - M6.7: Homepage + Catalog + Product Detail + Search pages
+  - M6.8: Auth + Account + Cart pages
+- Route strategy: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9
+
 ## Remaining Priority Flows
 
 ### Checkout
 
 - Belum diimplementasikan.
-- Bergantung pada stabilitas cart, customer address, shipping option, payment method.
+- Target: Phase 5.
 
 ### Payment
 
 - Belum diimplementasikan.
-- Integrasi Midtrans + webhook idempotency perlu desain implementasi detail.
+- Target: Phase 6. Integrasi Midtrans + webhook idempotency.
 
 ### Shipping
 
 - Belum diimplementasikan.
-- Integrasi Biteship + tracking status synchronization.
+- Target: Phase 6. Integrasi Biteship + tracking status synchronization.
 
 - Open Decisions: sudah diselesaikan pada 2026-07-06 (branding, engineering policy, operations SOP). Lihat `planning/decisions.md` Decision 018-020.
+- Decision 022 (2026-07-09): Workflow diubah ke UI paralel per phase. Lihat `planning/decisions.md`.
 
 ## Backlog (Post-MVP / Lower Priority)
 

@@ -9,6 +9,36 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-09 (5)
+
+### Changed
+
+- **Workflow diubah ke UI paralel per phase** (Decision 022). Sebelumnya UI hanya ada di Phase 8; sekarang setiap phase punya milestone UI setelah backend selesai.
+- `docs/04-system-architecture.md` §9 — route group strategy ditambahkan: `(store)`, `(auth)`, `(admin)` dengan aturan layout dan komponen per audience.
+- `docs/11-development-roadmap.md` — Phase 4, 5, 6 diperluas dengan UI deliverables dan exit criteria UI.
+- `planning/backlog.md` — M6.6 (Route Groups + Layout), M6.7 (Homepage + Catalog + Product Detail), M6.8 (Auth + Account + Cart) ditambahkan sebagai milestone resmi Phase 4.
+- `planning/decisions.md` — Decision 022 dicatat.
+- `context/ctx-implementation.md` — disinkronkan ke status terkini (Phase 3 complete, migration applied, Phase 4 planning done, workflow baru).
+- `PROJECT_STATE.md` — Milestone 6 diperluas dengan UI milestones; workflow decision dicatat di Latest Decisions.
+
+---
+
+## 2026-07-09 (4)
+
+### Planning
+
+- **Phase 4 — Cart & Inventory planning selesai.** Dokumentasi milestone M6.1–M6.5 dibuat di `planning/backlog.md` mencakup: Inventory Domain Foundation, Admin Inventory API, Cart Domain Foundation, Cart Customer API, dan Phase 4 Exit Validation. Roadmap `docs/11-development-roadmap.md` diperbarui: Phase 3 ditandai Completed, Phase 4 diperlengkap dengan deliverables dan exit criteria. `PROJECT_STATE.md` diperluas dengan urutan milestone dan Milestone Checkpoint M6.
+
+---
+
+## 2026-07-09 (3)
+
+### Milestone
+
+- **Phase 3 — Customer & Homepage selesai penuh.** Migration `20260709130000_homepage_banner` sudah diapply ke Supabase (`bunx prisma migrate deploy`). Database production tersinkron. Siap lanjut ke Phase 4 (Cart & Checkout Foundation).
+
+---
+
 ## 2026-07-09 (2)
 
 ### Added

@@ -437,6 +437,40 @@ Dampak:
 
 ---
 
+## Decision 022
+
+Tanggal: 2026-07-09
+
+Judul:
+
+Perubahan workflow ke UI paralel per phase — UI dibangun setelah backend setiap phase selesai.
+
+Keputusan:
+
+* **Workflow development diubah dari backend-first ke paralel per phase**: setelah backend milestone sebuah phase selesai, milestone UI untuk domain tersebut dikerjakan sebelum pindah ke phase berikutnya.
+* **Route group strategy ditetapkan** untuk `src/app/` menggunakan Next.js route groups: `(store)` untuk halaman customer-facing, `(auth)` untuk login/register, `(admin)` untuk dashboard admin. Masing-masing punya `layout.tsx` terpisah.
+* **Phase 4 diperluas dengan 3 milestone UI catch-up** (M6.6–M6.8) yang mencakup seluruh domain yang sudah dibangun di Phase 2–4: Homepage, Catalog, Auth, Customer, dan Cart.
+* **Dokumen yang diperbarui**: `docs/04-system-architecture.md` §9 (folder structure + route group rules), `docs/11-development-roadmap.md` (UI deliverables + UI exit criteria per phase), `planning/backlog.md` (M6.6–M6.8 backlog detail).
+* **Definition of Done tetap berlaku**: "Responsive" dan "Accessible" sudah menjadi syarat DoD di `docs/10-development-rules.md` §25. Dengan workflow baru, kondisi ini hanya berlaku penuh untuk milestone yang secara eksplisit mencakup UI — milestone backend-only (M6.1–M6.5) tidak diwajibkan punya halaman, namun **API contract dan domain logic tetap harus testable dan production-ready** sebelum milestone UI-nya dikerjakan.
+
+Alasan:
+
+* **Feedback loop lebih cepat**: dengan UI dibangun segera setelah API siap, masalah UX atau API shape yang tidak cocok terdeteksi lebih awal sebelum phase berikutnya.
+* **Motivasi dan progres yang terlihat**: ada deliverable yang bisa dilihat dan digunakan setelah setiap phase, bukan hanya backend yang tidak terlihat.
+* **Mencegah rework besar**: lebih murah memperbaiki API contract sebelum pindah phase daripada setelah semua backend selesai.
+* **Konsisten dengan arsitektur**: `docs/04-system-architecture.md` sudah menyebut "Frontend Web" sebagai komponen sistem, bukan afterthought.
+* **Solo developer**: tidak ada parallel team, jadi backend → UI → backend → UI adalah ritme yang natural dan realistis.
+
+Dampak:
+
+* `docs/04-system-architecture.md` §9 (route group strategy ditambahkan).
+* `docs/11-development-roadmap.md` (Phase 4–6 diperluas dengan UI deliverables dan exit criteria).
+* `planning/backlog.md` (M6.6, M6.7, M6.8 ditambahkan).
+* `PROJECT_STATE.md` (Milestone 6 diperluas dengan UI milestones).
+* `planning/changelog.md`.
+
+---
+
 ## Decision 019
 
 Tanggal: 2026-07-06

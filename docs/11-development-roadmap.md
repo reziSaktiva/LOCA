@@ -132,7 +132,7 @@ Exit Criteria:
 
 # Phase 3 — Customer & Homepage
 
-Status: 🔄 In Progress
+Status: ✅ Completed (2026-07-09)
 
 Tujuan:
 
@@ -156,38 +156,75 @@ Modules:
 
 Exit Criteria:
 
-- Homepage selesai.
-- Customer dapat login.
-- Customer dapat mengelola profil.
+- Homepage selesai. ✅
+- Customer dapat login. ✅
+- Customer dapat mengelola profil. ✅
 
 ---
 
 # Phase 4 — Cart & Inventory
 
-Status: ⏳ Planned
+Status: 🔄 In Progress
 
 Tujuan:
 
-Membangun proses sebelum checkout.
+Membangun kemampuan keranjang belanja dan manajemen stok sebagai prasyarat checkout. Setelah backend selesai, halaman-halaman customer-facing dibangun dalam milestone UI catch-up yang mencakup semua domain yang sudah ada (Homepage, Catalog, Auth, Customer, Cart).
 
 Deliverables:
 
-- Cart.
-- Cart Item.
-- Quantity Update.
-- Inventory Validation.
-- Stock Management.
+Backend:
+- Inventory Item (stok per variant).
+- Inventory Movement (audit trail stok).
+- Inventory Reservation (reservasi stok untuk order).
+- Admin Inventory API (stock adjustment + movement history).
+- Cart (keranjang aktif customer).
+- Cart Item (item keranjang dengan snapshot harga).
+- Cart CRUD API (add, update, remove, clear).
+- Stock validation real-time saat cart operation.
+- Cross-module contracts (cart → catalog, cart → inventory) via port pattern.
+
+UI (Catch-up Phase 2–4):
+- Route group setup `(store)`, `(auth)`, `(admin)` dengan layout masing-masing.
+- Homepage publik (`/`) — banner + featured products + new arrivals + best sellers.
+- Product listing (`/products`) — grid, filter, pagination.
+- Product detail (`/products/[slug]`) — galeri, variant selector, add to cart.
+- Search results (`/search`).
+- Login (`/login`) + Register (`/register`).
+- Customer account (`/account`) — profil + alamat.
+- Cart (`/cart`) — item list, quantity control, remove, summary.
 
 Modules:
 
-- Cart
 - Inventory
+- Cart
+
+Milestones:
+
+Backend:
+- M6.1 — Inventory Domain Foundation
+- M6.2 — Admin Inventory API
+- M6.3 — Cart Domain Foundation
+- M6.4 — Cart Customer API
+- M6.5 — Phase 4 Backend Exit Validation
+
+UI Catch-up:
+- M6.6 — UI Foundation: Route Groups + Shared Layout
+- M6.7 — UI: Homepage + Catalog + Product Detail
+- M6.8 — UI: Auth + Account + Cart
 
 Exit Criteria:
 
-- Customer dapat menambahkan produk.
-- Stok tervalidasi.
-- Cart stabil.
+Backend:
+- Customer dapat menambahkan produk ke cart via API.
+- Stok divalidasi real-time saat operasi cart.
+- Admin dapat mengelola stok via API.
+- Kontrak `getCartSnapshot` dan `reserveStock` siap untuk Phase 5 (Checkout & Order).
+- `bun run check` hijau.
+
+UI:
+- Customer dapat mengakses homepage, browse produk, login, dan melihat cart di browser.
+- Halaman responsive (mobile-first), accessible (WCAG AA minimum), tidak ada halaman kosong.
+- Route groups aktif dengan layout terpisah per audience.
 
 ---
 
@@ -197,16 +234,21 @@ Status: ⏳ Planned
 
 Tujuan:
 
-Membangun proses transaksi.
+Membangun proses transaksi end-to-end dari cart hingga order terbuat.
 
 Deliverables:
 
-- Checkout.
-- Shipping Selection.
-- Payment Selection.
-- Order Creation.
-- Order History.
-- Order Detail.
+Backend:
+- Checkout session (validasi cart, alamat, shipping option, payment method).
+- Order creation dari checkout snapshot.
+- Order status lifecycle (PENDING → WAITING_PAYMENT → ...).
+- Order list + detail API untuk customer.
+- Admin order management API.
+
+UI:
+- Checkout flow (`/checkout`) — address selection, shipping, payment method, order summary.
+- Order history (`/orders`).
+- Order detail (`/orders/[id]`) — status timeline, item list, shipping info.
 
 Modules:
 
@@ -215,9 +257,9 @@ Modules:
 
 Exit Criteria:
 
-- Customer dapat membuat pesanan.
-- Order tersimpan.
-- Workflow order berjalan.
+- Customer dapat membuat pesanan dari cart hingga status WAITING_PAYMENT.
+- Order tersimpan dan dapat dilihat di halaman account.
+- Checkout flow berjalan di browser, responsive, dan accessible.
 
 ---
 
@@ -227,16 +269,20 @@ Status: ⏳ Planned
 
 Tujuan:
 
-Mengintegrasikan layanan eksternal.
+Mengintegrasikan layanan eksternal untuk pembayaran dan pengiriman.
 
 Deliverables:
 
-- Midtrans Integration.
-- Biteship Integration.
-- Payment Callback.
-- Shipment.
-- Tracking.
-- Status Synchronization.
+Backend:
+- Midtrans Integration (payment initiation + webhook callback).
+- Biteship Integration (shipping rate + shipment creation + tracking sync).
+- Payment status lifecycle.
+- Shipment tracking event.
+
+UI:
+- Payment instruction page — VA number / QR code / redirect sesuai metode.
+- Order tracking page (`/orders/[id]/tracking`) — status timeline shipment.
+- Payment status polling UI.
 
 Modules:
 
@@ -245,9 +291,10 @@ Modules:
 
 Exit Criteria:
 
-- Pembayaran berhasil.
-- Tracking berjalan.
-- Order berubah otomatis.
+- Pembayaran berhasil via Midtrans.
+- Tracking dapat dilihat customer di browser.
+- Order status berubah otomatis setelah payment callback.
+- Halaman payment + tracking responsive dan accessible.
 
 ---
 

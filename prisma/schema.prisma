@@ -10,6 +10,60 @@ datasource db {
 }
 
 // ---------------------------------------------------------------------------
+// Customer Module
+// ---------------------------------------------------------------------------
+
+/// Profil customer — aggregate root, ID = Supabase user ID.
+model CustomerProfile {
+  id          String  @id // Supabase user ID
+  displayName String
+  phone       String
+  avatarUrl   String?
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  addresses CustomerAddress[]
+
+  @@map("customer_profiles")
+}
+
+/// Alamat pengiriman customer. Satu customer boleh punya banyak alamat.
+/// Satu alamat dapat ditandai sebagai default.
+model CustomerAddress {
+  id            String  @id @default(cuid())
+  customerId    String
+  recipientName String
+  phone         String
+  street        String
+  district      String
+  city          String
+  province      String
+  postalCode    String
+  isDefault     Boolean @default(false)
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  // Soft delete
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  deletedBy    String?
+  deleteReason String?
+
+  customer CustomerProfile @relation(fields: [customerId], references: [id])
+
+  @@index([customerId])
+  @@map("customer_addresses")
+}
+
+// ---------------------------------------------------------------------------
 // Catalog Module
 // ---------------------------------------------------------------------------
 

@@ -7,14 +7,15 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 0 (Planning & Documentation): **completed**
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
-- Phase 3 (Customer & Homepage): **in progress** (M5.1 selesai)
-- Current implementation progress: **65%** (M5.1 Customer Auth selesai)
+- Phase 3 (Customer & Homepage): **in progress** (M5.1–M5.2 selesai)
+- Current implementation progress: **70%** (M5.2 Customer Profile & Address selesai)
 
 ## Current Focus
 
 - `phase-3 customer & homepage`
 - M5.1 (Customer Auth Foundation) sudah completed.
-- Next active item: **M5.2 — Customer Profile & Address** (Prisma schema CustomerProfile + CustomerAddress, PrismaCustomerRepository, API routes customer)
+- M5.2 (Customer Profile & Address) sudah completed.
+- Next active item: **M5.3 — Homepage Foundation** (Prisma schema HomepageBanner, PrismaHomepageRepository, get-homepage-data service, API routes homepage + admin banner)
 
 ## Completed (Planning Side)
 
@@ -79,15 +80,16 @@ Target Phase 3 — Customer & Homepage:
   - API routes: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`.
   - 96 test lolos. `bun run check` hijau.
 
-- **M5.2 — Customer Profile & Address** *(next)*
-  - Domain: `CustomerProfile`, `CustomerAddress` entity + repository contract.
+- **M5.2 — Customer Profile & Address** ✅ **Completed**
+  - Domain: `CustomerProfile`, `CustomerAddress` entity + repository contract. Invariant: `isValidDisplayName`, `isValidPhone`.
   - Application service: `manage-customer-profile.ts`, `manage-customer-address.ts`.
-  - Prisma schema: model `CustomerProfile`, `CustomerAddress` + migration.
-  - Infrastructure: `PrismaCustomerRepository`.
-  - API routes: `GET/PATCH /api/v1/customer/profile`, `GET/POST/PATCH/DELETE /api/v1/customer/addresses`.
-  - Exit criteria: profil dan alamat dapat dikelola; default address logic aktif.
+  - Prisma schema: model `CustomerProfile`, `CustomerAddress` + migration `20260709044351_customer_profile_and_address` (diapply ke Supabase).
+  - Infrastructure: `PrismaCustomerRepository` (upsert, CRUD address, soft-delete, clearDefault).
+  - Public facade: `customer-service.ts`.
+  - API routes: `GET/PATCH /api/v1/customers/me`, `GET/POST /api/v1/customers/addresses`, `PATCH/DELETE /api/v1/customers/addresses/[id]`.
+  - 118 test lolos. `bun run check` hijau.
 
-- **M5.3 — Homepage Foundation**
+- **M5.3 — Homepage Foundation** *(next)*
   - Application service: `get-homepage-data.ts` (composite dari catalog: featured, new arrival, best seller).
   - Prisma schema: model `HomepageBanner` + migration.
   - Infrastructure: `PrismaHomepageRepository`.
@@ -185,8 +187,14 @@ Target setup awal (Phase 2 selesai):
 
 ### Auth Module
 
-- Status: **M5.1 Completed** — domain, application services, SupabaseAuthRepository, public facade, `requireCustomer()` guard, dan API routes auth aktif
-- 96 test lolos. Next: M5.2 Customer Profile & Address.
+- Status: **M5.1 Completed** — domain, application services, SupabaseAuthRepository, public facade, `requireCustomer()` guard, dan API routes auth aktif.
+- 96 test lolos.
+
+### Customer Module
+
+- Status: **M5.2 Completed** — domain, application services, PrismaCustomerRepository, public facade, dan API routes customer aktif.
+- Prisma models `CustomerProfile` + `CustomerAddress` sudah di-migrate ke Supabase.
+- 118 test lolos (total seluruh suite). Next: M5.3 Homepage Foundation.
 
 ### Database
 

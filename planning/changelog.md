@@ -9,6 +9,44 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-09 (1)
+
+### Added
+
+- `src/modules/customer/domain/customer-entities.ts` — type `CustomerProfile`, `CustomerAddress`, `UpsertCustomerProfileCommand`, `CreateAddressCommand`, `UpdateAddressCommand`, `CustomerError`, `CustomerResult<T>`.
+- `src/modules/customer/domain/customer-invariants.ts` — `isValidDisplayName` (2–100 karakter), `isValidPhone` (format Indonesia: 08xx, +62xx, 62xx).
+- `src/modules/customer/domain/customer-repository.ts` — interface `CustomerRepository` (findProfileByCustomerId, upsertProfile, listAddresses, findAddressById, createAddress, updateAddress, softDeleteAddress, clearDefaultAddress, setDefaultAddress).
+- `src/modules/customer/application/manage-customer-profile.ts` — `getCustomerProfile`, `upsertCustomerProfile` dengan typed error result.
+- `src/modules/customer/application/manage-customer-address.ts` — `listCustomerAddresses`, `createCustomerAddress`, `updateCustomerAddress`, `deleteCustomerAddress` dengan typed error result dan default address logic.
+- `src/modules/customer/application/customer.test.ts` — 22 unit test (invariant, profile service, address service).
+- `src/modules/customer/infrastructure/prisma-customer-repository.ts` — `PrismaCustomerRepository` mengimplementasikan seluruh `CustomerRepository` contract. `softDeleteAddress` menggunakan soft-delete fields. `setDefaultAddress` menggunakan `prisma.$transaction`.
+- `src/modules/customer/public/customer-service.ts` — public facade: `customerGetProfile`, `customerUpsertProfile`, `customerListAddresses`, `customerCreateAddress`, `customerUpdateAddress`, `customerDeleteAddress`.
+- `src/app/api/v1/customers/me/route.ts` — `GET /api/v1/customers/me` (get profile), `PATCH /api/v1/customers/me` (upsert profile). Dilindungi `requireCustomer()`.
+- `src/app/api/v1/customers/addresses/route.ts` — `GET /api/v1/customers/addresses` (list), `POST /api/v1/customers/addresses` (create). Dilindungi `requireCustomer()`.
+- `src/app/api/v1/customers/addresses/[id]/route.ts` — `PATCH /api/v1/customers/addresses/[id]` (update), `DELETE /api/v1/customers/addresses/[id]` (soft delete, 204). Dilindungi `requireCustomer()`.
+- Prisma schema: model `CustomerProfile` (id = Supabase user ID, displayName, phone, avatarUrl, audit fields) dan `CustomerAddress` (recipientName, phone, address fields, isDefault, audit fields, soft delete fields) ditambahkan ke `prisma/schema.prisma`.
+- Migration `20260709044351_customer_profile_and_address` sudah diapply ke database Supabase.
+
+### Changed
+
+- `PROJECT_STATE.md` — M5.2 ditandai completed, Current Focus diperbarui ke M5.3, implementation progress 70%, version v0.9.
+- `context/ctx-implementation.md` — Customer module status diperbarui, next target digeser ke M5.3.
+
+### Verified
+
+- `bunx --bun prisma generate` — lolos, Prisma client menyertakan `CustomerProfile` dan `CustomerAddress`.
+- `bunx --bun prisma migrate dev --name customer_profile_and_address` — migration berhasil diapply ke Supabase PostgreSQL.
+- `bun run check` (lint + typecheck + test) lolos — **118 test passed**, 0 error, 0 warning.
+
+### Notes
+
+- `CustomerProfile.id` menggunakan Supabase user ID langsung (bukan CUID baru) agar lookup per user O(1) tanpa JOIN.
+- `softDeleteAddress` menggunakan soft-delete fields (`isDeleted`, `deletedAt`, `deletedBy`) sesuai `docs/06-data-model.md §11`.
+- Default address logic: saat `isDefault=true` di create/update, `clearDefaultAddress` dipanggil dulu untuk unset semua default sebelum set yang baru — menjamin hanya satu default per customer.
+- Endpoint path mengikuti API spec `docs/07-api-specification.md` §14 (`/customers/me`, `/customers/addresses`).
+
+---
+
 ## 2026-07-07 (6)
 
 ### Added

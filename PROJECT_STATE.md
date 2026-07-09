@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 3 Completed — Siap lanjut Phase 4 (Cart & Checkout)
+Status: Phase 4 In Progress — M6.1 Inventory Domain Foundation selesai
 
 Current Version: v0.9
 
@@ -57,7 +57,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-Phase 3 selesai penuh — M5.1 (Auth), M5.2 (Customer Profile & Address), M5.3 (Homepage Foundation) selesai. Migration `20260709130000_homepage_banner` sudah diapply ke Supabase. Next: kickoff Phase 4 — Cart & Checkout Foundation.
+M6.1 (Inventory Domain Foundation) selesai. Migration `20260709160000_inventory_foundation` sudah diapply ke Supabase. 180 test lolos. Next: M6.2 — Admin Inventory API.
 
 ---
 
@@ -192,15 +192,16 @@ Belum diputuskan:
 - ✅ **M4.8 — Product Media & SEO Dasar**: Enum `MediaOwnerType`/`ProductMediaType`, type `ProductMedia`/`ProductSeo` aktif di domain. Prisma model `ProductMedia` + `ProductSeo` ditambah, migration `20260707061153_catalog_media_seo` diapply ke Supabase. Application service `manage-product-media.ts` (addMedia, removeMedia, getProductSeo, upsertProductSeo). Invariant `canActivateProduct` diperluas: thumbnail wajib ada + minimal 1 variant. Admin routes: `GET/POST /api/v1/admin/products/[id]/media`, `DELETE /api/v1/admin/products/[id]/media/[mediaId]`, `GET/PUT /api/v1/admin/products/[id]/seo`. `bun run check` hijau (78 test).
 - ✅ **M5.1 — Customer Auth Foundation**: Module `auth` diimplementasikan. Domain layer: `CustomerAccount`, `AuthSession`, `AuthResult`, `AuthError`, `RegisterCustomerCommand`, `LoginCommand`, invariant `isValidEmail`/`isValidPassword`. Application services: `register-customer.ts`, `login-customer.ts`, `logout-customer.ts`, `get-current-session.ts`. Infrastructure: `SupabaseAuthRepository` (wraps Supabase `signUp`, `signInWithPassword`, `signOut`, `getUser`). Public facade: `customer-auth-service.ts`. Session guard: `requireCustomer()` di `src/shared/infrastructure/auth/customer-guard.ts`. Shared helper: `src/shared/kernel/api-response.ts`. API routes aktif: `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`. `bun run check` hijau (96 test).
 - ✅ **M5.2 — Customer Profile & Address**: Module `customer` diimplementasikan. Domain layer: `CustomerProfile`, `CustomerAddress`, `UpsertCustomerProfileCommand`, `CreateAddressCommand`, `UpdateAddressCommand`, `CustomerError`, `CustomerResult`. Invariant: `isValidDisplayName`, `isValidPhone`. Application services: `manage-customer-profile.ts` (getProfile, upsertProfile), `manage-customer-address.ts` (list, create, update, delete). Infrastructure: `PrismaCustomerRepository` (upsert profile, CRUD address, clearDefault, softDelete). Public facade: `customer-service.ts`. Prisma models `CustomerProfile` + `CustomerAddress`, migration `20260709044351_customer_profile_and_address` sudah diapply ke Supabase. API routes: `GET/PATCH /api/v1/customers/me`, `GET/POST /api/v1/customers/addresses`, `PATCH/DELETE /api/v1/customers/addresses/[id]`. `bun run check` hijau (118 test).
-- ✅ **M5.3 — Homepage Foundation**: Module `homepage` diimplementasikan. Domain layer: `HomepageBanner`, `CreateBannerCommand`, `UpdateBannerCommand`, `HomepageError`, `HomepageResult`. Invariant: `isValidBannerTitle` (2–200 char), `isValidMediaUrl` (http/https valid). Application services: `manage-banner.ts` (create, update, delete dengan typed errors), `get-homepage-data.ts` (composite via `HomepageCatalogPort` — featured, new arrival, best seller). Infrastructure: `PrismaHomepageRepository`. Public facade: `homepage-service.ts` (menggunakan `listActiveProductsForHomepage` dari catalog public service — boundary patuh). Catalog diperluas: `listActiveProductsForHomepage(limit)` di `catalog-public-service.ts`. Prisma model `HomepageBanner`, migration `20260709130000_homepage_banner` (perlu diapply ke Supabase). API route: `GET /api/v1/homepage`. Admin routes: `GET/POST /api/v1/admin/homepage/banners`, `PATCH/DELETE /api/v1/admin/homepage/banners/[id]`. `bun run check` hijau (133 test).
+- ✅ **M5.3 — Homepage Foundation**: Module `homepage` diimplementasikan. Domain layer: `HomepageBanner`, `CreateBannerCommand`, `UpdateBannerCommand`, `HomepageError`, `HomepageResult`. Invariant: `isValidBannerTitle` (2–200 char), `isValidMediaUrl` (http/https valid). Application services: `manage-banner.ts` (create, update, delete dengan typed errors), `get-homepage-data.ts` (composite via `HomepageCatalogPort` — featured, new arrival, best seller). Infrastructure: `PrismaHomepageRepository`. Public facade: `homepage-service.ts` (menggunakan `listActiveProductsForHomepage` dari catalog public service — boundary patuh). Catalog diperluas: `listActiveProductsForHomepage(limit)` di `catalog-public-service.ts`. Prisma model `HomepageBanner`, migration `20260709130000_homepage_banner` sudah diapply ke Supabase. API route: `GET /api/v1/homepage`. Admin routes: `GET/POST /api/v1/admin/homepage/banners`, `PATCH/DELETE /api/v1/admin/homepage/banners/[id]`. `bun run check` hijau (133 test).
+- ✅ **M6.1 — Inventory Domain Foundation**: Module `inventory` diimplementasikan. Domain layer: `InventoryItem`, `InventoryReservation`, `InventoryMovement` entity + enum `InventoryMovementType`/`ReservationStatus` + typed `InventoryResult<T>`. Invariants: `isValidStockQty`, `isInventoryItemConsistent`, `isStockSufficient`, `canCommitReservation`, `canReleaseReservation`, `isValidAdjustmentReason`. Repository contract: `InventoryRepository` (10 method). Application services: `manage-stock.ts` (initializeStock/increaseStock/adjustStock), `check-stock.ts` (getStockByVariantId/assertStockAvailable/listStockMovements), `reserve-stock.ts` (reserveStock/commitStock/releaseReservedStock). Infrastructure: `PrismaInventoryRepository` (semua write menggunakan `prisma.$transaction`). Public facade: `inventory-service.ts` (9 fungsi publik). Prisma schema diperluas + migration `20260709160000_inventory_foundation` sudah diapply ke Supabase. `bun run check` hijau (180 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.**
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.** **M6.1 Inventory Domain Foundation sudah selesai.**
 
-Next action: **Phase 4 — Cart & Inventory** siap dimulai. Mulai dari **M6.1 — Inventory Domain Foundation**.
+Next action: **M6.2 — Admin Inventory API** — endpoint admin: lihat stok, adjustment, movement history.
 
 Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -342,7 +343,7 @@ System Design Readiness
 
 ```
 Implementation
-████████████████░░░░  80%
+█████████████████░░░  83%
 ```
 
 ---
@@ -430,7 +431,7 @@ Target Outcome:
 
 Breakdown — Backend:
 
-- [ ] M6.1 Inventory Domain Foundation
+- [x] M6.1 Inventory Domain Foundation
 - [ ] M6.2 Admin Inventory API
 - [ ] M6.3 Cart Domain Foundation
 - [ ] M6.4 Cart Customer API

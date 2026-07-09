@@ -8,12 +8,12 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
-- Phase 4 (Cart & Inventory): **in progress** — planning selesai, siap mulai M6.1
-- Current implementation progress: **80%**
+- Phase 4 (Cart & Inventory): **in progress** — M6.1 selesai, lanjut M6.2
+- Current implementation progress: **83%**
 
 ## Current Focus
 
-- Phase 4 — Cart & Inventory. Mulai dari **M6.1 — Inventory Domain Foundation**.
+- Phase 4 — Cart & Inventory. **M6.1 selesai.** Lanjut ke **M6.2 — Admin Inventory API**.
 - Workflow diubah ke **UI paralel per phase** (Decision 022): setelah backend M6.1–M6.5 selesai, lanjut ke UI milestone M6.6–M6.8.
 - Route group strategy ditetapkan: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9.
 
@@ -215,9 +215,10 @@ Target setup awal (Phase 2 selesai):
 
 ### Inventory Module
 
-- Status: **Belum diimplementasikan**
-- Target: M6.1 (domain foundation) → M6.2 (admin API)
-- Milestone pertama: M6.1 — Inventory Domain Foundation
+- Status: **M6.1 Completed** — domain, application services, PrismaInventoryRepository, public facade aktif.
+- Prisma models `InventoryItem`, `InventoryReservation`, `InventoryMovement` sudah di-migrate ke Supabase.
+- 47 test baru lolos (total 180 test). Migration `20260709160000_inventory_foundation` diapply.
+- Next: M6.2 — Admin Inventory API (endpoint: lihat stok, adjustment, movement history).
 
 ### Cart Module
 

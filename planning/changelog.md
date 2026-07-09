@@ -9,6 +9,26 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-09 (7)
+
+### Added
+
+- **M6.1 — Inventory Domain Foundation**: module `inventory` diimplementasikan penuh.
+  - Domain: `InventoryItem`, `InventoryReservation`, `InventoryMovement` entity + enum `InventoryMovementType` / `ReservationStatus` + commands + typed `InventoryResult<T>`.
+  - Invariants: `isValidStockQty`, `isInventoryItemConsistent`, `isStockSufficient`, `canCommitReservation`, `canReleaseReservation`, `isValidAdjustmentReason`.
+  - Repository contract: `InventoryRepository` (8 method: findByVariantId, existsByVariantId, createInventoryItem, increaseStock, adjustStock, createReservation, findActiveReservationsByOrderId, commitReservation, releaseReservation, listMovements).
+  - Application services: `manage-stock.ts` (initializeStock/increaseStock/adjustStock), `check-stock.ts` (getStockByVariantId/assertStockAvailable/listStockMovements), `reserve-stock.ts` (reserveStock/commitStock/releaseReservedStock).
+  - Infrastructure: `PrismaInventoryRepository` (semua operasi menggunakan `prisma.$transaction` untuk konsistensi stock + movement).
+  - Public facade: `inventory-service.ts` (9 fungsi publik siap dipakai Cart, Checkout, Order, Admin).
+  - Prisma schema: model `InventoryItem`, `InventoryReservation`, `InventoryMovement` + enum `InventoryMovementType` + `ReservationStatus`.
+  - Migration `20260709160000_inventory_foundation` **sudah diapply ke Supabase**.
+
+### Verified
+
+- `bun run check` hijau (lint + typecheck + test): **180 test lolos** (47 test baru dari inventory).
+
+---
+
 ## 2026-07-09 (6)
 
 ### Added

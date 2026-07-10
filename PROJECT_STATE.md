@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 4 In Progress — M6.1 Inventory Domain Foundation selesai
+Status: Phase 4 In Progress — M6.2 Admin Inventory API selesai
 
 Current Version: v0.9
 
@@ -57,7 +57,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-M6.1 (Inventory Domain Foundation) selesai. Migration `20260709160000_inventory_foundation` sudah diapply ke Supabase. 180 test lolos. Next: M6.2 — Admin Inventory API.
+M6.2 (Admin Inventory API) selesai. Admin dapat melihat daftar stok, melakukan adjustment/upsert stok per varian, dan melihat riwayat movement stok via API. 187 test lolos. Next: M6.3 — Cart Domain Foundation.
 
 ---
 
@@ -194,14 +194,15 @@ Belum diputuskan:
 - ✅ **M5.2 — Customer Profile & Address**: Module `customer` diimplementasikan. Domain layer: `CustomerProfile`, `CustomerAddress`, `UpsertCustomerProfileCommand`, `CreateAddressCommand`, `UpdateAddressCommand`, `CustomerError`, `CustomerResult`. Invariant: `isValidDisplayName`, `isValidPhone`. Application services: `manage-customer-profile.ts` (getProfile, upsertProfile), `manage-customer-address.ts` (list, create, update, delete). Infrastructure: `PrismaCustomerRepository` (upsert profile, CRUD address, clearDefault, softDelete). Public facade: `customer-service.ts`. Prisma models `CustomerProfile` + `CustomerAddress`, migration `20260709044351_customer_profile_and_address` sudah diapply ke Supabase. API routes: `GET/PATCH /api/v1/customers/me`, `GET/POST /api/v1/customers/addresses`, `PATCH/DELETE /api/v1/customers/addresses/[id]`. `bun run check` hijau (118 test).
 - ✅ **M5.3 — Homepage Foundation**: Module `homepage` diimplementasikan. Domain layer: `HomepageBanner`, `CreateBannerCommand`, `UpdateBannerCommand`, `HomepageError`, `HomepageResult`. Invariant: `isValidBannerTitle` (2–200 char), `isValidMediaUrl` (http/https valid). Application services: `manage-banner.ts` (create, update, delete dengan typed errors), `get-homepage-data.ts` (composite via `HomepageCatalogPort` — featured, new arrival, best seller). Infrastructure: `PrismaHomepageRepository`. Public facade: `homepage-service.ts` (menggunakan `listActiveProductsForHomepage` dari catalog public service — boundary patuh). Catalog diperluas: `listActiveProductsForHomepage(limit)` di `catalog-public-service.ts`. Prisma model `HomepageBanner`, migration `20260709130000_homepage_banner` sudah diapply ke Supabase. API route: `GET /api/v1/homepage`. Admin routes: `GET/POST /api/v1/admin/homepage/banners`, `PATCH/DELETE /api/v1/admin/homepage/banners/[id]`. `bun run check` hijau (133 test).
 - ✅ **M6.1 — Inventory Domain Foundation**: Module `inventory` diimplementasikan. Domain layer: `InventoryItem`, `InventoryReservation`, `InventoryMovement` entity + enum `InventoryMovementType`/`ReservationStatus` + typed `InventoryResult<T>`. Invariants: `isValidStockQty`, `isInventoryItemConsistent`, `isStockSufficient`, `canCommitReservation`, `canReleaseReservation`, `isValidAdjustmentReason`. Repository contract: `InventoryRepository` (10 method). Application services: `manage-stock.ts` (initializeStock/increaseStock/adjustStock), `check-stock.ts` (getStockByVariantId/assertStockAvailable/listStockMovements), `reserve-stock.ts` (reserveStock/commitStock/releaseReservedStock). Infrastructure: `PrismaInventoryRepository` (semua write menggunakan `prisma.$transaction`). Public facade: `inventory-service.ts` (9 fungsi publik). Prisma schema diperluas + migration `20260709160000_inventory_foundation` sudah diapply ke Supabase. `bun run check` hijau (180 test).
+- ✅ **M6.2 — Admin Inventory API**: Endpoint admin inventory aktif sesuai `docs/07-api-specification.md` §Admin/Inventory. Domain diperluas: `UpsertStockCommand`, `ListInventoryQuery`, `ListMovementsQuery.variantId` kini opsional (mendukung list movement lintas varian). Repository contract `InventoryRepository` diperluas: `listInventoryItems`. Application service baru: `upsertStock` di `manage-stock.ts` (initialize jika `InventoryItem` belum ada, adjust jika sudah ada — dipakai admin agar satu endpoint PATCH menangani kedua kasus), `listInventoryItems` di `check-stock.ts`. `PrismaInventoryRepository.listMovements` diperbarui untuk filter opsional per varian. Public facade diperluas: `inventoryListItems`, `inventoryUpsertStock`. Admin routes: `GET /api/v1/admin/inventory` (list stok, pagination), `PATCH /api/v1/admin/inventory/[variantId]` (upsert/adjust stok), `GET /api/v1/admin/inventory/movements` (riwayat movement, filter opsional `variantId`). `bun run check` hijau (187 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.** **M6.1 Inventory Domain Foundation sudah selesai.**
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.** **M6.1 Inventory Domain Foundation sudah selesai.** **M6.2 Admin Inventory API sudah selesai.**
 
-Next action: **M6.2 — Admin Inventory API** — endpoint admin: lihat stok, adjustment, movement history.
+Next action: **M6.3 — Cart Domain Foundation** — domain entities (Cart, CartItem), invariants, port pattern (CartCatalogPort, CartInventoryPort), application services, Prisma schema + migration.
 
 Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -432,7 +433,7 @@ Target Outcome:
 Breakdown — Backend:
 
 - [x] M6.1 Inventory Domain Foundation
-- [ ] M6.2 Admin Inventory API
+- [x] M6.2 Admin Inventory API
 - [ ] M6.3 Cart Domain Foundation
 - [ ] M6.4 Cart Customer API
 - [ ] M6.5 Phase 4 Backend Exit Validation

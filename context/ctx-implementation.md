@@ -8,12 +8,12 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
-- Phase 4 (Cart & Inventory): **in progress** — M6.1 selesai, lanjut M6.2
+- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.2 selesai, lanjut M6.3
 - Current implementation progress: **83%**
 
 ## Current Focus
 
-- Phase 4 — Cart & Inventory. **M6.1 selesai.** Lanjut ke **M6.2 — Admin Inventory API**.
+- Phase 4 — Cart & Inventory. **M6.1 & M6.2 selesai.** Lanjut ke **M6.3 — Cart Domain Foundation**.
 - Workflow diubah ke **UI paralel per phase** (Decision 022): setelah backend M6.1–M6.5 selesai, lanjut ke UI milestone M6.6–M6.8.
 - Route group strategy ditetapkan: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9.
 
@@ -215,10 +215,12 @@ Target setup awal (Phase 2 selesai):
 
 ### Inventory Module
 
-- Status: **M6.1 Completed** — domain, application services, PrismaInventoryRepository, public facade aktif.
+- Status: **M6.1–M6.2 Completed** — domain, application services, PrismaInventoryRepository, public facade, dan admin API aktif.
 - Prisma models `InventoryItem`, `InventoryReservation`, `InventoryMovement` sudah di-migrate ke Supabase.
-- 47 test baru lolos (total 180 test). Migration `20260709160000_inventory_foundation` diapply.
-- Next: M6.2 — Admin Inventory API (endpoint: lihat stok, adjustment, movement history).
+- M6.2: admin routes `GET /api/v1/admin/inventory`, `PATCH /api/v1/admin/inventory/[variantId]` (upsert stok), `GET /api/v1/admin/inventory/movements` (filter opsional `variantId`).
+- 187 test lolos (7 test baru dari M6.2). Migration `20260709160000_inventory_foundation` diapply.
+- Gap tercatat: wiring otomatis `catalog createVariant -> inventory initializeStock` belum ada; admin set stok manual via `PATCH /admin/inventory/[variantId]`.
+- Next: M6.3 — Cart Domain Foundation.
 
 ### Cart Module
 

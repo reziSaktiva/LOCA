@@ -9,6 +9,32 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-10 (1)
+
+### Added
+
+- **M6.2 — Admin Inventory API**: endpoint admin untuk mengelola stok sesuai `docs/07-api-specification.md` §Admin/Inventory.
+  - Domain: `UpsertStockCommand`, `ListInventoryQuery` baru; `ListMovementsQuery.variantId` diubah menjadi opsional agar movement bisa dilihat lintas varian.
+  - Repository contract `InventoryRepository` diperluas: `listInventoryItems(query)`.
+  - Application service baru: `upsertStock` di `manage-stock.ts` (initialize stok jika `InventoryItem` belum ada, adjust jika sudah ada — satu endpoint PATCH menangani kedua kasus), `listInventoryItems` di `check-stock.ts`.
+  - Infrastructure: `PrismaInventoryRepository.listInventoryItems` (pagination) dan `listMovements` diperbarui untuk filter `variantId` opsional.
+  - Public facade `inventory-service.ts` diperluas: `inventoryListItems`, `inventoryUpsertStock`.
+  - Admin routes baru:
+    - `GET /api/v1/admin/inventory` — daftar stok semua varian (pagination).
+    - `PATCH /api/v1/admin/inventory/[variantId]` — upsert/adjust stok (body: `newQty`, `reason`).
+    - `GET /api/v1/admin/inventory/movements` — riwayat movement stok (filter opsional `variantId`, pagination).
+
+### Verified
+
+- `bun run check` hijau (lint + typecheck + test): **187 test lolos** (7 test baru untuk `upsertStock`, `listInventoryItems`, dan movement lintas varian).
+
+### Notes
+
+- `PATCH /admin/inventory/{variantId}` didesain sebagai upsert (bukan hanya adjust murni) supaya admin bisa menetapkan stok pertama kali untuk varian baru tanpa endpoint tambahan di luar kontrak `docs/07-api-specification.md`.
+- Wiring otomatis "catalog create variant -> inventory initializeStock" belum ada; admin masih perlu set stok manual via endpoint ini setelah membuat varian baru. Dicatat sebagai gap yang bisa diselesaikan di milestone berikutnya jika diperlukan.
+
+---
+
 ## 2026-07-09 (7)
 
 ### Added

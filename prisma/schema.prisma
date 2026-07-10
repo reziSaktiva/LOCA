@@ -384,3 +384,56 @@ model InventoryMovement {
   @@index([variantId, createdAt])
   @@map("inventory_movements")
 }
+
+// ---------------------------------------------------------------------------
+// Cart Module
+// ---------------------------------------------------------------------------
+
+enum CartStatus {
+  ACTIVE
+  CHECKED_OUT
+  ABANDONED
+}
+
+/// Keranjang aktif milik satu customer — aggregate root modul cart.
+model Cart {
+  id         String     @id @default(cuid())
+  customerId String
+  cartStatus CartStatus @default(ACTIVE)
+  currency   String     @default("IDR")
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  items CartItem[]
+
+  // Pola akses: mencari cart ACTIVE milik customer
+  @@index([customerId, cartStatus])
+  @@map("carts")
+}
+
+/// Item keranjang. unitPriceSnapshot & lineSubtotal immutable snapshot saat item ditambahkan/diubah.
+model CartItem {
+  id                String @id @default(cuid())
+  cartId            String
+  variantId         String
+  quantity          Int
+  unitPriceSnapshot Float
+  lineSubtotal      Float
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  cart Cart @relation(fields: [cartId], references: [id])
+
+  // Satu cart tidak boleh memiliki duplikasi variant pada item terpisah.
+  @@unique([cartId, variantId])
+  @@index([cartId])
+  @@map("cart_items")
+}

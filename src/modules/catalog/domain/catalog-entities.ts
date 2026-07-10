@@ -65,6 +65,7 @@ export type VariantSnapshot = {
   compareAtPrice: number | null;
   thumbnailUrl: string;
   variantLabel: string;
+  status: CatalogVariantStatus;
 };
 
 export type CreateProductCommand = {

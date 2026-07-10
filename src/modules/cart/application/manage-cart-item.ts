@@ -8,6 +8,7 @@ import type {
   UpdateCartItemQuantityCommand,
 } from "../domain/cart-entities";
 import { calculateLineSubtotal, isValidQuantity } from "../domain/cart-invariants";
+import { isCartEditable } from "../domain/cart-invariants";
 import type { CartRepository } from "../domain/cart-repository";
 import type { CartCatalogPort, CartInventoryPort } from "./cart-ports";
 import { getOrCreateActiveCart } from "./get-cart";
@@ -28,7 +29,7 @@ async function findOwnedItem(
   }
 
   const cart = await repository.findCartById(item.cartId);
-  if (!cart || cart.customerId !== customerId) {
+  if (!cart || cart.customerId !== customerId || !isCartEditable(cart.cartStatus)) {
     return null;
   }
 

@@ -1,6 +1,16 @@
-import type { InventoryItem, InventoryMovement, InventoryResult, ListMovementsQuery } from "../domain/inventory-entities";
+import type {
+  InventoryItem,
+  InventoryMovement,
+  InventoryResult,
+  ListInventoryQuery,
+  ListMovementsQuery,
+} from "../domain/inventory-entities";
 import { isStockSufficient } from "../domain/inventory-invariants";
-import type { InventoryRepository, ListMovementsResult } from "../domain/inventory-repository";
+import type {
+  InventoryRepository,
+  ListInventoryResult,
+  ListMovementsResult,
+} from "../domain/inventory-repository";
 
 /**
  * Mengambil data stok suatu varian. Null jika belum diinisialisasi.
@@ -10,6 +20,17 @@ export async function getStockByVariantId(
   variantId: string,
 ): Promise<InventoryItem | null> {
   return repository.findByVariantId(variantId);
+}
+
+/**
+ * Mengambil daftar seluruh InventoryItem dengan pagination.
+ * Consumer: Admin (halaman daftar stok).
+ */
+export async function listInventoryItems(
+  repository: InventoryRepository,
+  query: ListInventoryQuery,
+): Promise<ListInventoryResult> {
+  return repository.listInventoryItems(query);
 }
 
 /**

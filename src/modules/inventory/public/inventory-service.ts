@@ -5,8 +5,18 @@
  * Semua akses ke Inventory harus melalui fungsi di file ini.
  */
 
-import { adjustStock, increaseStock, initializeStock } from "../application/manage-stock";
-import { assertStockAvailable, getStockByVariantId, listStockMovements } from "../application/check-stock";
+import {
+  adjustStock,
+  increaseStock,
+  initializeStock,
+  upsertStock,
+} from "../application/manage-stock";
+import {
+  assertStockAvailable,
+  getStockByVariantId,
+  listInventoryItems,
+  listStockMovements,
+} from "../application/check-stock";
 import { commitStock, releaseReservedStock, reserveStock } from "../application/reserve-stock";
 import { PrismaInventoryRepository } from "../infrastructure/prisma-inventory-repository";
 import type {
@@ -17,10 +27,13 @@ import type {
   InventoryItem,
   InventoryMovement,
   InventoryResult,
+  ListInventoryQuery,
   ListMovementsQuery,
   ReleaseStockCommand,
   ReserveStockCommand,
+  UpsertStockCommand,
 } from "../domain/inventory-entities";
+import type { ListInventoryResult } from "../domain/inventory-repository";
 
 export type {
   InventoryItem,
@@ -34,11 +47,14 @@ export type {
   InitializeStockCommand,
   IncreaseStockCommand,
   AdjustStockCommand,
+  UpsertStockCommand,
   ReserveStockCommand,
   CommitStockCommand,
   ReleaseStockCommand,
+  ListInventoryQuery,
   ListMovementsQuery,
 } from "../domain/inventory-entities";
+export type { ListInventoryResult } from "../domain/inventory-repository";
 
 const repository = new PrismaInventoryRepository();
 
@@ -49,6 +65,14 @@ const repository = new PrismaInventoryRepository();
 /** Mengambil data stok suatu varian. Null jika belum ada InventoryItem. */
 export async function inventoryGetStock(variantId: string): Promise<InventoryItem | null> {
   return getStockByVariantId(repository, variantId);
+}
+
+/**
+ * Mengambil daftar seluruh InventoryItem dengan pagination.
+ * Consumer: Admin (halaman daftar stok).
+ */
+export async function inventoryListItems(query: ListInventoryQuery): Promise<ListInventoryResult> {
+  return listInventoryItems(repository, query);
 }
 
 /**
@@ -95,6 +119,16 @@ export async function inventoryAdjustStock(
   command: AdjustStockCommand,
 ): Promise<InventoryResult<InventoryItem>> {
   return adjustStock(repository, command);
+}
+
+/**
+ * Upsert stok: initialize jika belum ada InventoryItem, adjust jika sudah ada.
+ * Dipakai admin API `PATCH /admin/inventory/{variantId}` agar satu endpoint menangani kedua kasus.
+ */
+export async function inventoryUpsertStock(
+  command: UpsertStockCommand,
+): Promise<InventoryResult<InventoryItem>> {
+  return upsertStock(repository, command);
 }
 
 // ---------------------------------------------------------------------------

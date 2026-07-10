@@ -5,14 +5,20 @@ import type {
   InventoryItem,
   InventoryMovement,
   InventoryReservation,
+  ListInventoryQuery,
   ListMovementsQuery,
   ReserveStockItem,
 } from "./inventory-entities";
 
-export type { ListMovementsQuery };
+export type { ListInventoryQuery, ListMovementsQuery };
 
 export type ListMovementsResult = {
   items: InventoryMovement[];
+  total: number;
+};
+
+export type ListInventoryResult = {
+  items: InventoryItem[];
   total: number;
 };
 
@@ -22,6 +28,11 @@ export interface InventoryRepository {
   // ---------------------------------------------------------------------------
   findByVariantId(variantId: string): Promise<InventoryItem | null>;
   existsByVariantId(variantId: string): Promise<boolean>;
+
+  /**
+   * Daftar seluruh InventoryItem dengan pagination. Dipakai admin untuk melihat stok semua varian.
+   */
+  listInventoryItems(query: ListInventoryQuery): Promise<ListInventoryResult>;
 
   /**
    * Membuat InventoryItem baru untuk suatu varian.

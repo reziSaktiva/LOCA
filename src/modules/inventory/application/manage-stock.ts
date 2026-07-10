@@ -4,6 +4,7 @@ import type {
   InitializeStockCommand,
   InventoryItem,
   InventoryResult,
+  UpsertStockCommand,
 } from "../domain/inventory-entities";
 import { isValidAdjustmentReason, isValidStockQty } from "../domain/inventory-invariants";
 import type { InventoryRepository } from "../domain/inventory-repository";
@@ -19,7 +20,10 @@ export async function initializeStock(
   if (!isValidStockQty(command.initialQty)) {
     return {
       success: false,
-      error: { code: "INVALID_QUANTITY", message: "Jumlah stok awal tidak valid. Harus berupa integer >= 0." },
+      error: {
+        code: "INVALID_QUANTITY",
+        message: "Jumlah stok awal tidak valid. Harus berupa integer >= 0.",
+      },
     };
   }
 
@@ -46,7 +50,10 @@ export async function increaseStock(
   if (!isValidStockQty(command.qty) || command.qty === 0) {
     return {
       success: false,
-      error: { code: "INVALID_QUANTITY", message: "Jumlah tambah stok harus integer positif (> 0)." },
+      error: {
+        code: "INVALID_QUANTITY",
+        message: "Jumlah tambah stok harus integer positif (> 0).",
+      },
     };
   }
 
@@ -61,7 +68,10 @@ export async function increaseStock(
   if (!existing) {
     return {
       success: false,
-      error: { code: "STOCK_NOT_FOUND", message: "Stok varian tidak ditemukan. Inisialisasi stok terlebih dahulu." },
+      error: {
+        code: "STOCK_NOT_FOUND",
+        message: "Stok varian tidak ditemukan. Inisialisasi stok terlebih dahulu.",
+      },
     };
   }
 
@@ -81,7 +91,10 @@ export async function adjustStock(
   if (!isValidStockQty(command.newQty)) {
     return {
       success: false,
-      error: { code: "INVALID_QUANTITY", message: "Nilai stok baru tidak valid. Harus berupa integer >= 0." },
+      error: {
+        code: "INVALID_QUANTITY",
+        message: "Nilai stok baru tidak valid. Harus berupa integer >= 0.",
+      },
     };
   }
 
@@ -96,10 +109,58 @@ export async function adjustStock(
   if (!existing) {
     return {
       success: false,
-      error: { code: "STOCK_NOT_FOUND", message: "Stok varian tidak ditemukan. Inisialisasi stok terlebih dahulu." },
+      error: {
+        code: "STOCK_NOT_FOUND",
+        message: "Stok varian tidak ditemukan. Inisialisasi stok terlebih dahulu.",
+      },
     };
   }
 
   const item = await repository.adjustStock(command);
+  return { success: true, data: item };
+}
+
+/**
+ * Upsert stok untuk admin: initialize InventoryItem jika belum ada, adjust jika sudah ada.
+ * Memungkinkan satu endpoint admin menangani penetapan stok pertama kali maupun koreksi berikutnya.
+ */
+export async function upsertStock(
+  repository: InventoryRepository,
+  command: UpsertStockCommand,
+): Promise<InventoryResult<InventoryItem>> {
+  if (!isValidStockQty(command.newQty)) {
+    return {
+      success: false,
+      error: {
+        code: "INVALID_QUANTITY",
+        message: "Jumlah stok tidak valid. Harus berupa integer >= 0.",
+      },
+    };
+  }
+
+  if (!isValidAdjustmentReason(command.reason)) {
+    return {
+      success: false,
+      error: { code: "INVALID_QUANTITY", message: "Alasan perubahan stok wajib diisi." },
+    };
+  }
+
+  const existing = await repository.findByVariantId(command.variantId);
+
+  if (!existing) {
+    const item = await repository.createInventoryItem({
+      variantId: command.variantId,
+      initialQty: command.newQty,
+      actorId: command.actorId,
+    });
+    return { success: true, data: item };
+  }
+
+  const item = await repository.adjustStock({
+    variantId: command.variantId,
+    newQty: command.newQty,
+    reason: command.reason,
+    actorId: command.actorId,
+  });
   return { success: true, data: item };
 }

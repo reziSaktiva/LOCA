@@ -88,6 +88,17 @@ export type AdjustStockCommand = {
   actorId: string;
 };
 
+/**
+ * Upsert stok: initialize jika InventoryItem belum ada, adjust jika sudah ada.
+ * Dipakai admin API agar satu endpoint bisa menangani stok pertama kali maupun koreksi.
+ */
+export type UpsertStockCommand = {
+  variantId: string;
+  newQty: number;
+  reason: string;
+  actorId: string;
+};
+
 export type ReserveStockItem = {
   variantId: string;
   qty: number;
@@ -110,7 +121,13 @@ export type ReleaseStockCommand = {
 };
 
 export type ListMovementsQuery = {
-  variantId: string;
+  /** Jika diisi, hasil difilter untuk satu varian saja. Jika kosong, mengambil seluruh movement (admin). */
+  variantId?: string;
+  page?: number;
+  limit?: number;
+};
+
+export type ListInventoryQuery = {
   page?: number;
   limit?: number;
 };
@@ -129,5 +146,4 @@ export type InventoryError =
   | { code: "RESERVATION_ALREADY_RELEASED"; message: string };
 
 export type InventoryResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: InventoryError };
+  { success: true; data: T } | { success: false; error: InventoryError };

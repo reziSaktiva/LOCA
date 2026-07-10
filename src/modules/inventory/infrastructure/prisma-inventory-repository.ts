@@ -13,7 +13,13 @@ import type {
   InventoryReservation,
   ReserveStockItem,
 } from "../domain/inventory-entities";
-import type { InventoryRepository, ListMovementsQuery, ListMovementsResult } from "../domain/inventory-repository";
+import type {
+  InventoryRepository,
+  ListInventoryQuery,
+  ListInventoryResult,
+  ListMovementsQuery,
+  ListMovementsResult,
+} from "../domain/inventory-repository";
 
 // ---------------------------------------------------------------------------
 // Mappers
@@ -73,6 +79,23 @@ export class PrismaInventoryRepository implements InventoryRepository {
     return count > 0;
   }
 
+  async listInventoryItems(query: ListInventoryQuery): Promise<ListInventoryResult> {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const skip = (page - 1) * limit;
+
+    const [rows, total] = await prisma.$transaction([
+      prisma.inventoryItem.findMany({
+        orderBy: { updatedAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.inventoryItem.count(),
+    ]);
+
+    return { items: rows.map(toInventoryItem), total };
+  }
+
   async createInventoryItem(command: InitializeStockCommand): Promise<InventoryItem> {
     return prisma.$transaction(async (tx) => {
       const row = await tx.inventoryItem.create({
@@ -129,7 +152,9 @@ export class PrismaInventoryRepository implements InventoryRepository {
 
   async adjustStock(command: AdjustStockCommand): Promise<InventoryItem> {
     return prisma.$transaction(async (tx) => {
-      const current = await tx.inventoryItem.findUnique({ where: { variantId: command.variantId } });
+      const current = await tx.inventoryItem.findUnique({
+        where: { variantId: command.variantId },
+      });
       if (!current) throw new Error(`InventoryItem not found for variant ${command.variantId}`);
 
       const qtyDelta = command.newQty - current.onHandQty;
@@ -212,7 +237,9 @@ export class PrismaInventoryRepository implements InventoryRepository {
 
   async commitReservation(reservationId: string, actorId: string): Promise<void> {
     await prisma.$transaction(async (tx) => {
-      const reservation = await tx.inventoryReservation.findUnique({ where: { id: reservationId } });
+      const reservation = await tx.inventoryReservation.findUnique({
+        where: { id: reservationId },
+      });
       if (!reservation) throw new Error(`Reservation ${reservationId} not found`);
 
       await tx.inventoryReservation.update({
@@ -245,7 +272,9 @@ export class PrismaInventoryRepository implements InventoryRepository {
 
   async releaseReservation(reservationId: string, actorId: string): Promise<void> {
     await prisma.$transaction(async (tx) => {
-      const reservation = await tx.inventoryReservation.findUnique({ where: { id: reservationId } });
+      const reservation = await tx.inventoryReservation.findUnique({
+        where: { id: reservationId },
+      });
       if (!reservation) throw new Error(`Reservation ${reservationId} not found`);
 
       await tx.inventoryReservation.update({
@@ -280,15 +309,16 @@ export class PrismaInventoryRepository implements InventoryRepository {
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
     const skip = (page - 1) * limit;
+    const where = query.variantId ? { variantId: query.variantId } : {};
 
     const [rows, total] = await prisma.$transaction([
       prisma.inventoryMovement.findMany({
-        where: { variantId: query.variantId },
+        where,
         orderBy: { createdAt: "desc" },
         skip,
         take: limit,
       }),
-      prisma.inventoryMovement.count({ where: { variantId: query.variantId } }),
+      prisma.inventoryMovement.count({ where }),
     ]);
 
     return { items: rows.map(toInventoryMovement), total };

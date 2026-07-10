@@ -9,6 +9,37 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-10 (2)
+
+### Added
+
+- **M6.3 — Cart Domain Foundation**: module `cart` diimplementasikan penuh sesuai `docs/05-domain-modules.md` §9 dan `docs/06-data-model.md` §6.5.
+  - Domain: `Cart`, `CartItem` entity + enum `CartStatus` (`ACTIVE`/`CHECKED_OUT`/`ABANDONED`) + `CartSnapshot` (kontrak lintas module untuk `checkout`) + commands + typed `CartResult<T>`.
+  - Invariants (`cart-invariants.ts`): `isValidQuantity`, `calculateLineSubtotal`, `calculateCartTotal`, `hasDuplicateVariant`, `isValidCartAmount`, `isCartEditable`.
+  - Repository contract: `CartRepository` (11 method, termasuk `findCartItemByVariantId` untuk mencegah duplikasi variant per cart).
+  - Port pattern (`application/cart-ports.ts`): `CartCatalogPort` (getVariantSnapshot) dan `CartInventoryPort` (assertStockAvailable) — sesuai dependency matrix Cart → Catalog + Inventory.
+  - Application services: `get-cart.ts` (getOrCreateActiveCart, getCartSnapshot), `manage-cart-item.ts` (addItemToCart, updateCartItemQuantity, changeCartItemVariant, removeCartItem, clearCart). `addItemToCart` menggabungkan quantity ke item yang sudah ada jika variant sama sudah di cart (menjaga invariant no-duplicate-variant). Semua operasi item memverifikasi ownership via `cart.customerId`.
+  - Infrastructure: `PrismaCartRepository` (unique constraint `[cartId, variantId]` di level DB sebagai pengaman tambahan invariant no-duplicate-variant).
+  - Public facade: `cart-service.ts` — `cartGetSnapshot`, `cartAddItem`, `cartUpdateItemQuantity`, `cartChangeItemVariant`, `cartRemoveItem`, `cartClear`, plus `getCartSnapshotForCheckout` untuk consumer `checkout`.
+  - Prisma schema: model `Cart`, `CartItem` + enum `CartStatus`. Migration `20260710042405_cart_domain_foundation` **sudah diapply ke Supabase**.
+
+### Changed
+
+- Catalog: `VariantSnapshot` (`domain/catalog-entities.ts`) diperluas dengan field `status: CatalogVariantStatus` — dibutuhkan cart untuk memvalidasi invariant "variant aktif" sebelum ditambahkan ke keranjang. Kedua implementasi (`PrismaCatalogRepository`, `InMemoryCatalogRepository`) diperbarui. Tipe `VariantSnapshot` kini di-re-export dari `catalog-public-service.ts` agar consumer lintas module mengaksesnya lewat public facade, bukan domain langsung.
+
+### Verified
+
+- `bun run check` hijau (lint + typecheck + test): **221 test lolos** (34 test baru dari cart: invariants + `get-cart` + `manage-cart-item`).
+- Migration `20260710042405_cart_domain_foundation` berhasil diapply ke Supabase (`prisma migrate dev`), `prisma generate` lolos.
+
+### Notes
+
+- M6.3 murni domain/application foundation — belum ada API route customer (menyusul di M6.4 sesuai `docs/07-api-specification.md` §Cart: `GET/DELETE /cart`, `POST/PATCH/DELETE /cart/items/{id}`).
+- MVP hanya mendukung actor Customer (auth wajib) untuk cart, selaras dengan seluruh endpoint Cart di API spec yang berstatus Customer-only. Guest/visitor cart merge dicatat sebagai Future Scope di `docs/05-domain-modules.md`, belum diimplementasikan.
+- Subtotal cart == total cart untuk MVP (belum ada fee/discount di level cart); shipping/tax/diskon akan dihitung di module `checkout`.
+
+---
+
 ## 2026-07-10 (1)
 
 ### Added

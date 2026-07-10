@@ -338,6 +338,7 @@ export class PrismaCatalogRepository implements CatalogRepository {
       compareAtPrice: row.compareAtPrice,
       thumbnailUrl: row.product.thumbnailUrl,
       variantLabel: row.variantLabel,
+      status: row.status,
     };
   }
 

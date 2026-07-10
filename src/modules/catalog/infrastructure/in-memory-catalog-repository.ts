@@ -459,6 +459,7 @@ export class InMemoryCatalogRepository implements CatalogRepository {
       compareAtPrice: variant.compareAtPrice,
       thumbnailUrl: product.thumbnailUrl,
       variantLabel: variant.variantLabel,
+      status: variant.status,
     };
   }
 }

@@ -1,10 +1,7 @@
 import { getProductBySlug } from "../application/get-product-by-slug";
 import { listPublicCategories } from "../application/list-public-categories";
 import { listPublicProducts } from "../application/list-public-products";
-import {
-  searchPublicProducts,
-  type SearchError,
-} from "../application/search-public-products";
+import { searchPublicProducts, type SearchError } from "../application/search-public-products";
 import type { VariantSnapshot } from "../domain/catalog-entities";
 import type { ListPublicProductsQuery } from "../domain/catalog-repository";
 import { PrismaCatalogRepository } from "../infrastructure/prisma-catalog-repository";
@@ -36,6 +33,8 @@ export type PublicCategory = {
   name: string;
   slug: string;
 };
+
+export type { VariantSnapshot } from "../domain/catalog-entities";
 
 const repository = new PrismaCatalogRepository();
 const DEFAULT_PAGE = 1;
@@ -69,7 +68,12 @@ function parseOptionalNumber(input: string | null): number | undefined {
 }
 
 function parseSort(input: string | null): ListPublicProductsQuery["sort"] {
-  if (input === "createdAt" || input === "-createdAt" || input === "priceFrom" || input === "-priceFrom") {
+  if (
+    input === "createdAt" ||
+    input === "-createdAt" ||
+    input === "priceFrom" ||
+    input === "-priceFrom"
+  ) {
     return input;
   }
 
@@ -123,9 +127,7 @@ export async function listPublicCategoriesForCatalog(): Promise<PublicCategory[]
   }));
 }
 
-export async function getPublicProductBySlug(
-  slug: string,
-): Promise<PublicProductDetail | null> {
+export async function getPublicProductBySlug(slug: string): Promise<PublicProductDetail | null> {
   const result = await getProductBySlug(repository, slug);
 
   if (!result.found) {

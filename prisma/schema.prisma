@@ -299,3 +299,88 @@ model VariantValue {
   @@index([variantId])
   @@map("variant_values")
 }
+
+// ---------------------------------------------------------------------------
+// Inventory Module
+// ---------------------------------------------------------------------------
+
+enum InventoryMovementType {
+  STOCK_IN
+  STOCK_OUT
+  ADJUSTMENT
+  RESERVE
+  RELEASE
+  COMMIT
+}
+
+enum ReservationStatus {
+  ACTIVE
+  COMMITTED
+  RELEASED
+  EXPIRED
+}
+
+/// Stok per ProductVariant — aggregate root modul inventory.
+/// availableQty = onHandQty - reservedQty (harus selalu konsisten).
+model InventoryItem {
+  id           String @id @default(cuid())
+  variantId    String @unique
+  onHandQty    Int    @default(0)
+  reservedQty  Int    @default(0)
+  availableQty Int    @default(0)
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  reservations InventoryReservation[]
+  movements    InventoryMovement[]
+
+  @@index([variantId])
+  @@map("inventory_items")
+}
+
+/// Reservasi stok saat order dibuat / menunggu pembayaran.
+model InventoryReservation {
+  id                String            @id @default(cuid())
+  orderId           String
+  variantId         String
+  qty               Int
+  reservationStatus ReservationStatus @default(ACTIVE)
+  expiresAt         DateTime?
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  inventoryItem InventoryItem @relation(fields: [variantId], references: [variantId])
+
+  @@index([orderId])
+  @@index([variantId, reservationStatus])
+  @@map("inventory_reservations")
+}
+
+/// Audit trail perubahan stok — bersifat append-only.
+/// qtyDelta: positif = penambahan, negatif = pengurangan.
+model InventoryMovement {
+  id            String                @id @default(cuid())
+  variantId     String
+  movementType  InventoryMovementType
+  qtyDelta      Int
+  reason        String
+  referenceType String?
+  referenceId   String?
+
+  // Append-only: hanya createdAt dan createdBy
+  createdAt DateTime @default(now())
+  createdBy String?
+
+  inventoryItem InventoryItem @relation(fields: [variantId], references: [variantId])
+
+  @@index([variantId, createdAt])
+  @@map("inventory_movements")
+}

@@ -83,10 +83,11 @@ export async function addItemToCart(
   const lineSubtotal = calculateLineSubtotal(targetQuantity, variant.price);
 
   if (existingItem) {
+    const mergeSubtotal = calculateLineSubtotal(targetQuantity, existingItem.unitPriceSnapshot);
     const updated = await repository.updateItemQuantity({
       itemId: existingItem.id,
       quantity: targetQuantity,
-      lineSubtotal,
+      lineSubtotal: mergeSubtotal,
     });
     return { success: true, data: updated };
   }

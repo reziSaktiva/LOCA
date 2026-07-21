@@ -9,6 +9,60 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (3)
+
+### Added
+
+- **M6.6 — UI Route Groups + Shared Layout**: fondasi UI route groups sesuai Decision 022 + `docs/04-system-architecture.md` §9.
+  - Route groups: `src/app/(store)/`, `(auth)/`, `(admin)/admin/`.
+  - Shared layout: `src/shared/ui/layout/` — `Navbar`, `NavbarMobileMenu` (Sheet), `Footer`, `AdminSidebar`.
+  - Placeholder pages: `/` (skeleton homepage), `/login`, `/register`, `/admin/dashboard|products|orders|inventory|homepage`.
+  - shadcn: `sheet`, `skeleton`, `separator`.
+
+### Changed
+
+- `docs/04-system-architecture.md` — struktur `(admin)/admin/` diklarasikan agar URL `/admin/*` eksplisit.
+- Fetch kategori + cart count dilakukan di `(store)/layout.tsx` (bukan di `shared/ui`) agar boundary `shared ↛ modules` tetap valid.
+
+### Verified
+
+- `bun run check` hijau (229 test).
+- `bun run build` hijau — routes `/`, `/login`, `/register`, `/admin/*` terdaftar.
+
+### Notes
+
+- Next: **M6.7 — UI Homepage + Catalog + Product Detail**.
+
+---
+
+## 2026-07-21 (2)
+
+### Added
+
+- **M6.5 — Phase 4 Backend Exit Validation**: exit gate backend Phase 4 selesai.
+  - Smoke + contract test: `src/modules/cart/application/phase-4-backend-exit.test.ts`
+    - Flow: addItem → stock validated → cart total → remove → empty.
+    - Surface check: `getCartSnapshotForCheckout`, `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`.
+  - Decision 025: kontrak lintas module Phase 5 + mapping nama facade.
+
+### Changed
+
+- `docs/05-domain-modules.md` §Inventory & §Cart — Public Services dipetakan ke nama facade implementasi (siap dikonsumsi checkout/order).
+- Folder migrasi kosong lokal `20260710065425_add_cart_item_quantity_check_and_unique_active_cart` dihapus (memblokir `prisma migrate status`; tidak ada `migration.sql`).
+
+### Verified
+
+- Cross-module: `cart` hanya import `catalog`/`inventory` dari `public/` (port wiring di `cart-service.ts`).
+- Migrations: `bunx prisma migrate status` → **Database schema is up to date** (6 migrations, termasuk inventory + cart).
+- `bun run check` hijau (lint + typecheck + test): **229 test lolos** (+3 dari exit smoke/contract).
+
+### Notes
+
+- Backend Phase 4 exit criteria terpenuhi. Next: **M6.6 — UI Route Groups + Shared Layout** (UI catch-up Decision 022).
+- Gap tetap tercatat: wiring otomatis `catalog createVariant → inventory initializeStock` belum ada (admin set stok manual).
+
+---
+
 ## 2026-07-21 (1)
 
 ### Added

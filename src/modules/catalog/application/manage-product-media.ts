@@ -15,8 +15,7 @@ export type ProductMediaError =
   | { code: "URL_REQUIRED"; message: string };
 
 export type ProductMediaResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: ProductMediaError };
+  { success: true; data: T } | { success: false; error: ProductMediaError };
 
 export async function listProductMedia(
   repository: CatalogRepository,

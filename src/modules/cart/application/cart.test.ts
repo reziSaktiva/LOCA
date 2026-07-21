@@ -592,17 +592,15 @@ describe("getCartCustomerView", () => {
   });
 
   it("enriches items with catalog display fields and sums itemCount", async () => {
-    const repo = new InMemoryCartRepository()
-      .seedCarts([makeCart()])
-      .seedItems([
-        makeCartItem({
-          id: "item-1",
-          variantId: "var-1",
-          quantity: 2,
-          unitPriceSnapshot: 150000,
-          lineSubtotal: 300000,
-        }),
-      ]);
+    const repo = new InMemoryCartRepository().seedCarts([makeCart()]).seedItems([
+      makeCartItem({
+        id: "item-1",
+        variantId: "var-1",
+        quantity: 2,
+        unitPriceSnapshot: 150000,
+        lineSubtotal: 300000,
+      }),
+    ]);
     const catalogPort = makeCatalogPort([
       makeVariant({
         variantId: "var-1",

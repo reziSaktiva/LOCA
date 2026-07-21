@@ -1,6 +1,9 @@
 import { requireCustomer } from "@/shared/infrastructure/auth/customer-guard";
 import { apiError, apiSuccess } from "@/shared/kernel/api-response";
-import { customerCreateAddress, customerListAddresses } from "@/modules/customer/public/customer-service";
+import {
+  customerCreateAddress,
+  customerListAddresses,
+} from "@/modules/customer/public/customer-service";
 
 export async function GET() {
   const guard = await requireCustomer();
@@ -38,7 +41,10 @@ export async function POST(request: Request) {
     typeof postalCode !== "string"
   ) {
     return apiError(
-      { code: "VALIDATION_ERROR", message: "recipientName, phone, street, district, city, province, postalCode wajib diisi." },
+      {
+        code: "VALIDATION_ERROR",
+        message: "recipientName, phone, street, district, city, province, postalCode wajib diisi.",
+      },
       422,
     );
   }

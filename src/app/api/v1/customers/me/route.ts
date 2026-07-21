@@ -1,6 +1,9 @@
 import { requireCustomer } from "@/shared/infrastructure/auth/customer-guard";
 import { apiError, apiSuccess } from "@/shared/kernel/api-response";
-import { customerGetProfile, customerUpsertProfile } from "@/modules/customer/public/customer-service";
+import {
+  customerGetProfile,
+  customerUpsertProfile,
+} from "@/modules/customer/public/customer-service";
 
 export async function GET() {
   const guard = await requireCustomer();
@@ -32,7 +35,10 @@ export async function PATCH(request: Request) {
   const { displayName, phone, avatarUrl } = body as Record<string, unknown>;
 
   if (typeof displayName !== "string" || typeof phone !== "string") {
-    return apiError({ code: "VALIDATION_ERROR", message: "displayName dan phone wajib diisi." }, 422);
+    return apiError(
+      { code: "VALIDATION_ERROR", message: "displayName dan phone wajib diisi." },
+      422,
+    );
   }
 
   const result = await customerUpsertProfile({

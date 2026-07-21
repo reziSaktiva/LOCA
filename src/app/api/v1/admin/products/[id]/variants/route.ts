@@ -12,7 +12,14 @@ export async function GET(_request: Request, { params }: RouteParams) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   const { id: productId } = await params;
@@ -29,7 +36,14 @@ export async function POST(request: Request, { params }: RouteParams) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   const { id: productId } = await params;
@@ -39,10 +53,19 @@ export async function POST(request: Request, { params }: RouteParams) {
     const { sku, price, compareAtPrice, variantLabel } = body;
 
     if (!sku || price === undefined || !variantLabel) {
-      return apiError({ code: "VALIDATION_ERROR", message: "sku, price, variantLabel are required" }, 400);
+      return apiError(
+        { code: "VALIDATION_ERROR", message: "sku, price, variantLabel are required" },
+        400,
+      );
     }
 
-    const result = await adminCreateVariant({ productId, sku, price, compareAtPrice, variantLabel });
+    const result = await adminCreateVariant({
+      productId,
+      sku,
+      price,
+      compareAtPrice,
+      variantLabel,
+    });
 
     if (!result.success) {
       const statusMap: Record<string, number> = {

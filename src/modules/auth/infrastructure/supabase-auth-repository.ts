@@ -19,7 +19,11 @@ export class SupabaseAuthRepository implements AuthRepository {
 
     if (error) {
       const msg = error.message.toLowerCase();
-      if (msg.includes("already registered") || msg.includes("already exists") || error.status === 422) {
+      if (
+        msg.includes("already registered") ||
+        msg.includes("already exists") ||
+        error.status === 422
+      ) {
         return {
           success: false,
           error: { code: "EMAIL_ALREADY_EXISTS", message: "Email sudah terdaftar." },

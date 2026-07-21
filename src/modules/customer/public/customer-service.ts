@@ -27,7 +27,9 @@ export type {
 
 const repository = new PrismaCustomerRepository();
 
-export async function customerGetProfile(customerId: string): Promise<CustomerResult<CustomerProfile>> {
+export async function customerGetProfile(
+  customerId: string,
+): Promise<CustomerResult<CustomerProfile>> {
   return getCustomerProfile(repository, customerId);
 }
 

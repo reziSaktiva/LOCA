@@ -20,8 +20,7 @@ export type SearchPublicProductsResult = {
 export type SearchError = { code: "QUERY_EMPTY"; message: string };
 
 export type SearchResult =
-  | { success: true; result: SearchPublicProductsResult }
-  | { success: false; error: SearchError };
+  { success: true; result: SearchPublicProductsResult } | { success: false; error: SearchError };
 
 function sortProducts(
   items: CatalogProduct[],

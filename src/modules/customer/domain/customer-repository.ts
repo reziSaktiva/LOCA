@@ -1,4 +1,10 @@
-import type { CustomerAddress, CustomerProfile, CreateAddressCommand, UpdateAddressCommand, UpsertCustomerProfileCommand } from "./customer-entities";
+import type {
+  CustomerAddress,
+  CustomerProfile,
+  CreateAddressCommand,
+  UpdateAddressCommand,
+  UpsertCustomerProfileCommand,
+} from "./customer-entities";
 
 export interface CustomerRepository {
   findProfileByCustomerId(customerId: string): Promise<CustomerProfile | null>;

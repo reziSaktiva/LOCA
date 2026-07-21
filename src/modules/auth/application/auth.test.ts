@@ -54,8 +54,12 @@ describe("isValidPassword", () => {
 
 function makeMockRepository(overrides: Partial<AuthRepository> = {}): AuthRepository {
   return {
-    register: vi.fn().mockResolvedValue({ success: true, data: { id: "uid-1", email: "user@example.com" } }),
-    login: vi.fn().mockResolvedValue({ success: true, data: { userId: "uid-1", email: "user@example.com" } }),
+    register: vi
+      .fn()
+      .mockResolvedValue({ success: true, data: { id: "uid-1", email: "user@example.com" } }),
+    login: vi
+      .fn()
+      .mockResolvedValue({ success: true, data: { userId: "uid-1", email: "user@example.com" } }),
     logout: vi.fn().mockResolvedValue(undefined),
     getCurrentSession: vi.fn().mockResolvedValue({ userId: "uid-1", email: "user@example.com" }),
     ...overrides,
@@ -65,7 +69,10 @@ function makeMockRepository(overrides: Partial<AuthRepository> = {}): AuthReposi
 describe("registerCustomer", () => {
   it("berhasil register dengan data valid", async () => {
     const repo = makeMockRepository();
-    const result = await registerCustomer(repo, { email: "user@example.com", password: "password123" });
+    const result = await registerCustomer(repo, {
+      email: "user@example.com",
+      password: "password123",
+    });
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.email).toBe("user@example.com");
@@ -100,7 +107,10 @@ describe("registerCustomer", () => {
         error: { code: "EMAIL_ALREADY_EXISTS", message: "Email sudah terdaftar." },
       }),
     });
-    const result = await registerCustomer(repo, { email: "taken@example.com", password: "password123" });
+    const result = await registerCustomer(repo, {
+      email: "taken@example.com",
+      password: "password123",
+    });
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.code).toBe("EMAIL_ALREADY_EXISTS");
@@ -111,7 +121,10 @@ describe("registerCustomer", () => {
 describe("loginCustomer", () => {
   it("berhasil login dengan data valid", async () => {
     const repo = makeMockRepository();
-    const result = await loginCustomer(repo, { email: "user@example.com", password: "password123" });
+    const result = await loginCustomer(repo, {
+      email: "user@example.com",
+      password: "password123",
+    });
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.userId).toBe("uid-1");
@@ -136,7 +149,10 @@ describe("loginCustomer", () => {
         error: { code: "INVALID_CREDENTIALS", message: "Email atau password salah." },
       }),
     });
-    const result = await loginCustomer(repo, { email: "user@example.com", password: "wrongpass123" });
+    const result = await loginCustomer(repo, {
+      email: "user@example.com",
+      password: "wrongpass123",
+    });
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.code).toBe("INVALID_CREDENTIALS");

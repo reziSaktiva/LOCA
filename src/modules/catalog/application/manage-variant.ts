@@ -3,10 +3,7 @@ import type {
   CreateVariantCommand,
   UpdateVariantCommand,
 } from "../domain/catalog-entities";
-import {
-  isValidSku,
-  isVariantPriceValid,
-} from "../domain/catalog-invariants";
+import { isValidSku, isVariantPriceValid } from "../domain/catalog-invariants";
 import type { CatalogRepository } from "../domain/catalog-repository";
 
 export type VariantOperationError =
@@ -17,8 +14,7 @@ export type VariantOperationError =
   | { code: "PRICE_INVALID"; message: string };
 
 export type VariantOperationResult<T> =
-  | { success: true; variant: T }
-  | { success: false; error: VariantOperationError };
+  { success: true; variant: T } | { success: false; error: VariantOperationError };
 
 export async function createVariant(
   repository: CatalogRepository,

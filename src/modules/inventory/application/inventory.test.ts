@@ -283,9 +283,7 @@ class InMemoryInventoryRepository implements InventoryRepository {
     const filtered = query.variantId
       ? this.movements.filter((m) => m.variantId === query.variantId)
       : this.movements;
-    const ordered = [...filtered].sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    );
+    const ordered = [...filtered].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
     const start = (page - 1) * limit;

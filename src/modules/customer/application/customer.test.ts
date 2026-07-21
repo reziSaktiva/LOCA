@@ -246,7 +246,10 @@ describe("upsertCustomerProfile", () => {
 
 describe("listCustomerAddresses", () => {
   it("returns addresses for customer", async () => {
-    const repo = makeRepository([], [makeAddress(), makeAddress({ id: "addr-2", customerId: "user-2" })]);
+    const repo = makeRepository(
+      [],
+      [makeAddress(), makeAddress({ id: "addr-2", customerId: "user-2" })],
+    );
     const result = await listCustomerAddresses(repo, "user-1");
     expect(result).toHaveLength(1);
     expect(result[0].customerId).toBe("user-1");

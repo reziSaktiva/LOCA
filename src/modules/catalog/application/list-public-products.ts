@@ -5,7 +5,10 @@ import type {
   ListPublicProductsResult,
 } from "../domain/catalog-repository";
 
-function sortProducts(items: ListPublicProductsResult["items"], sort: ListPublicProductsQuery["sort"]) {
+function sortProducts(
+  items: ListPublicProductsResult["items"],
+  sort: ListPublicProductsQuery["sort"],
+) {
   switch (sort) {
     case "createdAt":
       return items.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());

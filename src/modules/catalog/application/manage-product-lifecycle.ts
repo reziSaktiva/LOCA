@@ -20,8 +20,7 @@ export type ProductLifecycleError =
   | { code: "CANNOT_ACTIVATE_WITHOUT_THUMBNAIL"; message: string };
 
 export type ProductLifecycleResult<T> =
-  | { success: true; product: T }
-  | { success: false; error: ProductLifecycleError };
+  { success: true; product: T } | { success: false; error: ProductLifecycleError };
 
 export async function createProduct(
   repository: CatalogRepository,
@@ -107,7 +106,8 @@ export async function updateProductStatus(
         success: false,
         error: {
           code: "CANNOT_ACTIVATE_WITHOUT_THUMBNAIL",
-          message: "Product tidak bisa diaktifkan tanpa thumbnail. Tambahkan media thumbnail terlebih dahulu.",
+          message:
+            "Product tidak bisa diaktifkan tanpa thumbnail. Tambahkan media thumbnail terlebih dahulu.",
         },
       };
     }

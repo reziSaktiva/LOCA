@@ -1,4 +1,9 @@
-import type { HomepageBanner, HomepageResult, CreateBannerCommand, UpdateBannerCommand } from "../domain/homepage-entities";
+import type {
+  HomepageBanner,
+  HomepageResult,
+  CreateBannerCommand,
+  UpdateBannerCommand,
+} from "../domain/homepage-entities";
 import { isValidBannerTitle, isValidMediaUrl } from "../domain/homepage-invariants";
 import type { HomepageRepository } from "../domain/homepage-repository";
 
@@ -20,7 +25,10 @@ export async function createBanner(
   if (!isValidMediaUrl(command.mediaUrl)) {
     return {
       success: false,
-      error: { code: "MEDIA_URL_INVALID", message: "URL media tidak valid. Harus berupa URL http/https yang valid." },
+      error: {
+        code: "MEDIA_URL_INVALID",
+        message: "URL media tidak valid. Harus berupa URL http/https yang valid.",
+      },
     };
   }
 
@@ -50,7 +58,10 @@ export async function updateBanner(
   if (command.mediaUrl !== undefined && !isValidMediaUrl(command.mediaUrl)) {
     return {
       success: false,
-      error: { code: "MEDIA_URL_INVALID", message: "URL media tidak valid. Harus berupa URL http/https yang valid." },
+      error: {
+        code: "MEDIA_URL_INVALID",
+        message: "URL media tidak valid. Harus berupa URL http/https yang valid.",
+      },
     };
   }
 

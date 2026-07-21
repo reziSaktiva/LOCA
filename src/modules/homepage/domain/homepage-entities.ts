@@ -39,4 +39,5 @@ export type HomepageError =
   | { code: "TITLE_INVALID"; message: string }
   | { code: "MEDIA_URL_INVALID"; message: string };
 
-export type HomepageResult<T> = { success: true; data: T } | { success: false; error: HomepageError };
+export type HomepageResult<T> =
+  { success: true; data: T } | { success: false; error: HomepageError };

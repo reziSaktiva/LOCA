@@ -11,7 +11,14 @@ import type {
 } from "../domain/auth-entities";
 import { SupabaseAuthRepository } from "../infrastructure/supabase-auth-repository";
 
-export type { AuthError, AuthResult, AuthSession, CustomerAccount, LoginCommand, RegisterCustomerCommand } from "../domain/auth-entities";
+export type {
+  AuthError,
+  AuthResult,
+  AuthSession,
+  CustomerAccount,
+  LoginCommand,
+  RegisterCustomerCommand,
+} from "../domain/auth-entities";
 
 const repository = new SupabaseAuthRepository();
 
@@ -21,9 +28,7 @@ export async function authRegisterCustomer(
   return registerCustomer(repository, command);
 }
 
-export async function authLoginCustomer(
-  command: LoginCommand,
-): Promise<AuthResult<AuthSession>> {
+export async function authLoginCustomer(command: LoginCommand): Promise<AuthResult<AuthSession>> {
   return loginCustomer(repository, command);
 }
 

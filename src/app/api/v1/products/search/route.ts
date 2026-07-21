@@ -7,10 +7,7 @@ export async function GET(request: Request) {
     const result = await searchPublicProductsFromSearchParams(searchParams);
 
     if (!result.success) {
-      return apiError(
-        { code: result.error.code, message: result.error.message },
-        400,
-      );
+      return apiError({ code: result.error.code, message: result.error.message }, 400);
     }
 
     return apiSuccess(result);

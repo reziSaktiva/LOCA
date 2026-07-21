@@ -1,8 +1,5 @@
 import { apiError, apiSuccess } from "@/shared/kernel/api-response";
-import {
-  authLoginCustomer,
-  type LoginCommand,
-} from "@/modules/auth/public/customer-auth-service";
+import { authLoginCustomer, type LoginCommand } from "@/modules/auth/public/customer-auth-service";
 
 export async function POST(request: Request) {
   try {

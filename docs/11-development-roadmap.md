@@ -201,24 +201,24 @@ Modules:
 Milestones:
 
 Backend:
-- M6.1 — Inventory Domain Foundation
-- M6.2 — Admin Inventory API
-- M6.3 — Cart Domain Foundation
-- M6.4 — Cart Customer API
-- M6.5 — Phase 4 Backend Exit Validation
+- ✅ M6.1 — Inventory Domain Foundation
+- ✅ M6.2 — Admin Inventory API
+- ✅ M6.3 — Cart Domain Foundation
+- ✅ M6.4 — Cart Customer API
+- ✅ M6.5 — Phase 4 Backend Exit Validation
 
 UI Catch-up:
-- M6.6 — UI Foundation: Route Groups + Shared Layout
+- ✅ M6.6 — UI Foundation: Route Groups + Shared Layout
 - M6.7 — UI: Homepage + Catalog + Product Detail
 - M6.8 — UI: Auth + Account + Cart
 
 Exit Criteria:
 
-Backend:
+Backend (✅ terpenuhi M6.5):
 - Customer dapat menambahkan produk ke cart via API.
 - Stok divalidasi real-time saat operasi cart.
 - Admin dapat mengelola stok via API.
-- Kontrak `getCartSnapshot` dan `reserveStock` siap untuk Phase 5 (Checkout & Order).
+- Kontrak `getCartSnapshot` (`getCartSnapshotForCheckout`) dan `reserveStock` (`inventoryReserveStock`) siap untuk Phase 5 (Checkout & Order).
 - `bun run check` hijau.
 
 UI:

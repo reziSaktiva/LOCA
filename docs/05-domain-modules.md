@@ -363,14 +363,17 @@ Mengelola stok per varian, movement historis, dan konsistensi stok terhadap orde
 
 ### Public Services
 
-- `getAvailableStock(variantId)`
-- `assertStockAvailable(variantId, qty)`
-- `reserveStock(orderId, items)`
-- `commitStock(orderId)`
-- `releaseReservedStock(orderId)`
-- `increaseStock(variantId, qty, reason)`
-- `adjustStock(variantId, qty, reason)`
-- `listStockMovements(query)`
+Entry point implementasi: `src/modules/inventory/public/inventory-service.ts`.
+
+- `getAvailableStock(variantId)` — facade: `inventoryGetStock`
+- `assertStockAvailable(variantId, qty)` — facade: `inventoryAssertStockAvailable` (dikonsumsi `cart`)
+- `reserveStock(orderId, items)` — facade: `inventoryReserveStock` (kontrak Phase 5 / `order`)
+- `commitStock(orderId)` — facade: `inventoryCommitStock` (kontrak Phase 5 / `payment` → `order`)
+- `releaseReservedStock(orderId)` — facade: `inventoryReleaseReservedStock` (kontrak Phase 5 / `order`)
+- `increaseStock(variantId, qty, reason)` — facade: `inventoryIncreaseStock`
+- `adjustStock(variantId, qty, reason)` — facade: `inventoryAdjustStock` / `inventoryUpsertStock` (admin)
+- `listStockMovements(query)` — facade: `inventoryListMovements`
+- `listInventoryItems(query)` — facade: `inventoryListItems` (admin)
 
 ### Owned Entities
 
@@ -444,13 +447,22 @@ Mengelola item yang dipilih customer sebelum checkout.
 
 ### Public Services
 
-- `getActiveCart(actorContext)`
-- `addItem(actorContext, payload)`
-- `removeItem(actorContext, itemId)`
-- `changeItemQuantity(actorContext, itemId, qty)`
-- `changeItemVariant(actorContext, itemId, variantId)`
-- `clearCart(actorContext)`
-- `recalculateCart(actorContext)`
+Entry point implementasi: `src/modules/cart/public/cart-service.ts`.
+Untuk MVP, `actorContext` disederhanakan menjadi `customerId` (cart bersifat Customer-only).
+
+- `getActiveCart(customerId)` — facade: `cartGetSnapshot`
+- `getCartSnapshot(customerId)` — facade: `getCartSnapshotForCheckout` (kontrak Phase 5 / `checkout`)
+- `getCartCustomerView(customerId)` — facade: `cartGetCustomerView` (DTO REST customer)
+- `addItem(customerId, payload)` — facade: `cartAddItem`
+- `removeItem(customerId, itemId)` — facade: `cartRemoveItem`
+- `changeItemQuantity(customerId, itemId, qty)` — facade: `cartUpdateItemQuantity`
+- `changeItemVariant(customerId, itemId, variantId)` — facade: `cartChangeItemVariant`
+- `clearCart(customerId)` — facade: `cartClear`
+
+Cross-module dependency (wajib via port di application; wiring ke public facade di `cart-service.ts`):
+
+- `catalog` → `getVariantSnapshotForCart(variantId)`
+- `inventory` → `inventoryAssertStockAvailable(variantId, qty)`
 
 ### Owned Entities
 

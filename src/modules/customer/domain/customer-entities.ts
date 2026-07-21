@@ -60,4 +60,5 @@ export type CustomerError =
   | { code: "DISPLAY_NAME_INVALID"; message: string }
   | { code: "PHONE_INVALID"; message: string };
 
-export type CustomerResult<T> = { success: true; data: T } | { success: false; error: CustomerError };
+export type CustomerResult<T> =
+  { success: true; data: T } | { success: false; error: CustomerError };

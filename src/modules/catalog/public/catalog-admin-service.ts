@@ -132,9 +132,7 @@ export async function adminAddProductMedia(
   return addProductMedia(repository, command);
 }
 
-export async function adminRemoveProductMedia(
-  mediaId: string,
-): Promise<ProductMediaResult<void>> {
+export async function adminRemoveProductMedia(mediaId: string): Promise<ProductMediaResult<void>> {
   return removeProductMedia(repository, mediaId);
 }
 

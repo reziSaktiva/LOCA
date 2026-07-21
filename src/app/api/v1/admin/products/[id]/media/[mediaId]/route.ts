@@ -11,7 +11,11 @@ export async function DELETE(
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
     return apiError(
-      { code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" },
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
       status,
     );
   }

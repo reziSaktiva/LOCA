@@ -1,6 +1,9 @@
 import { requireCustomer } from "@/shared/infrastructure/auth/customer-guard";
 import { apiError, apiSuccess } from "@/shared/kernel/api-response";
-import { customerDeleteAddress, customerUpdateAddress } from "@/modules/customer/public/customer-service";
+import {
+  customerDeleteAddress,
+  customerUpdateAddress,
+} from "@/modules/customer/public/customer-service";
 
 type RouteContext = { params: Promise<{ id: string }> };
 

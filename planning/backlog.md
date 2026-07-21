@@ -228,7 +228,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned
+Status: Completed
 
 Feature: `cart-customer-api`
 

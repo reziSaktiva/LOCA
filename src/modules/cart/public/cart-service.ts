@@ -8,6 +8,10 @@
 import { getVariantSnapshotForCart } from "../../catalog/public/catalog-public-service";
 import { inventoryAssertStockAvailable } from "../../inventory/public/inventory-service";
 import type { CartCatalogPort, CartInventoryPort } from "../application/cart-ports";
+import {
+  getCartCustomerView,
+  type CartCustomerView,
+} from "../application/get-cart-customer-view";
 import { getCartSnapshot } from "../application/get-cart";
 import {
   addItemToCart,
@@ -28,6 +32,8 @@ export type {
   CartStatus,
 } from "../domain/cart-entities";
 
+export type { CartCustomerItemView, CartCustomerView } from "../application/get-cart-customer-view";
+
 const repository = new PrismaCartRepository();
 
 function makeCatalogPort(): CartCatalogPort {
@@ -35,7 +41,14 @@ function makeCatalogPort(): CartCatalogPort {
     async getVariantSnapshot(variantId) {
       const snapshot = await getVariantSnapshotForCart(variantId);
       if (!snapshot) return null;
-      return { variantId: snapshot.variantId, price: snapshot.price, status: snapshot.status };
+      return {
+        variantId: snapshot.variantId,
+        price: snapshot.price,
+        status: snapshot.status,
+        productName: snapshot.productName,
+        variantLabel: snapshot.variantLabel,
+        thumbnailUrl: snapshot.thumbnailUrl,
+      };
     },
   };
 }
@@ -55,6 +68,11 @@ function makeInventoryPort(): CartInventoryPort {
 /** Mengambil snapshot cart ACTIVE milik customer (membuat cart baru jika belum ada). */
 export async function cartGetSnapshot(customerId: string): Promise<CartSnapshot> {
   return getCartSnapshot(repository, customerId);
+}
+
+/** Customer-facing cart view untuk REST API (termasuk display fields dari catalog). */
+export async function cartGetCustomerView(customerId: string): Promise<CartCustomerView> {
+  return getCartCustomerView(repository, makeCatalogPort(), customerId);
 }
 
 /** Menambah produk ke cart. Menggabungkan quantity jika variant sudah ada di cart. */

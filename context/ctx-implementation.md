@@ -8,12 +8,12 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
-- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.3 selesai, lanjut M6.4
-- Current implementation progress: **83%**
+- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.4 selesai, lanjut M6.5
+- Current implementation progress: **86%**
 
 ## Current Focus
 
-- Phase 4 — Cart & Inventory. **M6.1–M6.3 selesai.** Lanjut ke **M6.4 — Cart Customer API**.
+- Phase 4 — Cart & Inventory. **M6.1–M6.4 selesai.** Lanjut ke **M6.5 — Phase 4 Backend Exit Validation**.
 - Workflow diubah ke **UI paralel per phase** (Decision 022): setelah backend M6.1–M6.5 selesai, lanjut ke UI milestone M6.6–M6.8.
 - Route group strategy ditetapkan: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9.
 
@@ -218,18 +218,15 @@ Target setup awal (Phase 2 selesai):
 - Status: **M6.1–M6.2 Completed** — domain, application services, PrismaInventoryRepository, public facade, dan admin API aktif.
 - Prisma models `InventoryItem`, `InventoryReservation`, `InventoryMovement` sudah di-migrate ke Supabase.
 - M6.2: admin routes `GET /api/v1/admin/inventory`, `PATCH /api/v1/admin/inventory/[variantId]` (upsert stok), `GET /api/v1/admin/inventory/movements` (filter opsional `variantId`).
-- 187 test lolos (7 test baru dari M6.2). Migration `20260709160000_inventory_foundation` diapply.
+- Migration `20260709160000_inventory_foundation` diapply.
 - Gap tercatat: wiring otomatis `catalog createVariant -> inventory initializeStock` belum ada; admin set stok manual via `PATCH /admin/inventory/[variantId]`.
-- Next: M6.4 — Cart Customer API.
 
 ### Cart Module
 
-- Status: **M6.3 Completed** — domain (`Cart`, `CartItem`, `CartStatus`, `CartSnapshot`), invariants, repository contract, port pattern (`CartCatalogPort`, `CartInventoryPort`), application services (`get-cart.ts`, `manage-cart-item.ts`), `PrismaCartRepository`, dan public facade `cart-service.ts` aktif.
-- Prisma models `Cart`, `CartItem` sudah di-migrate ke Supabase (migration `20260710042405_cart_domain_foundation`).
-- Catalog `VariantSnapshot` diperluas dengan field `status` untuk mendukung validasi "variant aktif" di cart.
-- 221 test lolos (34 test baru dari M6.3).
-- Belum ada API route customer — menyusul di M6.4.
-- Target selanjutnya: M6.4 — Cart Customer API (`GET/DELETE /cart`, `POST/PATCH/DELETE /cart/items/{id}`).
+- Status: **M6.3–M6.4 Completed** — domain foundation + customer API aktif.
+- M6.3: domain (`Cart`, `CartItem`, `CartStatus`, `CartSnapshot`), invariants, repository contract, port pattern, application services, `PrismaCartRepository`, public facade. Migration `20260710042405_cart_domain_foundation` diapply.
+- M6.4: customer routes `GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]` (semua `requireCustomer()`). Application `get-cart-customer-view.ts` + presentation `cart-http.ts`. Facade `cartGetCustomerView`.
+- 226 test lolos. Next: M6.5 — Phase 4 Backend Exit Validation.
 
 ### UI — Phase 4 (Catch-up M6.6–M6.8)
 

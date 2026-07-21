@@ -9,6 +9,32 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (6)
+
+### Added
+
+- **M6.7 slice 2 — UI Product Detail + Search** (M6.7 selesai penuh):
+  - `/products/[slug]` — galeri, variant selector, stok, Add to Cart (`POST /api/v1/cart/items`, 401→login).
+  - `/search` — hasil search + debounce URL-state + empty states.
+  - Application `get-public-product-detail.ts` + enrich `getPublicProductBySlug` (variants + media + stock via Inventory).
+  - Presentation: `ProductGallery`, `VariantSelector`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`.
+
+### Changed
+
+- `docs/07-api-specification.md` — shape response `GET /products/slug/{slug}` didokumentasikan.
+- Progress docs: `PROJECT_STATE.md`, roadmap, backlog, `ctx-implementation.md` — M6.7 ✅; next M6.8.
+
+### Verified
+
+- `bun run check` hijau (236 test).
+- `bun run build` hijau — routes `/products/[slug]` + `/search` terdaftar.
+
+### Notes
+
+- Next: **M6.8 — UI Auth + Account + Cart**.
+
+---
+
 ## 2026-07-21 (5)
 
 ### Added

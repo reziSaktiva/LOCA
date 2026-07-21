@@ -13,9 +13,11 @@ export type CatalogPaginationProps = {
   totalPages: number;
   /** Query string tanpa `page` (mis. "category=socks&sort=-createdAt"). */
   queryBase: string;
+  /** Base path halaman (default katalog). */
+  basePath?: string;
 };
 
-function buildPageHref(queryBase: string, page: number): string {
+function buildPageHref(basePath: string, queryBase: string, page: number): string {
   const params = new URLSearchParams(queryBase);
   if (page <= 1) {
     params.delete("page");
@@ -23,7 +25,7 @@ function buildPageHref(queryBase: string, page: number): string {
     params.set("page", String(page));
   }
   const qs = params.toString();
-  return qs ? `/products?${qs}` : "/products";
+  return qs ? `${basePath}?${qs}` : basePath;
 }
 
 function pageWindow(current: number, total: number): Array<number | "ellipsis"> {
@@ -56,7 +58,12 @@ function pageWindow(current: number, total: number): Array<number | "ellipsis"> 
   return result;
 }
 
-export function CatalogPagination({ page, totalPages, queryBase }: CatalogPaginationProps) {
+export function CatalogPagination({
+  page,
+  totalPages,
+  queryBase,
+  basePath = "/products",
+}: CatalogPaginationProps) {
   if (totalPages <= 1) {
     return null;
   }
@@ -68,7 +75,7 @@ export function CatalogPagination({ page, totalPages, queryBase }: CatalogPagina
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={page > 1 ? buildPageHref(queryBase, page - 1) : undefined}
+            href={page > 1 ? buildPageHref(basePath, queryBase, page - 1) : undefined}
             aria-disabled={page <= 1}
             className={page <= 1 ? "pointer-events-none opacity-50" : undefined}
             text="Sebelumnya"
@@ -82,7 +89,10 @@ export function CatalogPagination({ page, totalPages, queryBase }: CatalogPagina
             </PaginationItem>
           ) : (
             <PaginationItem key={item}>
-              <PaginationLink href={buildPageHref(queryBase, item)} isActive={item === page}>
+              <PaginationLink
+                href={buildPageHref(basePath, queryBase, item)}
+                isActive={item === page}
+              >
                 {item}
               </PaginationLink>
             </PaginationItem>
@@ -91,7 +101,7 @@ export function CatalogPagination({ page, totalPages, queryBase }: CatalogPagina
 
         <PaginationItem>
           <PaginationNext
-            href={page < totalPages ? buildPageHref(queryBase, page + 1) : undefined}
+            href={page < totalPages ? buildPageHref(basePath, queryBase, page + 1) : undefined}
             aria-disabled={page >= totalPages}
             className={page >= totalPages ? "pointer-events-none opacity-50" : undefined}
             text="Berikutnya"

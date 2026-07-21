@@ -300,9 +300,15 @@ Base Path
 | Method | Endpoint | Description | Auth |
 |---------|----------|-------------|------|
 | GET | / | Product listing | Public |
-| GET | /slug/{slug} | Product detail | Public |
+| GET | /slug/{slug} | Product detail (variants ACTIVE + media + stok `availableQty`/`inStock`) | Public |
 | GET | /search | Search products | Public |
 | GET | /categories | Categories | Public |
+
+Catatan `GET /slug/{slug}` response `data`:
+
+- Field dasar: `id`, `name`, `slug`, `description`, `brand`, `categoryId`, `priceFrom`, `priceTo`, `thumbnailUrl`
+- `variants[]`: `id`, `sku`, `price`, `compareAtPrice`, `variantLabel`, `availableQty`, `inStock`
+- `media[]`: `id`, `url`, `altText`, `sortOrder`, `mediaType` (fallback ke thumbnail bila gallery kosong)
 
 ---
 

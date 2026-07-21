@@ -17,7 +17,7 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 Priority: P0
 
-Status: In Progress — M6.1–M6.6 ✅; M6.7 slice 1 (Homepage + Catalog) ✅; next M6.7 slice 2 (Detail + Search)
+Status: In Progress — M6.1–M6.7 ✅; next M6.8 UI Auth + Account + Cart
 
 Owner: `cart` module, `inventory` module
 
@@ -332,15 +332,15 @@ Dependency:
 
 Priority: P0
 
-Status: In Progress — slice 1 (Homepage + Catalog) ✅; slice 2 (Detail + Search) next
+Status: Completed
 
 Feature: `ui-store-catalog`
 
 Output:
 - ✅ Homepage menampilkan banner, featured products, new arrivals, best sellers.
 - ✅ Halaman listing produk dengan filter dan pagination.
-- ⏳ Halaman detail produk dengan galeri, variant selector, dan add-to-cart.
-- ⏳ Halaman search results.
+- ✅ Halaman detail produk dengan galeri, variant selector, dan add-to-cart.
+- ✅ Halaman search results.
 
 Scope implementasi:
 
@@ -356,33 +356,31 @@ Scope implementasi:
    - Pagination.
    - Data dari `listPublicProductsFromSearchParams`.
 
-3. ⏳ **Product detail** (`src/app/(store)/products/[slug]/page.tsx`):
+3. ✅ **Product detail** (`src/app/(store)/products/[slug]/page.tsx`):
    - Galeri gambar produk (thumbnail + full view).
    - Informasi: nama, brand, harga, deskripsi.
-   - Variant selector (warna/ukuran/model) — pilihan harus valid.
+   - Variant selector — pilihan ACTIVE; stok dari inventory.
    - Stok indicator (tersedia / habis).
-   - Tombol "Add to Cart" — memanggil `POST /api/v1/cart/items`.
-   - Data dari `GET /api/v1/products/slug/[slug]`.
+   - Tombol "Add to Cart" — `POST /api/v1/cart/items` (401 → `/login?next=`).
+   - Data dari `getPublicProductBySlug` (variants + media + stock).
 
-4. ⏳ **Search** (`src/app/(store)/search/page.tsx`):
-   - Input search (bisa via URL params `?q=`).
+4. ✅ **Search** (`src/app/(store)/search/page.tsx`):
+   - Input search (URL params `?q=`) + debounce navigasi.
    - Hasil grid produk.
-   - Empty state jika tidak ditemukan.
-   - Data dari `GET /api/v1/products/search?q=`.
+   - Empty state jika tidak ditemukan / q kosong.
+   - Data dari `searchPublicProductsFromSearchParams`.
 
 5. **Komponen domain** (`src/modules/catalog/presentation/`):
-   - ✅ `ProductCard` — thumbnail, nama, harga.
-   - ✅ `ProductGrid` — layout grid responsif.
-   - ✅ `ProductFilters` / `CatalogPagination` / `PriceDisplay`.
-   - ⏳ `VariantSelector` — tombol pilihan variant (slice 2).
+   - ✅ `ProductCard`, `ProductGrid`, `ProductFilters`, `CatalogPagination`, `PriceDisplay`.
+   - ✅ `VariantSelector`, `ProductGallery`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`.
 
 Acceptance criteria:
-- Homepage load dengan data real dari API (bukan mock).
-- Product listing menampilkan produk aktif dengan pagination berjalan.
-- Product detail menampilkan semua info; tombol Add to Cart berfungsi (login required).
-- Search mengembalikan hasil yang relevan dengan debounce.
-- Semua halaman responsive di mobile.
-- `bun run check` hijau.
+- ✅ Homepage load dengan data real (bukan mock).
+- ✅ Product listing menampilkan produk aktif dengan pagination.
+- ✅ Product detail menampilkan info + Add to Cart (login required).
+- ✅ Search mengembalikan hasil relevan dengan debounce.
+- ✅ Responsive di mobile.
+- ✅ `bun run check` hijau.
 
 Dependency:
 - M6.6 selesai (layout aktif).

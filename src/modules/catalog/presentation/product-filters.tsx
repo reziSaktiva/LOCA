@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { PublicCategory } from "@/modules/catalog/public/catalog-public-service";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
@@ -122,7 +124,7 @@ export function ProductFilters({ categories, values, className }: ProductFilters
           variant="outline"
           size="default"
           nativeButton={false}
-          render={<a href="/products" />}
+          render={<Link href="/products" />}
           className="flex-1 md:flex-none"
         >
           Reset

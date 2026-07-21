@@ -164,15 +164,16 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 025** (Phase 4 backend exit contracts).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-21** (entry 2 — M6.5).
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 026** (proactive-clarification skill).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-21** (entry 4).
 
 ## Agent Governance
 
 - ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
 - ✅ Folder `agents/` sudah berisi role profiles inti (`backend`, `frontend`, `database`, `security`, `qa`, `code-review`, `product`, `solution-architect`, `ui`) untuk mendukung eksekusi Phase 1.
-- ✅ Folder `.agents/skills/` sudah berisi 6 skill aktif: 4 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`, `progress-sync`) + 2 skill dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi skill registry via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012-013.
+- ✅ Folder `.agents/skills/` berisi core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`, `progress-sync`, `proactive-clarification`) + skill registry (`supabase`, `supabase-postgres-best-practices`, `shadcn`). Tracking versi skill registry via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012-013, 026.
 - ✅ Skill `progress-sync` memaksa agent otomatis melaporkan progress task ke `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` di akhir setiap task implementasi, tanpa harus diminta user. Detail: `planning/decisions.md` Decision 013.
+- ✅ Skill `proactive-clarification` mewajibkan agent mengidentifikasi fork keputusan yang belum ada di SSOT/`planning/decisions.md` sebelum eksekusi, lalu bertanya dengan opsi terkurasi (bukan berasumsi). Detail: `planning/decisions.md` Decision 026.
 
 ## Implementation State
 

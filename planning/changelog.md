@@ -9,6 +9,22 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (4)
+
+### Added
+
+- Skill **`proactive-clarification`** di `.agents/skills/proactive-clarification/SKILL.md` — agent wajib tanya dulu pada fork keputusan yang belum ada di baseline Loca (bukan berasumsi). Decision 026.
+
+### Changed
+
+- `PROJECT_STATE.md` — Agent Governance diperbarui (daftar skill + deskripsi `proactive-clarification`).
+
+### Notes
+
+- Skill ini melengkapi `spec-driven-workflow` / `docs-sync`; tidak mengubah business rule produk.
+
+---
+
 ## 2026-07-21 (3)
 
 ### Added

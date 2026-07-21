@@ -1,5 +1,33 @@
 # Project Decisions
 
+## Decision 026
+
+Tanggal: 2026-07-21
+
+Judul:
+
+Skill `proactive-clarification` untuk mencegah asumsi pada fork keputusan.
+
+Keputusan:
+
+* Menambahkan skill project `.agents/skills/proactive-clarification/SKILL.md`.
+* Sebelum eksekusi tugas (docs, fitur, arsitektur, UX, konfigurasi), agent wajib mengidentifikasi fork keputusan yang belum ada di baseline (`docs/`, `planning/decisions.md`, stack resmi) dan bertanya dengan pilihan terkurasi.
+* Pengecualian: keputusan yang sudah tertulis di SSOT / decisions / stack resmi tidak ditanya ulang.
+* Setelah jawaban manusia, keputusan permanen dicatat via skill `docs-sync`.
+
+Alasan:
+
+* Mengurangi implementasi salah arah karena asumsi diam-diam pada opsi yang setara.
+* Melengkapi `spec-driven-workflow`: SSOT dulu; jika SSOT belum menjawab, klarifikasi dulu.
+
+Dampak:
+
+* `.agents/skills/proactive-clarification/SKILL.md` (baru)
+* `PROJECT_STATE.md` (Agent Governance)
+* `planning/changelog.md`
+
+---
+
 ## Decision 025
 
 Tanggal: 2026-07-21

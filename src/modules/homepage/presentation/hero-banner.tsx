@@ -33,11 +33,11 @@ function FallbackHero({ className }: { className?: string }) {
       aria-label="Hero"
       className={cn(
         "relative overflow-hidden bg-primary text-primary-foreground",
-        "bg-[radial-gradient(ellipse_at_top_right,_oklch(0.47_0.23_265_/_0.35),_transparent_55%),linear-gradient(160deg,_#0A0A0A_0%,_#171717_55%,_#0A0A0A_100%)]",
+        "bg-[radial-gradient(ellipse_at_top_right,oklch(0.47_0.23_265/0.35),transparent_55%),linear-gradient(160deg,#0A0A0A_0%,#171717_55%,#0A0A0A_100%)]",
         className,
       )}
     >
-      <Container className="relative flex min-h-[min(70vh,36rem)] flex-col justify-end gap-4 py-12 md:min-h-[28rem] md:py-16">
+      <Container className="relative flex min-h-[min(70vh,36rem)] flex-col justify-end gap-4 py-12 md:min-h-112 md:py-16">
         <p className="font-heading text-5xl font-bold tracking-tight md:text-6xl">LOCA</p>
         <p className="max-w-md text-base text-primary-foreground/80 md:text-lg">
           Sports apparel essentials untuk gerakan harianmu.
@@ -69,13 +69,13 @@ export function HeroBanner({ banners, className }: HeroBannerProps) {
 
   return (
     <section aria-label="Hero" className={cn("relative overflow-hidden bg-primary", className)}>
-      <div className="relative min-h-[min(70vh,36rem)] md:min-h-[28rem]">
+      <div className="relative min-h-[min(70vh,36rem)] md:min-h-112">
         <HeroMedia src={banner.mediaUrl} alt={banner.title} />
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"
+          className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20"
         />
-        <Container className="relative flex min-h-[min(70vh,36rem)] flex-col justify-end gap-3 py-12 text-white md:min-h-[28rem] md:gap-4 md:py-16">
+        <Container className="relative flex min-h-[min(70vh,36rem)] flex-col justify-end gap-3 py-12 text-white md:min-h-112 md:gap-4 md:py-16">
           <p className="font-heading text-sm font-semibold tracking-[0.2em] text-white/80 uppercase">
             LOCA
           </p>

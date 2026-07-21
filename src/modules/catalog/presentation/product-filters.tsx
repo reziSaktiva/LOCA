@@ -46,7 +46,7 @@ export function ProductFilters({ categories, values, className }: ProductFilters
       )}
       aria-label="Filter produk"
     >
-      <div className="flex min-w-[10rem] flex-1 flex-col gap-1.5">
+      <div className="flex min-w-40 flex-1 flex-col gap-1.5">
         <label htmlFor="catalog-category" className="text-xs font-medium text-muted-foreground">
           Kategori
         </label>
@@ -65,7 +65,7 @@ export function ProductFilters({ categories, values, className }: ProductFilters
         </select>
       </div>
 
-      <div className="flex min-w-[7rem] flex-1 flex-col gap-1.5">
+      <div className="flex min-w-28 flex-1 flex-col gap-1.5">
         <label htmlFor="catalog-min-price" className="text-xs font-medium text-muted-foreground">
           Harga min
         </label>
@@ -81,7 +81,7 @@ export function ProductFilters({ categories, values, className }: ProductFilters
         />
       </div>
 
-      <div className="flex min-w-[7rem] flex-1 flex-col gap-1.5">
+      <div className="flex min-w-28 flex-1 flex-col gap-1.5">
         <label htmlFor="catalog-max-price" className="text-xs font-medium text-muted-foreground">
           Harga max
         </label>
@@ -97,7 +97,7 @@ export function ProductFilters({ categories, values, className }: ProductFilters
         />
       </div>
 
-      <div className="flex min-w-[10rem] flex-1 flex-col gap-1.5">
+      <div className="flex min-w-40 flex-1 flex-col gap-1.5">
         <label htmlFor="catalog-sort" className="text-xs font-medium text-muted-foreground">
           Urutkan
         </label>

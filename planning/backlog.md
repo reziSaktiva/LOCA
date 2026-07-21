@@ -17,7 +17,7 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 Priority: P0
 
-Status: In Progress — M6.1–M6.7 ✅; next M6.8 UI Auth + Account + Cart
+Status: Completed — M6.1–M6.8 ✅ (Phase 4 selesai); next Phase 5 Checkout & Order
 
 Owner: `cart` module, `inventory` module
 
@@ -393,7 +393,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned (setelah M6.7)
+Status: Completed (2026-07-21)
 
 Feature: `ui-auth-account-cart`
 

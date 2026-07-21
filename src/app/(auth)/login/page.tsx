@@ -1,26 +1,34 @@
-import Link from "next/link";
+import { LoginForm, safeRedirectPath } from "@/modules/auth/presentation";
 
-/**
- * Login placeholder (M6.6). Form lengkap di M6.8.
- */
-export default function LoginPage() {
+export const metadata = {
+  title: "Masuk — LOCA",
+  description: "Masuk ke akun LOCA untuk belanja dan kelola profil.",
+};
+
+type LoginPageProps = {
+  searchParams: Promise<{ next?: string | string[]; registered?: string | string[] }>;
+};
+
+function firstParam(value: string | string[] | undefined): string | undefined {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+  return value;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
+  const nextPath = safeRedirectPath(firstParam(params.next));
+  const justRegistered = firstParam(params.registered) === "1";
+
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-heading text-xl font-semibold tracking-tight">Masuk</h1>
-        <p className="text-sm text-muted-foreground">
-          Form login akan tersedia di milestone Auth UI berikutnya.
+      {justRegistered ? (
+        <p role="status" className="rounded-lg bg-success/10 px-3 py-2 text-sm text-success">
+          Akun berhasil dibuat. Silakan masuk.
         </p>
-      </div>
-      <p className="text-sm text-muted-foreground">
-        Belum punya akun?{" "}
-        <Link
-          href="/register"
-          className="font-medium text-brand-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          Daftar
-        </Link>
-      </p>
+      ) : null}
+      <LoginForm nextPath={nextPath} />
     </div>
   );
 }

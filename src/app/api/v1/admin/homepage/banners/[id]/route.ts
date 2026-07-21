@@ -15,7 +15,8 @@ export async function PATCH(request: Request, context: RouteContext) {
     return apiError(
       {
         code: guard.reason,
-        message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
       },
       status,
     );
@@ -59,7 +60,8 @@ export async function DELETE(_request: Request, context: RouteContext) {
     return apiError(
       {
         code: guard.reason,
-        message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
       },
       status,
     );

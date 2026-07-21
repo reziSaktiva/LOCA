@@ -13,11 +13,11 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 ## Current Backlog
 
-### Cart & Inventory Phase 4 (M6.1–M6.6)
+### Cart & Inventory Phase 4 (M6.1–M6.8)
 
 Priority: P0
 
-Status: Ready — next to implement
+Status: In Progress — M6.1–M6.6 ✅; next M6.7 UI catalog pages
 
 Owner: `cart` module, `inventory` module
 
@@ -31,7 +31,7 @@ Membangun kemampuan manajemen keranjang belanja dan stok inventori sesuai roadma
 
 Priority: P0
 
-Status: Ready — next to implement
+Status: Completed
 
 Feature: `inventory-domain`
 
@@ -109,7 +109,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned
+Status: Completed
 
 Feature: `inventory-admin-api`
 
@@ -146,7 +146,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned
+Status: Completed
 
 Feature: `cart-domain`
 
@@ -291,7 +291,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned (setelah M6.5)
+Status: Completed (2026-07-21)
 
 Feature: `ui-route-groups`
 
@@ -332,7 +332,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned (setelah M6.6)
+Status: Ready — next to implement
 
 Feature: `ui-store-catalog`
 
@@ -456,7 +456,7 @@ Dependency:
 
 Priority: P0
 
-Status: Planned
+Status: Completed (2026-07-21)
 
 Feature: `phase-4-exit-gate`
 

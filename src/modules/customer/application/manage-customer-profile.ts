@@ -1,4 +1,8 @@
-import type { CustomerProfile, CustomerResult, UpsertCustomerProfileCommand } from "../domain/customer-entities";
+import type {
+  CustomerProfile,
+  CustomerResult,
+  UpsertCustomerProfileCommand,
+} from "../domain/customer-entities";
 import { isValidDisplayName, isValidPhone } from "../domain/customer-invariants";
 import type { CustomerRepository } from "../domain/customer-repository";
 

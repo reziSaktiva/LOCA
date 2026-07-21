@@ -12,7 +12,14 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   const { id } = await params;
@@ -22,7 +29,10 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     if (!body.status || !CATALOG_PRODUCT_STATUSES.includes(body.status as CatalogProductStatus)) {
       return apiError(
-        { code: "VALIDATION_ERROR", message: `status harus salah satu dari: ${CATALOG_PRODUCT_STATUSES.join(", ")}` },
+        {
+          code: "VALIDATION_ERROR",
+          message: `status harus salah satu dari: ${CATALOG_PRODUCT_STATUSES.join(", ")}`,
+        },
         400,
       );
     }

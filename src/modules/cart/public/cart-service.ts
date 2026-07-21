@@ -8,10 +8,7 @@
 import { getVariantSnapshotForCart } from "../../catalog/public/catalog-public-service";
 import { inventoryAssertStockAvailable } from "../../inventory/public/inventory-service";
 import type { CartCatalogPort, CartInventoryPort } from "../application/cart-ports";
-import {
-  getCartCustomerView,
-  type CartCustomerView,
-} from "../application/get-cart-customer-view";
+import { getCartCustomerView, type CartCustomerView } from "../application/get-cart-customer-view";
 import { getCartSnapshot } from "../application/get-cart";
 import {
   addItemToCart,

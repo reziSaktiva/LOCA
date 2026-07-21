@@ -189,19 +189,20 @@ src/
         page.tsx                # /login
       register/
         page.tsx                # /register
-    (admin)/                    # Admin pages — layout dengan sidebar admin
-      dashboard/
-        page.tsx                # /admin/dashboard
-      products/
-        page.tsx                # /admin/products
-        [id]/
-          page.tsx              # /admin/products/[id]
-      orders/
-        page.tsx                # /admin/orders
-      inventory/
-        page.tsx                # /admin/inventory
-      homepage/
-        page.tsx                # /admin/homepage
+    (admin)/                    # Admin pages — layout dengan sidebar + requireAdmin()
+      admin/                    # Segment URL `/admin/*` (route group tidak menambah path)
+        dashboard/
+          page.tsx              # /admin/dashboard
+        products/
+          page.tsx              # /admin/products
+          [id]/
+            page.tsx            # /admin/products/[id]
+        orders/
+          page.tsx              # /admin/orders
+        inventory/
+          page.tsx              # /admin/inventory
+        homepage/
+          page.tsx              # /admin/homepage
     api/
       v1/                       # Seluruh API route handler
   modules/

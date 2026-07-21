@@ -8,14 +8,15 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
-- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.4 selesai, lanjut M6.5
-- Current implementation progress: **86%**
+- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.6 selesai; lanjut M6.7 UI catalog
+- Current implementation progress: **90%**
 
 ## Current Focus
 
-- Phase 4 — Cart & Inventory. **M6.1–M6.4 selesai.** Lanjut ke **M6.5 — Phase 4 Backend Exit Validation**.
-- Workflow diubah ke **UI paralel per phase** (Decision 022): setelah backend M6.1–M6.5 selesai, lanjut ke UI milestone M6.6–M6.8.
-- Route group strategy ditetapkan: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9.
+- Phase 4 — Cart & Inventory. **M6.1–M6.6 selesai.** Lanjut ke **M6.7 — UI Homepage + Catalog + Product Detail**.
+- Workflow **UI paralel per phase** (Decision 022): UI catch-up M6.7–M6.8 sebelum Phase 5.
+- Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
+- Decision 025: kontrak Phase 5 terdokumentasi.
 
 ## Completed (Planning Side)
 
@@ -223,19 +224,20 @@ Target setup awal (Phase 2 selesai):
 
 ### Cart Module
 
-- Status: **M6.3–M6.4 Completed** — domain foundation + customer API aktif.
+- Status: **M6.3–M6.5 Completed** — domain foundation + customer API + Phase 4 backend exit validation.
 - M6.3: domain (`Cart`, `CartItem`, `CartStatus`, `CartSnapshot`), invariants, repository contract, port pattern, application services, `PrismaCartRepository`, public facade. Migration `20260710042405_cart_domain_foundation` diapply.
 - M6.4: customer routes `GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]` (semua `requireCustomer()`). Application `get-cart-customer-view.ts` + presentation `cart-http.ts`. Facade `cartGetCustomerView`.
-- 226 test lolos. Next: M6.5 — Phase 4 Backend Exit Validation.
+- M6.5: exit gate — smoke/contract test `phase-4-backend-exit.test.ts`; migrations up to date; kontrak Phase 5 terpasang (Decision 025).
+- 229 test lolos. Next: M6.6 — UI catch-up.
 
 ### UI — Phase 4 (Catch-up M6.6–M6.8)
 
-- Status: **Belum diimplementasikan**
-- Target setelah M6.5 (backend exit validation):
-  - M6.6: Route group setup + shared layout (Navbar, Footer, AdminSidebar)
-  - M6.7: Homepage + Catalog + Product Detail + Search pages
+- Status: **M6.6 Completed** — route groups + shared layout aktif; placeholder pages siap.
+- M6.6: `(store)` Navbar+Footer, `(auth)` logo-centered, `(admin)` Sidebar+`requireAdmin()`. Components di `src/shared/ui/layout/`.
+- Next:
+  - M6.7: Homepage + Catalog + Product Detail + Search pages (data real)
   - M6.8: Auth + Account + Cart pages
-- Route strategy: `(store)`, `(auth)`, `(admin)` — lihat `docs/04-system-architecture.md` §9
+- Route strategy: `(store)`, `(auth)`, `(admin)/admin/*` — lihat `docs/04-system-architecture.md` §9
 
 ## Remaining Priority Flows
 

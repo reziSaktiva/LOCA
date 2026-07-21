@@ -10,7 +10,14 @@ export async function GET() {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   try {
@@ -25,7 +32,14 @@ export async function POST(request: Request) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   try {

@@ -1,6 +1,15 @@
-import type { CustomerAddress as PrismaAddress, CustomerProfile as PrismaProfile } from "../../../generated/prisma/client";
+import type {
+  CustomerAddress as PrismaAddress,
+  CustomerProfile as PrismaProfile,
+} from "../../../generated/prisma/client";
 import { prisma } from "../../../shared/infrastructure/database/client";
-import type { CustomerAddress, CustomerProfile, CreateAddressCommand, UpdateAddressCommand, UpsertCustomerProfileCommand } from "../domain/customer-entities";
+import type {
+  CustomerAddress,
+  CustomerProfile,
+  CreateAddressCommand,
+  UpdateAddressCommand,
+  UpsertCustomerProfileCommand,
+} from "../domain/customer-entities";
 import type { CustomerRepository } from "../domain/customer-repository";
 
 function toProfile(row: PrismaProfile): CustomerProfile {

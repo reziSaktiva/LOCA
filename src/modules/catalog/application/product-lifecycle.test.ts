@@ -3,11 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { CatalogProduct } from "../domain/catalog-entities";
 import { InMemoryCatalogRepository } from "../infrastructure/in-memory-catalog-repository";
 import { getProductBySlug } from "./get-product-by-slug";
-import {
-  archiveProduct,
-  createProduct,
-  updateProductStatus,
-} from "./manage-product-lifecycle";
+import { archiveProduct, createProduct, updateProductStatus } from "./manage-product-lifecycle";
 
 function makeRepo() {
   return new InMemoryCatalogRepository();
@@ -122,7 +118,10 @@ describe("updateProductStatus", () => {
       id: productWithVariant.id,
       name: productWithVariant.name,
     });
-    await repo.updateProductStatus(productWithVariant.id, productWithVariant.variantCount >= 1 ? productWithVariant.status : "DRAFT");
+    await repo.updateProductStatus(
+      productWithVariant.id,
+      productWithVariant.variantCount >= 1 ? productWithVariant.status : "DRAFT",
+    );
 
     const runSocks = await repo.findProductBySlug("run-socks-pro");
     expect(runSocks).not.toBeNull();

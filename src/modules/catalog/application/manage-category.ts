@@ -12,8 +12,7 @@ export type CategoryOperationError =
   | { code: "SLUG_CONFLICT"; message: string };
 
 export type CategoryOperationResult<T> =
-  | { success: true; category: T }
-  | { success: false; error: CategoryOperationError };
+  { success: true; category: T } | { success: false; error: CategoryOperationError };
 
 export async function createCategory(
   repository: CatalogRepository,

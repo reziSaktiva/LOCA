@@ -6,15 +6,16 @@ import {
   adminListProductMedia,
 } from "@/modules/catalog/public/catalog-admin-service";
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
     return apiError(
-      { code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" },
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
       status,
     );
   }
@@ -30,15 +31,16 @@ export async function GET(
   return apiSuccess(result.data);
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
     return apiError(
-      { code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" },
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
       status,
     );
   }

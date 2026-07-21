@@ -4,7 +4,11 @@ import type {
   ReleaseStockCommand,
   ReserveStockCommand,
 } from "../domain/inventory-entities";
-import { canCommitReservation, canReleaseReservation, isStockSufficient } from "../domain/inventory-invariants";
+import {
+  canCommitReservation,
+  canReleaseReservation,
+  isStockSufficient,
+} from "../domain/inventory-invariants";
 import type { InventoryRepository } from "../domain/inventory-repository";
 
 /**

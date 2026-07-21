@@ -1,5 +1,34 @@
 # Project Decisions
 
+## Decision 025
+
+Tanggal: 2026-07-21
+
+Judul:
+
+Phase 4 Backend Exit — kontrak lintas module untuk Phase 5 (Checkout & Order).
+
+Keputusan:
+
+* **Cart → Checkout**: consumer Phase 5 memakai `getCartSnapshotForCheckout(customerId)` dari `src/modules/cart/public/cart-service.ts`. Shape kontrak: `CartSnapshot` (`cart`, `items`, `subtotal`, `total`).
+* **Inventory → Order/Payment**: consumer Phase 5 memakai `inventoryReserveStock`, `inventoryCommitStock`, dan `inventoryReleaseReservedStock` dari `src/modules/inventory/public/inventory-service.ts`.
+* **Cart dependency wiring**: `cart` hanya mengakses `catalog` dan `inventory` via port (`CartCatalogPort`, `CartInventoryPort`) di application layer; implementasi port di public facade memanggil `getVariantSnapshotForCart` dan `inventoryAssertStockAvailable`.
+* **Naming**: spesifikasi domain di `docs/05-domain-modules.md` tetap memakai nama konseptual (`getCartSnapshot`, `reserveStock`, …); nama fungsi facade di kode memakai prefix module (`getCartSnapshotForCheckout`, `inventoryReserveStock`, …) agar boundary lintas module eksplisit.
+* **MVP actor**: parameter `actorContext` pada spesifikasi cart disederhanakan menjadi `customerId` karena cart bersifat Customer-only.
+
+Alasan:
+
+* M6.5 mewajibkan kontrak Phase 5 terpasang dan terdokumentasi sebelum UI catch-up (M6.6–M6.8) dan sebelum kickoff Checkout.
+* Menyelaraskan nama konseptual di docs dengan export nyata di public facade menghindari ambigu saat Phase 5 dimulai.
+
+Dampak:
+
+* `docs/05-domain-modules.md` §Inventory dan §Cart — Public Services dipetakan ke nama facade implementasi.
+* `src/modules/cart/application/phase-4-backend-exit.test.ts` — smoke + contract surface check.
+* `PROJECT_STATE.md`, `planning/backlog.md`, `planning/changelog.md`, `context/ctx-implementation.md`.
+
+---
+
 ## Decision 024
 
 Tanggal: 2026-07-09

@@ -23,7 +23,10 @@ export async function POST(request: Request) {
   }
 
   if (typeof quantity !== "number" || !Number.isFinite(quantity)) {
-    return apiError({ code: "VALIDATION_ERROR", message: "quantity wajib diisi sebagai angka." }, 422);
+    return apiError(
+      { code: "VALIDATION_ERROR", message: "quantity wajib diisi sebagai angka." },
+      422,
+    );
   }
 
   try {

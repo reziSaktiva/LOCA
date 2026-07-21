@@ -13,7 +13,8 @@ export async function GET() {
     return apiError(
       {
         code: guard.reason,
-        message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
       },
       status,
     );
@@ -34,7 +35,8 @@ export async function POST(request: Request) {
     return apiError(
       {
         code: guard.reason,
-        message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
       },
       status,
     );

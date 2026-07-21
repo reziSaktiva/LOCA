@@ -11,7 +11,14 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   const { variantId } = await params;

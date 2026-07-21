@@ -2,9 +2,7 @@ import type { CatalogProduct } from "../domain/catalog-entities";
 import { isProductPubliclyListable } from "../domain/catalog-invariants";
 import type { CatalogRepository } from "../domain/catalog-repository";
 
-export type GetProductBySlugResult =
-  | { found: true; product: CatalogProduct }
-  | { found: false };
+export type GetProductBySlugResult = { found: true; product: CatalogProduct } | { found: false };
 
 export async function getProductBySlug(
   repository: CatalogRepository,

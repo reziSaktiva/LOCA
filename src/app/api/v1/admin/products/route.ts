@@ -10,7 +10,14 @@ export async function GET() {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   try {
@@ -25,7 +32,14 @@ export async function POST(request: Request) {
   const guard = await requireAdmin();
   if (!guard.authorized) {
     const status = guard.reason === "UNAUTHORIZED" ? 401 : 403;
-    return apiError({ code: guard.reason, message: guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required" }, status);
+    return apiError(
+      {
+        code: guard.reason,
+        message:
+          guard.reason === "UNAUTHORIZED" ? "Authentication required" : "Admin access required",
+      },
+      status,
+    );
   }
 
   try {
@@ -33,7 +47,13 @@ export async function POST(request: Request) {
     const { name, slug, description, brand, categoryId } = body;
 
     if (!name || !slug || description === undefined || !brand || !categoryId) {
-      return apiError({ code: "VALIDATION_ERROR", message: "name, slug, description, brand, categoryId are required" }, 400);
+      return apiError(
+        {
+          code: "VALIDATION_ERROR",
+          message: "name, slug, description, brand, categoryId are required",
+        },
+        400,
+      );
     }
 
     const result = await adminCreateProduct({ name, slug, description, brand, categoryId });

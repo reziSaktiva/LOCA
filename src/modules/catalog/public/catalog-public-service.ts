@@ -1,10 +1,14 @@
-import { getProductBySlug } from "../application/get-product-by-slug";
+import {
+  getPublicProductDetail,
+  type PublicProductDetailData,
+} from "../application/get-public-product-detail";
 import { listPublicCategories } from "../application/list-public-categories";
 import { listPublicProducts } from "../application/list-public-products";
 import { searchPublicProducts, type SearchError } from "../application/search-public-products";
 import type { VariantSnapshot } from "../domain/catalog-entities";
 import type { ListPublicProductsQuery } from "../domain/catalog-repository";
 import { PrismaCatalogRepository } from "../infrastructure/prisma-catalog-repository";
+import { inventoryGetStock } from "../../inventory/public/inventory-service";
 
 export type PublicProductCard = {
   id: string;
@@ -16,17 +20,12 @@ export type PublicProductCard = {
   thumbnailUrl: string;
 };
 
-export type PublicProductDetail = {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  brand: string;
-  categoryId: string;
-  priceFrom: number;
-  priceTo: number;
-  thumbnailUrl: string;
-};
+export type PublicProductDetail = PublicProductDetailData;
+
+export type {
+  PublicProductDetailVariant,
+  PublicProductDetailMedia,
+} from "../application/get-public-product-detail";
 
 export type PublicCategory = {
   id: string;
@@ -127,24 +126,21 @@ export async function listPublicCategoriesForCatalog(): Promise<PublicCategory[]
   }));
 }
 
+/**
+ * Product detail publik lengkap (variants ACTIVE + media + stok).
+ * Stok di-enrich via Inventory public facade (dependency Catalog → Inventory).
+ */
 export async function getPublicProductBySlug(slug: string): Promise<PublicProductDetail | null> {
-  const result = await getProductBySlug(repository, slug);
-
-  if (!result.found) {
-    return null;
-  }
-
-  return {
-    id: result.product.id,
-    name: result.product.name,
-    slug: result.product.slug,
-    description: result.product.description,
-    brand: result.product.brand,
-    categoryId: result.product.categoryId,
-    priceFrom: result.product.priceFrom,
-    priceTo: result.product.priceTo,
-    thumbnailUrl: result.product.thumbnailUrl,
-  };
+  return getPublicProductDetail(
+    repository,
+    {
+      async getAvailableQty(variantId) {
+        const stock = await inventoryGetStock(variantId);
+        return stock?.availableQty ?? 0;
+      },
+    },
+    slug,
+  );
 }
 
 export type SearchProductsResult =

@@ -209,7 +209,7 @@ Backend:
 
 UI Catch-up:
 - ✅ M6.6 — UI Foundation: Route Groups + Shared Layout
-- M6.7 — UI: Homepage + Catalog + Product Detail
+- ✅ M6.7 — UI: Homepage + Catalog + Product Detail
 - M6.8 — UI: Auth + Account + Cart
 
 Exit Criteria:

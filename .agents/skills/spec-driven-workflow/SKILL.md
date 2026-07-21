@@ -74,5 +74,7 @@ Jika requirement tidak jelas atau dokumen tidak cukup untuk menjawab, **tanyakan
 
 ## Skill Terkait
 
+- Ada fork keputusan belum jelas di SSOT/decisions -> gunakan skill `proactive-clarification` **sebelum** coding.
 - Membuat/menambah domain module baru -> gunakan skill `module-scaffold`.
 - Ada keputusan baru atau spesifikasi berubah -> gunakan skill `docs-sync`.
+- Task implementasi selesai -> gunakan skill `progress-sync`.

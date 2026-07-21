@@ -17,7 +17,7 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 Priority: P0
 
-Status: In Progress — M6.1–M6.6 ✅; next M6.7 UI catalog pages
+Status: In Progress — M6.1–M6.7 ✅; next M6.8 UI Auth + Account + Cart
 
 Owner: `cart` module, `inventory` module
 
@@ -332,57 +332,55 @@ Dependency:
 
 Priority: P0
 
-Status: Ready — next to implement
+Status: Completed
 
 Feature: `ui-store-catalog`
 
 Output:
-- Homepage menampilkan banner, featured products, new arrivals, best sellers.
-- Halaman listing produk dengan filter dan pagination.
-- Halaman detail produk dengan galeri, variant selector, dan add-to-cart.
-- Halaman search results.
+- ✅ Homepage menampilkan banner, featured products, new arrivals, best sellers.
+- ✅ Halaman listing produk dengan filter dan pagination.
+- ✅ Halaman detail produk dengan galeri, variant selector, dan add-to-cart.
+- ✅ Halaman search results.
 
 Scope implementasi:
 
-1. **Homepage** (`src/app/(store)/page.tsx`):
-   - Hero section dengan banner aktif dari `GET /api/v1/homepage`.
-   - Section Featured Products, New Arrivals, Best Sellers (horizontal scroll atau grid).
-   - Data fetching via Server Component (SSR/ISR).
+1. ✅ **Homepage** (`src/app/(store)/page.tsx`):
+   - Hero section dengan banner aktif dari `homepageGetData` (public facade).
+   - Section Featured Products, New Arrivals, Best Sellers (grid).
+   - Data fetching via Server Component.
 
-2. **Product listing** (`src/app/(store)/products/page.tsx`):
+2. ✅ **Product listing** (`src/app/(store)/products/page.tsx`):
    - Grid produk responsif (2 kolom mobile, 3–4 kolom desktop).
-   - Filter: kategori, range harga.
+   - Filter: kategori (slug), range harga.
    - Sorting: terbaru, harga terendah/tertinggi.
    - Pagination.
-   - Data dari `GET /api/v1/products`.
+   - Data dari `listPublicProductsFromSearchParams`.
 
-3. **Product detail** (`src/app/(store)/products/[slug]/page.tsx`):
+3. ✅ **Product detail** (`src/app/(store)/products/[slug]/page.tsx`):
    - Galeri gambar produk (thumbnail + full view).
    - Informasi: nama, brand, harga, deskripsi.
-   - Variant selector (warna/ukuran/model) — pilihan harus valid.
+   - Variant selector — pilihan ACTIVE; stok dari inventory.
    - Stok indicator (tersedia / habis).
-   - Tombol "Add to Cart" — memanggil `POST /api/v1/cart/items`.
-   - Data dari `GET /api/v1/products/slug/[slug]`.
+   - Tombol "Add to Cart" — `POST /api/v1/cart/items` (401 → `/login?next=`).
+   - Data dari `getPublicProductBySlug` (variants + media + stock).
 
-4. **Search** (`src/app/(store)/search/page.tsx`):
-   - Input search (bisa via URL params `?q=`).
+4. ✅ **Search** (`src/app/(store)/search/page.tsx`):
+   - Input search (URL params `?q=`) + debounce navigasi.
    - Hasil grid produk.
-   - Empty state jika tidak ditemukan.
-   - Data dari `GET /api/v1/products/search?q=`.
+   - Empty state jika tidak ditemukan / q kosong.
+   - Data dari `searchPublicProductsFromSearchParams`.
 
 5. **Komponen domain** (`src/modules/catalog/presentation/`):
-   - `ProductCard` — thumbnail, nama, harga, badge stok.
-   - `ProductGrid` — layout grid responsif.
-   - `VariantSelector` — tombol pilihan variant.
-   - `PriceDisplay` — format harga IDR.
+   - ✅ `ProductCard`, `ProductGrid`, `ProductFilters`, `CatalogPagination`, `PriceDisplay`.
+   - ✅ `VariantSelector`, `ProductGallery`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`.
 
 Acceptance criteria:
-- Homepage load dengan data real dari API (bukan mock).
-- Product listing menampilkan produk aktif dengan pagination berjalan.
-- Product detail menampilkan semua info; tombol Add to Cart berfungsi (login required).
-- Search mengembalikan hasil yang relevan dengan debounce.
-- Semua halaman responsive di mobile.
-- `bun run check` hijau.
+- ✅ Homepage load dengan data real (bukan mock).
+- ✅ Product listing menampilkan produk aktif dengan pagination.
+- ✅ Product detail menampilkan info + Add to Cart (login required).
+- ✅ Search mengembalikan hasil relevan dengan debounce.
+- ✅ Responsive di mobile.
+- ✅ `bun run check` hijau.
 
 Dependency:
 - M6.6 selesai (layout aktif).

@@ -9,6 +9,75 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (6)
+
+### Added
+
+- **M6.7 slice 2 — UI Product Detail + Search** (M6.7 selesai penuh):
+  - `/products/[slug]` — galeri, variant selector, stok, Add to Cart (`POST /api/v1/cart/items`, 401→login).
+  - `/search` — hasil search + debounce URL-state + empty states.
+  - Application `get-public-product-detail.ts` + enrich `getPublicProductBySlug` (variants + media + stock via Inventory).
+  - Presentation: `ProductGallery`, `VariantSelector`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`.
+
+### Changed
+
+- `docs/07-api-specification.md` — shape response `GET /products/slug/{slug}` didokumentasikan.
+- Progress docs: `PROJECT_STATE.md`, roadmap, backlog, `ctx-implementation.md` — M6.7 ✅; next M6.8.
+
+### Verified
+
+- `bun run check` hijau (236 test).
+- `bun run build` hijau — routes `/products/[slug]` + `/search` terdaftar.
+
+### Notes
+
+- Next: **M6.8 — UI Auth + Account + Cart**.
+
+---
+
+## 2026-07-21 (5)
+
+### Added
+
+- **M6.7 slice 1 — UI Homepage + Catalog listing**:
+  - Homepage real: `src/app/(store)/page.tsx` + `HeroBanner` (`src/modules/homepage/presentation/`).
+  - Catalog listing: `src/app/(store)/products/page.tsx` (filter kategori/harga/sort + pagination URL-state).
+  - Catalog presentation: `ProductCard`, `ProductGrid`, `ProductSection`, `ProductFilters`, `CatalogPagination`, `PriceDisplay`, `formatIdr`.
+  - Loading skeletons: `(store)/loading.tsx`, `(store)/products/loading.tsx`.
+
+### Changed
+
+- Filter `category` di `list-public-products` / `search-public-products` kini resolve **slug** (kontrak `docs/07`) atau id — selaras link Navbar `?category=<slug>`.
+- `PROJECT_STATE.md`, `docs/11-development-roadmap.md`, `planning/backlog.md`, `context/ctx-implementation.md` — progress M6.7 slice 1.
+
+### Verified
+
+- `bun run check` hijau (233 test).
+- `bun run build` hijau — routes `/` + `/products` dinamis.
+
+### Notes
+
+- Scope disepakati: Homepage + Catalog dulu; Product Detail + Search di iterasi M6.7 slice 2.
+- Belum commit (tunggu instruksi eksplisit).
+
+---
+
+## 2026-07-21 (4)
+
+### Added
+
+- Skill **`proactive-clarification`** di `.agents/skills/proactive-clarification/SKILL.md` — agent wajib tanya dulu pada fork keputusan yang belum ada di baseline Loca (bukan berasumsi). Decision 026.
+
+### Changed
+
+- `PROJECT_STATE.md` — Agent Governance diperbarui (daftar skill + deskripsi `proactive-clarification`).
+
+### Notes
+
+- Skill ini melengkapi `spec-driven-workflow` / `docs-sync`; tidak mengubah business rule produk.
+
+---
+
 ## 2026-07-21 (3)
 
 ### Added

@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Phase 4 In Progress — M6.6 Route Groups + Shared Layout selesai
+Status: Phase 4 In Progress — M6.7 UI store catalog selesai; next M6.8
 
-Current Version: v0.93
+Current Version: v0.95
 
 Project Type:
 
@@ -57,7 +57,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-M6.6 (UI Route Groups + Shared Layout) selesai. Route groups `(store)` / `(auth)` / `(admin)` aktif dengan layout terpisah. Shared layout: Navbar (cart count + mobile sheet), Footer, AdminSidebar. Admin dilindungi `requireAdmin()`. Homepage placeholder + auth/admin placeholders. Next: M6.7 — UI Homepage + Catalog + Product Detail.
+M6.7 selesai penuh: Homepage, Catalog listing, Product Detail (`/products/[slug]`), Search (`/search`). Detail: galeri, variant selector, stok, Add to Cart (401→login). Search dengan debounce URL-state. Next: M6.8 — UI Auth + Account + Cart.
 
 ---
 
@@ -164,15 +164,16 @@ Belum diputuskan:
 ## Planning Workspace
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
-- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 025** (Phase 4 backend exit contracts).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-21** (entry 2 — M6.5).
+- `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 026** (proactive-clarification skill).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-21** (entry 4).
 
 ## Agent Governance
 
 - ✅ `AGENTS.md` sudah ditingkatkan dari reminder minimal menjadi implementation guide operasional.
 - ✅ Folder `agents/` sudah berisi role profiles inti (`backend`, `frontend`, `database`, `security`, `qa`, `code-review`, `product`, `solution-architect`, `ui`) untuk mendukung eksekusi Phase 1.
-- ✅ Folder `.agents/skills/` sudah berisi 6 skill aktif: 4 core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`, `progress-sync`) + 2 skill dari registry `supabase/agent-skills` (`supabase`, `supabase-postgres-best-practices`). Tracking versi skill registry via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012-013.
+- ✅ Folder `.agents/skills/` berisi core skill project (`spec-driven-workflow`, `module-scaffold`, `docs-sync`, `progress-sync`, `proactive-clarification`) + skill registry (`supabase`, `supabase-postgres-best-practices`, `shadcn`). Tracking versi skill registry via `skills-lock.json`. Detail: `planning/decisions.md` Decision 012-013, 026.
 - ✅ Skill `progress-sync` memaksa agent otomatis melaporkan progress task ke `PROJECT_STATE.md`, `planning/changelog.md`, dan `context/ctx-implementation.md` di akhir setiap task implementasi, tanpa harus diminta user. Detail: `planning/decisions.md` Decision 013.
+- ✅ Skill `proactive-clarification` mewajibkan agent mengidentifikasi fork keputusan yang belum ada di SSOT/`planning/decisions.md` sebelum eksekusi, lalu bertanya dengan opsi terkurasi (bukan berasumsi). Detail: `planning/decisions.md` Decision 026.
 
 ## Implementation State
 
@@ -199,14 +200,15 @@ Belum diputuskan:
 - ✅ **M6.4 — Cart Customer API**: Endpoint customer cart aktif sesuai `docs/07-api-specification.md` §Cart. Application: `get-cart-customer-view.ts` (DTO customer-facing + enrich display fields via `CartCatalogPort`). Presentation: `cart-http.ts` (`cartErrorStatus` mapping). Public facade diperluas: `cartGetCustomerView`. `CartVariant` port diperluas dengan `productName`/`variantLabel`/`thumbnailUrl`. Routes: `GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]` — semua dilindungi `requireCustomer()`. POST/PATCH return cart terbaru; DELETE return 204; INSUFFICIENT_STOCK → 400. `bun run check` hijau (226 test).
 - ✅ **M6.5 — Phase 4 Backend Exit Validation**: Exit gate backend Phase 4 lolos. Cross-module: cart hanya mengakses catalog/inventory via public facade + ports. Kontrak Phase 5: `getCartSnapshotForCheckout`, `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`. Smoke test flow add→stock→total→remove→empty. Migrations inventory+cart applied (`prisma migrate status` up to date). Docs Public Services dipetakan ke facade names. Decision 025. `bun run check` hijau (229 test).
 - ✅ **M6.6 — UI Route Groups + Shared Layout**: Route groups `(store)`, `(auth)`, `(admin)` aktif. Shared layout di `src/shared/ui/layout/` (`Navbar`, `Footer`, `AdminSidebar`, `Container` re-export). Store layout fetch kategori + cart count lalu inject ke Navbar (boundary shared↛modules dipatuhi). Auth layout minimalist + redirect jika sudah login. Admin layout + topbar + `requireAdmin()` (401→`/login`, 403→`/`). Placeholder pages: `/`, `/login`, `/register`, `/admin/*`. shadcn `sheet`/`skeleton`/`separator`. `bun run check` + `bun run build` hijau.
+- ✅ **M6.7 — UI Homepage + Catalog + Product Detail**: Slice 1+2 selesai. Homepage + `/products` + `/products/[slug]` + `/search`. `getPublicProductBySlug` diperkaya (variants ACTIVE + media + stok via Inventory port). Presentation: `ProductGallery`, `VariantSelector`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`. Docs `07` diperbarui untuk shape detail. `bun run check` hijau (236 test) + `bun run build` hijau.
 
 ---
 
 # Next Action
 
-**Milestone 3–5** sudah selesai. **M6.1–M6.6** sudah selesai.
+**Milestone 3–5** sudah selesai. **M6.1–M6.7** sudah selesai.
 
-Next action: **M6.7 — UI: Homepage + Catalog + Product Detail** — `/`, `/products`, `/products/[slug]`, `/search` dengan data real dari API.
+Next action: **M6.8 — UI: Auth + Account + Cart** — `/login`, `/register`, `/account`, `/cart`.
 
 Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -221,7 +223,7 @@ Backend:
 
 UI Catch-up (Phase 2–4):
 6. ✅ **M6.6 — UI Route Groups + Shared Layout** — setup `(store)`, `(auth)`, `(admin)` dengan layout masing-masing (Navbar, Footer, AdminSidebar).
-7. **M6.7 — UI: Homepage + Catalog + Product Detail** — halaman publik: `/`, `/products`, `/products/[slug]`, `/search`.
+7. ✅ **M6.7 — UI: Homepage + Catalog + Product Detail** — `/`, `/products`, `/products/[slug]`, `/search`.
 8. **M6.8 — UI: Auth + Account + Cart** — halaman protected: `/login`, `/register`, `/account`, `/cart`.
 
 ---
@@ -348,7 +350,7 @@ System Design Readiness
 
 ```
 Implementation
-███████████████████░  90%
+███████████████████░  94%
 ```
 
 ---
@@ -445,7 +447,7 @@ Breakdown — Backend:
 Breakdown — UI Catch-up Phase 2–4:
 
 - [x] M6.6 UI: Route Groups + Shared Layout
-- [ ] M6.7 UI: Homepage + Catalog + Product Detail
+- [x] M6.7 UI: Homepage + Catalog + Product Detail
 - [ ] M6.8 UI: Auth + Account + Cart
 
 Target Outcome:

@@ -1,6 +1,7 @@
 import type { CatalogProduct } from "../domain/catalog-entities";
 import { isProductPubliclyListable } from "../domain/catalog-invariants";
 import type { CatalogRepository, ListPublicProductsQuery } from "../domain/catalog-repository";
+import { resolveCategoryFilterId } from "./resolve-category-filter";
 
 export type SearchPublicProductsQuery = {
   q: string;
@@ -56,6 +57,16 @@ export async function searchPublicProducts(
   }
 
   const q = query.q.toLowerCase().trim();
+
+  let categoryId: string | undefined;
+  if (query.category) {
+    const resolved = await resolveCategoryFilterId(repository, query.category);
+    if (!resolved) {
+      return { success: true, result: { items: [], total: 0 } };
+    }
+    categoryId = resolved;
+  }
+
   const allProducts = await repository.listProducts();
 
   const filtered = allProducts.filter((product) => {
@@ -72,7 +83,7 @@ export async function searchPublicProducts(
       return false;
     }
 
-    if (query.category && product.categoryId !== query.category) {
+    if (categoryId && product.categoryId !== categoryId) {
       return false;
     }
 

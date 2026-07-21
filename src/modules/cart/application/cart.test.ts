@@ -15,6 +15,7 @@ import type {
   UpdateCartItemVariantCommand,
 } from "../domain/cart-repository";
 import type { CartCatalogPort, CartInventoryPort, CartVariant } from "./cart-ports";
+import { getCartCustomerView } from "./get-cart-customer-view";
 import { getCartSnapshot, getOrCreateActiveCart } from "./get-cart";
 import {
   addItemToCart,
@@ -160,6 +161,17 @@ class InMemoryCartRepository implements CartRepository {
   }
 }
 
+function makeVariant(override: Partial<CartVariant> & Pick<CartVariant, "variantId">): CartVariant {
+  return {
+    price: 100000,
+    status: "ACTIVE",
+    productName: "Test Product",
+    variantLabel: "M",
+    thumbnailUrl: "/test.jpg",
+    ...override,
+  };
+}
+
 function makeCatalogPort(variants: CartVariant[] = []): CartCatalogPort {
   return {
     async getVariantSnapshot(variantId) {
@@ -301,7 +313,7 @@ describe("getCartSnapshot", () => {
 describe("addItemToCart", () => {
   it("adds a new item to a new cart", async () => {
     const repo = new InMemoryCartRepository();
-    const catalogPort = makeCatalogPort([{ variantId: "var-1", price: 100000, status: "ACTIVE" }]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-1" })]);
     const inventoryPort = makeInventoryPort({ "var-1": 10 });
 
     const result = await addItemToCart(repo, catalogPort, inventoryPort, {
@@ -321,7 +333,7 @@ describe("addItemToCart", () => {
     const repo = new InMemoryCartRepository()
       .seedCarts([makeCart()])
       .seedItems([makeCartItem({ quantity: 2, unitPriceSnapshot: 100000, lineSubtotal: 200000 })]);
-    const catalogPort = makeCatalogPort([{ variantId: "var-1", price: 100000, status: "ACTIVE" }]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-1" })]);
     const inventoryPort = makeInventoryPort({ "var-1": 10 });
 
     const result = await addItemToCart(repo, catalogPort, inventoryPort, {
@@ -364,9 +376,7 @@ describe("addItemToCart", () => {
 
   it("returns VARIANT_INACTIVE when variant is not active", async () => {
     const repo = new InMemoryCartRepository();
-    const catalogPort = makeCatalogPort([
-      { variantId: "var-1", price: 100000, status: "INACTIVE" },
-    ]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-1", status: "INACTIVE" })]);
     const result = await addItemToCart(repo, catalogPort, makeInventoryPort(), {
       customerId: "customer-1",
       variantId: "var-1",
@@ -378,7 +388,7 @@ describe("addItemToCart", () => {
 
   it("returns INSUFFICIENT_STOCK when stock is not enough", async () => {
     const repo = new InMemoryCartRepository();
-    const catalogPort = makeCatalogPort([{ variantId: "var-1", price: 100000, status: "ACTIVE" }]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-1" })]);
     const inventoryPort = makeInventoryPort({ "var-1": 1 });
     const result = await addItemToCart(repo, catalogPort, inventoryPort, {
       customerId: "customer-1",
@@ -456,7 +466,7 @@ describe("changeCartItemVariant", () => {
     const repo = new InMemoryCartRepository()
       .seedCarts([makeCart()])
       .seedItems([makeCartItem({ quantity: 2, unitPriceSnapshot: 100000, lineSubtotal: 200000 })]);
-    const catalogPort = makeCatalogPort([{ variantId: "var-2", price: 120000, status: "ACTIVE" }]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-2", price: 120000 })]);
     const result = await changeCartItemVariant(
       repo,
       catalogPort,
@@ -482,7 +492,7 @@ describe("changeCartItemVariant", () => {
         makeCartItem({ id: "item-1", variantId: "var-1" }),
         makeCartItem({ id: "item-2", variantId: "var-2" }),
       ]);
-    const catalogPort = makeCatalogPort([{ variantId: "var-2", price: 100000, status: "ACTIVE" }]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-2" })]);
     const result = await changeCartItemVariant(repo, catalogPort, makeInventoryPort(), {
       customerId: "customer-1",
       itemId: "item-1",
@@ -494,9 +504,7 @@ describe("changeCartItemVariant", () => {
 
   it("returns VARIANT_INACTIVE when target variant is inactive", async () => {
     const repo = new InMemoryCartRepository().seedCarts([makeCart()]).seedItems([makeCartItem()]);
-    const catalogPort = makeCatalogPort([
-      { variantId: "var-2", price: 100000, status: "INACTIVE" },
-    ]);
+    const catalogPort = makeCatalogPort([makeVariant({ variantId: "var-2", status: "INACTIVE" })]);
     const result = await changeCartItemVariant(repo, catalogPort, makeInventoryPort(), {
       customerId: "customer-1",
       itemId: "item-1",
@@ -566,5 +574,73 @@ describe("clearCart", () => {
     const repo = new InMemoryCartRepository();
     const result = await clearCart(repo, { customerId: "customer-new" });
     expect(result.success).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getCartCustomerView
+// ---------------------------------------------------------------------------
+
+describe("getCartCustomerView", () => {
+  it("returns empty customer view for new customer", async () => {
+    const repo = new InMemoryCartRepository();
+    const view = await getCartCustomerView(repo, makeCatalogPort(), "customer-new");
+    expect(view.items).toHaveLength(0);
+    expect(view.subtotal).toBe(0);
+    expect(view.itemCount).toBe(0);
+    expect(view.cartId).toBeTruthy();
+  });
+
+  it("enriches items with catalog display fields and sums itemCount", async () => {
+    const repo = new InMemoryCartRepository()
+      .seedCarts([makeCart()])
+      .seedItems([
+        makeCartItem({
+          id: "item-1",
+          variantId: "var-1",
+          quantity: 2,
+          unitPriceSnapshot: 150000,
+          lineSubtotal: 300000,
+        }),
+      ]);
+    const catalogPort = makeCatalogPort([
+      makeVariant({
+        variantId: "var-1",
+        productName: "Run Socks Pro",
+        variantLabel: "S",
+        thumbnailUrl: "/socks.jpg",
+        price: 150000,
+      }),
+    ]);
+
+    const view = await getCartCustomerView(repo, catalogPort, "customer-1");
+
+    expect(view.cartId).toBe("cart-1");
+    expect(view.subtotal).toBe(300000);
+    expect(view.itemCount).toBe(2);
+    expect(view.items).toEqual([
+      {
+        itemId: "item-1",
+        variantId: "var-1",
+        productName: "Run Socks Pro",
+        variantLabel: "S",
+        thumbnailUrl: "/socks.jpg",
+        unitPrice: 150000,
+        quantity: 2,
+        lineSubtotal: 300000,
+      },
+    ]);
+  });
+
+  it("uses fallback display fields when catalog variant is missing", async () => {
+    const repo = new InMemoryCartRepository()
+      .seedCarts([makeCart()])
+      .seedItems([makeCartItem({ quantity: 1, unitPriceSnapshot: 100000, lineSubtotal: 100000 })]);
+
+    const view = await getCartCustomerView(repo, makeCatalogPort([]), "customer-1");
+
+    expect(view.items[0]?.productName).toBe("Produk tidak tersedia");
+    expect(view.items[0]?.variantLabel).toBe("-");
+    expect(view.items[0]?.thumbnailUrl).toBe("");
   });
 });

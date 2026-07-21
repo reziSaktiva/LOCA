@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Phase 4 In Progress — M6.3 Cart Domain Foundation selesai
+Status: Phase 4 In Progress — M6.4 Cart Customer API selesai
 
-Current Version: v0.9
+Current Version: v0.91
 
 Project Type:
 
@@ -57,7 +57,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-M6.3 (Cart Domain Foundation) selesai. Module `cart` sudah punya domain entities, invariants, port pattern (CartCatalogPort, CartInventoryPort), application services (add/update/remove/clear item, change variant), dan Prisma schema + migration. 221 test lolos. Next: M6.4 — Cart Customer API.
+M6.4 (Cart Customer API) selesai. Endpoint customer cart aktif (`GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]`), dilindungi `requireCustomer()`, dengan stock validation real-time. 226 test lolos. Next: M6.5 — Phase 4 Backend Exit Validation.
 
 ---
 
@@ -196,14 +196,15 @@ Belum diputuskan:
 - ✅ **M6.1 — Inventory Domain Foundation**: Module `inventory` diimplementasikan. Domain layer: `InventoryItem`, `InventoryReservation`, `InventoryMovement` entity + enum `InventoryMovementType`/`ReservationStatus` + typed `InventoryResult<T>`. Invariants: `isValidStockQty`, `isInventoryItemConsistent`, `isStockSufficient`, `canCommitReservation`, `canReleaseReservation`, `isValidAdjustmentReason`. Repository contract: `InventoryRepository` (10 method). Application services: `manage-stock.ts` (initializeStock/increaseStock/adjustStock), `check-stock.ts` (getStockByVariantId/assertStockAvailable/listStockMovements), `reserve-stock.ts` (reserveStock/commitStock/releaseReservedStock). Infrastructure: `PrismaInventoryRepository` (semua write menggunakan `prisma.$transaction`). Public facade: `inventory-service.ts` (9 fungsi publik). Prisma schema diperluas + migration `20260709160000_inventory_foundation` sudah diapply ke Supabase. `bun run check` hijau (180 test).
 - ✅ **M6.2 — Admin Inventory API**: Endpoint admin inventory aktif sesuai `docs/07-api-specification.md` §Admin/Inventory. Domain diperluas: `UpsertStockCommand`, `ListInventoryQuery`, `ListMovementsQuery.variantId` kini opsional (mendukung list movement lintas varian). Repository contract `InventoryRepository` diperluas: `listInventoryItems`. Application service baru: `upsertStock` di `manage-stock.ts` (initialize jika `InventoryItem` belum ada, adjust jika sudah ada — dipakai admin agar satu endpoint PATCH menangani kedua kasus), `listInventoryItems` di `check-stock.ts`. `PrismaInventoryRepository.listMovements` diperbarui untuk filter opsional per varian. Public facade diperluas: `inventoryListItems`, `inventoryUpsertStock`. Admin routes: `GET /api/v1/admin/inventory` (list stok, pagination), `PATCH /api/v1/admin/inventory/[variantId]` (upsert/adjust stok), `GET /api/v1/admin/inventory/movements` (riwayat movement, filter opsional `variantId`). `bun run check` hijau (187 test).
 - ✅ **M6.3 — Cart Domain Foundation**: Module `cart` diimplementasikan. Domain layer: `Cart`, `CartItem` entity + enum `CartStatus` (`ACTIVE`/`CHECKED_OUT`/`ABANDONED`) + `CartSnapshot` (cart + items + subtotal + total, kontrak lintas module untuk `checkout`) + typed `CartResult<T>`. Invariants: `isValidQuantity`, `calculateLineSubtotal`, `calculateCartTotal`, `hasDuplicateVariant`, `isValidCartAmount`, `isCartEditable`. Repository contract: `CartRepository` (11 method: findCartById, findActiveCartByCustomerId, createCart, findCartItems, findCartItemById, findCartItemByVariantId, addItem, updateItemQuantity, updateItemVariant, removeItem, clearItems). Port pattern (sesuai `docs/05-domain-modules.md` dependency Cart → Catalog + Inventory): `CartCatalogPort` (getVariantSnapshot) dan `CartInventoryPort` (assertStockAvailable), didefinisikan di `application/cart-ports.ts`. Application services: `get-cart.ts` (getOrCreateActiveCart, getCartSnapshot), `manage-cart-item.ts` (addItemToCart — merge quantity jika variant sudah ada, updateCartItemQuantity, changeCartItemVariant, removeCartItem, clearCart — semua dengan ownership check via cart.customerId). Infrastructure: `PrismaCartRepository`. Public facade: `cart-service.ts` (6 fungsi publik + `getCartSnapshotForCheckout` untuk consumer `checkout`). Catalog diperluas: `VariantSnapshot` kini menyertakan field `status` (dibutuhkan invariant "variant aktif" di cart) dan di-re-export dari `catalog-public-service.ts`. Prisma schema: model `Cart`, `CartItem` + enum `CartStatus`, migration `20260710042405_cart_domain_foundation` **sudah diapply ke Supabase**. `bun run check` hijau (221 test).
+- ✅ **M6.4 — Cart Customer API**: Endpoint customer cart aktif sesuai `docs/07-api-specification.md` §Cart. Application: `get-cart-customer-view.ts` (DTO customer-facing + enrich display fields via `CartCatalogPort`). Presentation: `cart-http.ts` (`cartErrorStatus` mapping). Public facade diperluas: `cartGetCustomerView`. `CartVariant` port diperluas dengan `productName`/`variantLabel`/`thumbnailUrl`. Routes: `GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]` — semua dilindungi `requireCustomer()`. POST/PATCH return cart terbaru; DELETE return 204; INSUFFICIENT_STOCK → 400. `bun run check` hijau (226 test).
 
 ---
 
 # Next Action
 
-**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.** **M6.1 Inventory Domain Foundation sudah selesai.** **M6.2 Admin Inventory API sudah selesai.** **M6.3 Cart Domain Foundation sudah selesai.**
+**Milestone 3 — Implementation Foundation** sudah selesai. **M4.1–M4.8 Catalog Foundation** sudah selesai. **Phase 2 selesai.** **M5.1 Customer Auth Foundation sudah selesai.** **M5.2 Customer Profile & Address sudah selesai.** **M5.3 Homepage Foundation sudah selesai.** **M6.1 Inventory Domain Foundation sudah selesai.** **M6.2 Admin Inventory API sudah selesai.** **M6.3 Cart Domain Foundation sudah selesai.** **M6.4 Cart Customer API sudah selesai.**
 
-Next action: **M6.4 — Cart Customer API** — endpoint customer: `GET/DELETE /cart`, `POST/PATCH/DELETE /cart/items/{id}` sesuai `docs/07-api-specification.md` §Cart.
+Next action: **M6.5 — Phase 4 Backend Exit Validation** — verifikasi cross-module contracts, quality gate penuh, pastikan kontrak Phase 5 (checkout) terpasang.
 
 Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -345,7 +346,7 @@ System Design Readiness
 
 ```
 Implementation
-█████████████████░░░  83%
+██████████████████░░  86%
 ```
 
 ---
@@ -436,7 +437,7 @@ Breakdown — Backend:
 - [x] M6.1 Inventory Domain Foundation
 - [x] M6.2 Admin Inventory API
 - [x] M6.3 Cart Domain Foundation
-- [ ] M6.4 Cart Customer API
+- [x] M6.4 Cart Customer API
 - [ ] M6.5 Phase 4 Backend Exit Validation
 
 Breakdown — UI Catch-up Phase 2–4:

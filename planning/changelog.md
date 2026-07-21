@@ -9,6 +9,36 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (1)
+
+### Added
+
+- **M6.4 — Cart Customer API**: endpoint customer untuk mengelola cart sesuai `docs/07-api-specification.md` §Cart dan acceptance criteria `planning/backlog.md` M6.4.
+  - Application: `get-cart-customer-view.ts` — membangun `CartCustomerView` (cartId, items dengan display fields, subtotal, itemCount) dari snapshot + `CartCatalogPort`.
+  - Presentation: `cart-http.ts` — `cartErrorStatus` (ITEM/VARIANT_NOT_FOUND → 404; stock/validation errors → 400).
+  - Public facade: `cartGetCustomerView` di `cart-service.ts`.
+  - Routes (semua dilindungi `requireCustomer()`):
+    - `GET /api/v1/cart` — cart aktif (auto-create jika belum ada).
+    - `POST /api/v1/cart/items` — tambah item; 201 + cart terbaru; 400 jika stok tidak cukup.
+    - `PATCH /api/v1/cart/items/[id]` — update `quantity` dan/atau `variantId`; 200 + cart terbaru.
+    - `DELETE /api/v1/cart/items/[id]` — hapus item; 204.
+    - `DELETE /api/v1/cart` — clear cart; 204.
+
+### Changed
+
+- `CartVariant` di `cart-ports.ts` diperluas dengan `productName`, `variantLabel`, `thumbnailUrl` agar customer view bisa di-enrich tanpa akses domain catalog langsung.
+- Mapping catalog port di `cart-service.ts` meneruskan field display dari `VariantSnapshot`.
+
+### Verified
+
+- `bun run check` hijau (lint + typecheck + test): **226 test lolos** (+5: `getCartCustomerView` + `cartErrorStatus`).
+
+### Notes
+
+- Next: **M6.5 — Phase 4 Backend Exit Validation** sebelum UI catch-up M6.6–M6.8.
+
+---
+
 ## 2026-07-10 (2)
 
 ### Added

@@ -10,6 +10,9 @@ export type CartVariant = {
   variantId: string;
   price: number;
   status: "ACTIVE" | "INACTIVE";
+  productName: string;
+  variantLabel: string;
+  thumbnailUrl: string;
 };
 
 export type CartCatalogPort = {

@@ -9,6 +9,33 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (5)
+
+### Added
+
+- **M6.7 slice 1 — UI Homepage + Catalog listing**:
+  - Homepage real: `src/app/(store)/page.tsx` + `HeroBanner` (`src/modules/homepage/presentation/`).
+  - Catalog listing: `src/app/(store)/products/page.tsx` (filter kategori/harga/sort + pagination URL-state).
+  - Catalog presentation: `ProductCard`, `ProductGrid`, `ProductSection`, `ProductFilters`, `CatalogPagination`, `PriceDisplay`, `formatIdr`.
+  - Loading skeletons: `(store)/loading.tsx`, `(store)/products/loading.tsx`.
+
+### Changed
+
+- Filter `category` di `list-public-products` / `search-public-products` kini resolve **slug** (kontrak `docs/07`) atau id — selaras link Navbar `?category=<slug>`.
+- `PROJECT_STATE.md`, `docs/11-development-roadmap.md`, `planning/backlog.md`, `context/ctx-implementation.md` — progress M6.7 slice 1.
+
+### Verified
+
+- `bun run check` hijau (233 test).
+- `bun run build` hijau — routes `/` + `/products` dinamis.
+
+### Notes
+
+- Scope disepakati: Homepage + Catalog dulu; Product Detail + Search di iterasi M6.7 slice 2.
+- Belum commit (tunggu instruksi eksplisit).
+
+---
+
 ## 2026-07-21 (4)
 
 ### Added

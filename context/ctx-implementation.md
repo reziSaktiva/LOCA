@@ -8,12 +8,12 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
-- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.6 selesai; lanjut M6.7 UI catalog
-- Current implementation progress: **90%**
+- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.6 selesai; M6.7 slice 1 (Homepage + Catalog) selesai
+- Current implementation progress: **92%**
 
 ## Current Focus
 
-- Phase 4 — Cart & Inventory. **M6.1–M6.6 selesai.** Lanjut ke **M6.7 — UI Homepage + Catalog + Product Detail**.
+- Phase 4 — Cart & Inventory. **M6.7 slice 1 selesai** (Homepage + `/products`). Lanjut **M6.7 slice 2 — Product Detail + Search**.
 - Workflow **UI paralel per phase** (Decision 022): UI catch-up M6.7–M6.8 sebelum Phase 5.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
 - Decision 025: kontrak Phase 5 terdokumentasi.
@@ -232,10 +232,13 @@ Target setup awal (Phase 2 selesai):
 
 ### UI — Phase 4 (Catch-up M6.6–M6.8)
 
-- Status: **M6.6 Completed** — route groups + shared layout aktif; placeholder pages siap.
+- Status: **M6.6 Completed**; **M6.7 slice 1 Completed** (Homepage + Catalog listing).
 - M6.6: `(store)` Navbar+Footer, `(auth)` logo-centered, `(admin)` Sidebar+`requireAdmin()`. Components di `src/shared/ui/layout/`.
+- M6.7 slice 1: `/` (HeroBanner + product sections via `homepageGetData`), `/products` (filters + pagination). Presentation di `catalog/presentation` + `homepage/presentation`.
+- Fix pendukung: category filter resolve slug/id (`resolve-category-filter.ts`).
+- 233 test lolos; `bun run build` hijau.
 - Next:
-  - M6.7: Homepage + Catalog + Product Detail + Search pages (data real)
+  - M6.7 slice 2: Product Detail (`/products/[slug]`) + Search (`/search`)
   - M6.8: Auth + Account + Cart pages
 - Route strategy: `(store)`, `(auth)`, `(admin)/admin/*` — lihat `docs/04-system-architecture.md` §9
 

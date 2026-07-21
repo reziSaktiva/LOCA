@@ -17,7 +17,7 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 Priority: P0
 
-Status: In Progress — M6.1–M6.6 ✅; next M6.7 UI catalog pages
+Status: In Progress — M6.1–M6.6 ✅; M6.7 slice 1 (Homepage + Catalog) ✅; next M6.7 slice 2 (Detail + Search)
 
 Owner: `cart` module, `inventory` module
 
@@ -332,31 +332,31 @@ Dependency:
 
 Priority: P0
 
-Status: Ready — next to implement
+Status: In Progress — slice 1 (Homepage + Catalog) ✅; slice 2 (Detail + Search) next
 
 Feature: `ui-store-catalog`
 
 Output:
-- Homepage menampilkan banner, featured products, new arrivals, best sellers.
-- Halaman listing produk dengan filter dan pagination.
-- Halaman detail produk dengan galeri, variant selector, dan add-to-cart.
-- Halaman search results.
+- ✅ Homepage menampilkan banner, featured products, new arrivals, best sellers.
+- ✅ Halaman listing produk dengan filter dan pagination.
+- ⏳ Halaman detail produk dengan galeri, variant selector, dan add-to-cart.
+- ⏳ Halaman search results.
 
 Scope implementasi:
 
-1. **Homepage** (`src/app/(store)/page.tsx`):
-   - Hero section dengan banner aktif dari `GET /api/v1/homepage`.
-   - Section Featured Products, New Arrivals, Best Sellers (horizontal scroll atau grid).
-   - Data fetching via Server Component (SSR/ISR).
+1. ✅ **Homepage** (`src/app/(store)/page.tsx`):
+   - Hero section dengan banner aktif dari `homepageGetData` (public facade).
+   - Section Featured Products, New Arrivals, Best Sellers (grid).
+   - Data fetching via Server Component.
 
-2. **Product listing** (`src/app/(store)/products/page.tsx`):
+2. ✅ **Product listing** (`src/app/(store)/products/page.tsx`):
    - Grid produk responsif (2 kolom mobile, 3–4 kolom desktop).
-   - Filter: kategori, range harga.
+   - Filter: kategori (slug), range harga.
    - Sorting: terbaru, harga terendah/tertinggi.
    - Pagination.
-   - Data dari `GET /api/v1/products`.
+   - Data dari `listPublicProductsFromSearchParams`.
 
-3. **Product detail** (`src/app/(store)/products/[slug]/page.tsx`):
+3. ⏳ **Product detail** (`src/app/(store)/products/[slug]/page.tsx`):
    - Galeri gambar produk (thumbnail + full view).
    - Informasi: nama, brand, harga, deskripsi.
    - Variant selector (warna/ukuran/model) — pilihan harus valid.
@@ -364,17 +364,17 @@ Scope implementasi:
    - Tombol "Add to Cart" — memanggil `POST /api/v1/cart/items`.
    - Data dari `GET /api/v1/products/slug/[slug]`.
 
-4. **Search** (`src/app/(store)/search/page.tsx`):
+4. ⏳ **Search** (`src/app/(store)/search/page.tsx`):
    - Input search (bisa via URL params `?q=`).
    - Hasil grid produk.
    - Empty state jika tidak ditemukan.
    - Data dari `GET /api/v1/products/search?q=`.
 
 5. **Komponen domain** (`src/modules/catalog/presentation/`):
-   - `ProductCard` — thumbnail, nama, harga, badge stok.
-   - `ProductGrid` — layout grid responsif.
-   - `VariantSelector` — tombol pilihan variant.
-   - `PriceDisplay` — format harga IDR.
+   - ✅ `ProductCard` — thumbnail, nama, harga.
+   - ✅ `ProductGrid` — layout grid responsif.
+   - ✅ `ProductFilters` / `CatalogPagination` / `PriceDisplay`.
+   - ⏳ `VariantSelector` — tombol pilihan variant (slice 2).
 
 Acceptance criteria:
 - Homepage load dengan data real dari API (bukan mock).

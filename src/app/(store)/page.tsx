@@ -1,38 +1,62 @@
+import Link from "next/link";
+
+import { ProductSection } from "@/modules/catalog/presentation";
+import { HeroBanner } from "@/modules/homepage/presentation";
+import { homepageGetData } from "@/modules/homepage/public/homepage-service";
+import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
-import { Skeleton } from "@/shared/ui/skeleton";
 
-/**
- * Homepage placeholder (M6.6).
- * Konten penuh (banner + featured/new arrival/best seller) diisi di M6.7.
- */
-export default function StoreHomePage() {
+export const metadata = {
+  title: "LOCA — Sports Apparel Essentials",
+  description: "Brand hub & D2C store untuk sports apparel essentials.",
+};
+
+export default async function StoreHomePage() {
+  const data = await homepageGetData();
+  const hasAnyProducts =
+    data.featured.length > 0 || data.newArrivals.length > 0 || data.bestSellers.length > 0;
+
   return (
-    <Container className="flex flex-col gap-10 py-8 md:py-12">
-      <section aria-label="Hero" className="flex flex-col gap-4">
-        <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-56 w-full rounded-xl md:h-80" />
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-8 w-64 max-w-full" />
-          <Skeleton className="h-4 w-full max-w-md" />
-        </div>
-      </section>
+    <>
+      <HeroBanner banners={data.banners} />
 
-      <section aria-label="Featured products" className="flex flex-col gap-4">
-        <Skeleton className="h-7 w-48" />
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="flex flex-col gap-2">
-              <Skeleton className="aspect-square w-full rounded-lg" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <p className="text-center text-sm text-muted-foreground">
-        Homepage LOCA — konten katalog akan tersedia di milestone berikutnya.
-      </p>
-    </Container>
+      <Container className="flex flex-col gap-12 py-10 md:gap-16 md:py-14">
+        {hasAnyProducts ? (
+          <>
+            <ProductSection
+              title="Featured"
+              products={data.featured}
+              viewAllHref="/products?sort=-createdAt"
+            />
+            <ProductSection
+              title="New Arrivals"
+              products={data.newArrivals}
+              viewAllHref="/products?sort=-createdAt"
+            />
+            <ProductSection
+              title="Best Sellers"
+              products={data.bestSellers}
+              viewAllHref="/products"
+            />
+          </>
+        ) : (
+          <section
+            role="status"
+            className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border px-6 py-16 text-center"
+          >
+            <h2 className="font-heading text-xl font-semibold text-foreground">
+              Koleksi segera hadir
+            </h2>
+            <p className="max-w-md text-sm text-muted-foreground">
+              Produk aktif belum tersedia. Silakan cek katalog nanti atau hubungi admin untuk
+              menambahkan produk.
+            </p>
+            <Button nativeButton={false} render={<Link href="/products" />}>
+              Ke katalog
+            </Button>
+          </section>
+        )}
+      </Container>
+    </>
   );
 }

@@ -4,6 +4,7 @@ import type {
   ListPublicProductsQuery,
   ListPublicProductsResult,
 } from "../domain/catalog-repository";
+import { resolveCategoryFilterId } from "./resolve-category-filter";
 
 function sortProducts(
   items: ListPublicProductsResult["items"],
@@ -26,6 +27,15 @@ export async function listPublicProducts(
   repository: CatalogRepository,
   query: ListPublicProductsQuery,
 ): Promise<ListPublicProductsResult> {
+  let categoryId: string | undefined;
+  if (query.category) {
+    const resolved = await resolveCategoryFilterId(repository, query.category);
+    if (!resolved) {
+      return { items: [], total: 0 };
+    }
+    categoryId = resolved;
+  }
+
   const allProducts = await repository.listProducts();
 
   const filtered = allProducts.filter((product) => {
@@ -33,7 +43,7 @@ export async function listPublicProducts(
       return false;
     }
 
-    if (query.category && product.categoryId !== query.category) {
+    if (categoryId && product.categoryId !== categoryId) {
       return false;
     }
 

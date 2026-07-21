@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Phase 4 In Progress — M6.6 Route Groups + Shared Layout selesai
+Status: Phase 4 In Progress — M6.7 slice Homepage + Catalog listing selesai
 
-Current Version: v0.93
+Current Version: v0.94
 
 Project Type:
 
@@ -57,7 +57,7 @@ Sedang mengerjakan:
 
 Tujuan:
 
-M6.6 (UI Route Groups + Shared Layout) selesai. Route groups `(store)` / `(auth)` / `(admin)` aktif dengan layout terpisah. Shared layout: Navbar (cart count + mobile sheet), Footer, AdminSidebar. Admin dilindungi `requireAdmin()`. Homepage placeholder + auth/admin placeholders. Next: M6.7 — UI Homepage + Catalog + Product Detail.
+M6.7 slice 1 selesai: Homepage (`/`) + Catalog listing (`/products`) dengan data real via Server Components. Komponen catalog presentation (`ProductCard`, `ProductGrid`, `ProductFilters`, `CatalogPagination`, `PriceDisplay`) + homepage `HeroBanner`. Next: M6.7 slice 2 — Product Detail + Search.
 
 ---
 
@@ -200,14 +200,15 @@ Belum diputuskan:
 - ✅ **M6.4 — Cart Customer API**: Endpoint customer cart aktif sesuai `docs/07-api-specification.md` §Cart. Application: `get-cart-customer-view.ts` (DTO customer-facing + enrich display fields via `CartCatalogPort`). Presentation: `cart-http.ts` (`cartErrorStatus` mapping). Public facade diperluas: `cartGetCustomerView`. `CartVariant` port diperluas dengan `productName`/`variantLabel`/`thumbnailUrl`. Routes: `GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]` — semua dilindungi `requireCustomer()`. POST/PATCH return cart terbaru; DELETE return 204; INSUFFICIENT_STOCK → 400. `bun run check` hijau (226 test).
 - ✅ **M6.5 — Phase 4 Backend Exit Validation**: Exit gate backend Phase 4 lolos. Cross-module: cart hanya mengakses catalog/inventory via public facade + ports. Kontrak Phase 5: `getCartSnapshotForCheckout`, `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`. Smoke test flow add→stock→total→remove→empty. Migrations inventory+cart applied (`prisma migrate status` up to date). Docs Public Services dipetakan ke facade names. Decision 025. `bun run check` hijau (229 test).
 - ✅ **M6.6 — UI Route Groups + Shared Layout**: Route groups `(store)`, `(auth)`, `(admin)` aktif. Shared layout di `src/shared/ui/layout/` (`Navbar`, `Footer`, `AdminSidebar`, `Container` re-export). Store layout fetch kategori + cart count lalu inject ke Navbar (boundary shared↛modules dipatuhi). Auth layout minimalist + redirect jika sudah login. Admin layout + topbar + `requireAdmin()` (401→`/login`, 403→`/`). Placeholder pages: `/`, `/login`, `/register`, `/admin/*`. shadcn `sheet`/`skeleton`/`separator`. `bun run check` + `bun run build` hijau.
+- 🔄 **M6.7 — UI Homepage + Catalog + Product Detail** (slice 1/2): Homepage + Catalog listing selesai. `HeroBanner` (banner aktif / brand fallback), section Featured / New Arrivals / Best Sellers via `homepageGetData`. `/products` dengan filter (kategori slug, harga, sort) + pagination URL-state. Presentation: `src/modules/catalog/presentation/*`, `src/modules/homepage/presentation/hero-banner.tsx`. Fix: filter `category` API kini resolve slug (docs/07) atau id. `bun run check` hijau (233 test) + `bun run build` hijau. Sisa: Product Detail + Search.
 
 ---
 
 # Next Action
 
-**Milestone 3–5** sudah selesai. **M6.1–M6.6** sudah selesai.
+**Milestone 3–5** sudah selesai. **M6.1–M6.6** sudah selesai. **M6.7 slice 1** (Homepage + Catalog) sudah selesai.
 
-Next action: **M6.7 — UI: Homepage + Catalog + Product Detail** — `/`, `/products`, `/products/[slug]`, `/search` dengan data real dari API.
+Next action: **M6.7 slice 2 — UI: Product Detail + Search** — `/products/[slug]`, `/search` dengan data real dari API.
 
 Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -222,7 +223,7 @@ Backend:
 
 UI Catch-up (Phase 2–4):
 6. ✅ **M6.6 — UI Route Groups + Shared Layout** — setup `(store)`, `(auth)`, `(admin)` dengan layout masing-masing (Navbar, Footer, AdminSidebar).
-7. **M6.7 — UI: Homepage + Catalog + Product Detail** — halaman publik: `/`, `/products`, `/products/[slug]`, `/search`.
+7. 🔄 **M6.7 — UI: Homepage + Catalog + Product Detail** — ✅ Homepage + `/products`; ⏳ `/products/[slug]` + `/search`.
 8. **M6.8 — UI: Auth + Account + Cart** — halaman protected: `/login`, `/register`, `/account`, `/cart`.
 
 ---
@@ -349,7 +350,7 @@ System Design Readiness
 
 ```
 Implementation
-███████████████████░  90%
+███████████████████░  92%
 ```
 
 ---
@@ -446,7 +447,7 @@ Breakdown — Backend:
 Breakdown — UI Catch-up Phase 2–4:
 
 - [x] M6.6 UI: Route Groups + Shared Layout
-- [ ] M6.7 UI: Homepage + Catalog + Product Detail
+- [~] M6.7 UI: Homepage + Catalog + Product Detail (slice 1: Homepage + Catalog ✅; slice 2: Detail + Search ⏳)
 - [ ] M6.8 UI: Auth + Account + Cart
 
 Target Outcome:

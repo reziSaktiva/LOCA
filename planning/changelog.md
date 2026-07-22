@@ -9,6 +9,28 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (9)
+
+### Added
+
+- **M7.5 — Phase 5 Backend Exit Validation**:
+  - `src/modules/checkout/application/phase-5-backend-exit.test.ts` — smoke flow `prepareCheckout → selectCheckoutShippingOption → selectCheckoutPaymentMethod → placeOrder` (stub shipping/payment asli, `CheckoutOrderPort` stub selaras kontrak produksi), memvalidasi `CheckoutSnapshot` immutable (totals, address, shipping, payment) + cart cleared + session `ORDER_PLACED`. Plus readiness contract (`typeof`) terhadap `order/public/order-service.ts`.
+  - `src/modules/order/application/phase-5-backend-exit.test.ts` — smoke flow `createOrderFromCheckout → WAITING_PAYMENT + reservasi ACTIVE → getOrderDetail → cancelOrder → reservasi RELEASED`, input meniru shape `CheckoutSnapshot` persis kontrak `place-order.ts`. Plus readiness contract terhadap `checkout/public/checkout-service.ts`.
+  - Smoke test dipecah 2 file (bukan 1 file lintas module) agar patuh `import/no-restricted-paths` — setiap module hanya boleh reach ke module lain lewat folder `public/` miliknya, bukan layer `application`/`domain` internal.
+
+### Verified
+
+- Cross-module: dikonfirmasi tidak ada deep import checkout↔order ke layer internal (hanya lewat `*/public/*`) — lint `import/no-restricted-paths` lolos tanpa exception baru.
+- Migration `20260722030000_checkout_domain_foundation` dan `20260722040000_order_domain_foundation` terverifikasi urut & konsisten di `prisma/migrations/` (tidak ada folder ganda/conflict).
+- `bun run check` hijau (lint + typecheck + test — 286 test, 22 test file).
+
+### Notes
+
+- Live `prisma migrate status` terhadap Supabase tidak bisa dijalankan dari sandbox (network pooler tidak reachable/timeout); verifikasi migration dilakukan di level file (urutan timestamp + isi SQL), konsisten dengan status "applied" yang sudah dicatat di M7.1/M7.2.
+- Backend Phase 5 (M7.1–M7.5) resmi ditutup. Next: **M7.6 — UI: Checkout Flow**.
+
+---
+
 ## 2026-07-22 (8)
 
 ### Added

@@ -162,7 +162,7 @@ Dependency: M7.1 ✅, M7.2 ✅.
 
 Priority: P0
 
-Status: Ready (setelah M7.2; bisa paralel akhir M7.3)
+Status: In Progress (branch `feat/m7.4-order-customer-admin-api`)
 
 Feature: `order-api`
 

@@ -469,8 +469,8 @@ Breakdown — Backend:
 
 - [x] M7.1 Checkout Domain Foundation
 - [x] M7.2 Order Domain Foundation
-- [ ] M7.3 Checkout Customer API ← next
-- [ ] M7.4 Order Customer + Admin API
+- [x] M7.3 Checkout Customer API
+- [ ] M7.4 Order Customer + Admin API ← next
 - [ ] M7.5 Phase 5 Backend Exit Validation
 
 Breakdown — UI:

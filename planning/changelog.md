@@ -9,6 +9,19 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (7)
+
+### Fixed
+
+- Sync checklist Milestone 7 di `PROJECT_STATE.md`: M7.3 ditandai selesai; `← next` dipindah ke M7.4.
+- `planning/backlog.md` M7.4 status → In Progress (branch `feat/m7.4-order-customer-admin-api`).
+
+### Notes
+
+- Dokumen lain (`docs/11`, `ctx-implementation`, bagian atas `PROJECT_STATE`) sudah selaras sejak merge M7.3; hanya checklist breakdown yang tertinggal.
+
+---
+
 ## 2026-07-22 (6)
 
 ### Added

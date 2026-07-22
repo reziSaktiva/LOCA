@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Phase 4 Completed — M6.8 UI Auth + Account + Cart selesai; next Phase 5
+Status: Phase 5 In Progress — M7.1 Checkout Domain Foundation selesai; next M7.2
 
-Current Version: v0.96
+Current Version: v0.97
 
 Project Type:
 
@@ -31,6 +31,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 ✅ Phase 2 — Catalog Foundation (Completed)
 ✅ Phase 3 — Customer & Homepage (Completed)
 ✅ Phase 4 — Cart & Inventory (Completed)
+🔄 Phase 5 — Checkout & Order (In Progress — kicked off 2026-07-22)
 
 Progress:
 
@@ -52,13 +53,13 @@ Progress:
 
 # Current Focus
 
-Siap mulai:
+Sedang dikerjakan:
 
-`phase-5 checkout & order`
+`phase-5 checkout & order` — **M7.2 Order Domain Foundation** (next)
 
 Tujuan:
 
-Phase 4 selesai penuh (backend inventory/cart + UI catch-up M6.6–M6.8). Customer dapat login/register, kelola akun, dan kelola cart di browser. Next: Phase 5 — Checkout & Order.
+Membangun proses transaksi end-to-end dari cart hingga order `WAITING_PAYMENT` (M7.1–M7.7). Shipping/payment Phase 5 via stub/port adapter; Midtrans/Biteship di Phase 6 (Decision 027). M7.1 selesai: domain checkout + stub ports + Prisma `CheckoutSession`.
 
 ---
 
@@ -79,6 +80,7 @@ Phase 4 selesai penuh (backend inventory/cart + UI catch-up M6.6–M6.8). Custom
 
 - **Workflow diubah ke UI paralel per phase** (Decision 022, 2026-07-09): setelah backend sebuah phase selesai, milestone UI dikerjakan dalam phase yang sama sebelum pindah ke phase berikutnya. Sebelumnya UI hanya ada di Phase 8.
 - **Route group strategy ditetapkan**: `src/app/(store)/`, `(auth)/`, `(admin)/` dengan layout terpisah per audience. Lihat `docs/04-system-architecture.md` §9.
+- **Phase 5 milestones M7.1–M7.7 ditetapkan** (Decision 027, 2026-07-22): backend checkout/order → exit gate → UI checkout + orders. Shipping/payment memakai stub/port adapter hingga Phase 6.
 
 ---
 
@@ -203,18 +205,39 @@ Belum diputuskan:
 - ✅ **M6.6 — UI Route Groups + Shared Layout**: Route groups `(store)`, `(auth)`, `(admin)` aktif. Shared layout di `src/shared/ui/layout/` (`Navbar`, `Footer`, `AdminSidebar`, `Container` re-export). Store layout fetch kategori + cart count lalu inject ke Navbar (boundary shared↛modules dipatuhi). Auth layout minimalist + redirect jika sudah login. Admin layout + topbar + `requireAdmin()` (401→`/login`, 403→`/`). Placeholder pages: `/`, `/login`, `/register`, `/admin/*`. shadcn `sheet`/`skeleton`/`separator`. `bun run check` + `bun run build` hijau.
 - ✅ **M6.7 — UI Homepage + Catalog + Product Detail**: Slice 1+2 selesai. Homepage + `/products` + `/products/[slug]` + `/search`. `getPublicProductBySlug` diperkaya (variants ACTIVE + media + stok via Inventory port). Presentation: `ProductGallery`, `VariantSelector`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`. Docs `07` diperbarui untuk shape detail. `bun run check` hijau (236 test) + `bun run build` hijau.
 - ✅ **M6.8 — UI Auth + Account + Cart**: `/login`, `/register`, `/account`, `/cart` berfungsi penuh. Auth presentation: `LoginForm`, `RegisterForm`, `LogoutButton`, `safeRedirectPath`. Customer presentation: `ProfileForm`, `AddressCard`, `AddressForm`, `AddressSection`. Cart presentation: `CartPanel`, `CartItemRow`, `CartSummary`, `QuantityStepper`. Protected pages redirect ke `/login?next=…`. Checkout CTA disabled (aktif di Phase 5). `formatIdr` dipindah ke `src/shared/kernel/`. `bun run check` hijau (239 test) + `bun run build` hijau. **Phase 4 selesai.**
+- ✅ **M7.1 — Checkout Domain Foundation**: Module `checkout` aktif. Domain: `CheckoutSession`, `CheckoutSnapshot`, status lifecycle, typed `CheckoutResult`/`CheckoutError`, invariants (`isCartNonEmpty`, `isReadyToPlaceOrder`, …). Ports: cart/customer/shipping/payment/order. Application: `prepareCheckout`, `selectCheckoutAddress`, `selectCheckoutShippingOption`, `selectCheckoutPaymentMethod`, `placeOrder`. Stub shipping/payment (Decision 027); order port `ORDER_MODULE_UNAVAILABLE` hingga M7.2. Infrastructure: `PrismaCheckoutRepository`. Public facade: `checkout-service.ts`. Migration `20260722030000_checkout_domain_foundation` diapply ke Supabase. `bun run check` hijau (253 test).
 
 ---
 
 # Next Action
 
-**Phase 0–4** sudah selesai (termasuk UI catch-up M6.6–M6.8).
+**Phase 5 — Checkout & Order** in progress (Decision 027).
 
-Next action: **Phase 5 — Checkout & Order** — mulai fondasi domain `checkout` + `order` (vertical slice pertama sesuai roadmap).
+Immediate next: **M7.2 — Order Domain Foundation**.
 
 Workflow (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
-Urutan milestone Phase 4 (semua ✅):
+Prasyarat Phase 5 (sudah siap):
+- ✅ `getCartSnapshotForCheckout` (cart public facade)
+- ✅ `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
+- ✅ Customer profile + address API/UI
+- ✅ Cart customer API/UI
+- ✅ Checkout domain + stub shipping/payment ports (M7.1)
+
+Urutan milestone Phase 5:
+
+Backend:
+1. ✅ **M7.1 — Checkout Domain Foundation**
+2. ⏳ **M7.2 — Order Domain Foundation** ← next
+3. ⏳ **M7.3 — Checkout Customer API**
+4. ⏳ **M7.4 — Order Customer + Admin API**
+5. ⏳ **M7.5 — Phase 5 Backend Exit Validation**
+
+UI:
+6. ⏳ **M7.6 — UI: Checkout Flow**
+7. ⏳ **M7.7 — UI: Order History + Detail**
+
+Urutan milestone Phase 4 (semua ✅ — closed):
 
 Backend:
 1. ✅ **M6.1 — Inventory Domain Foundation**
@@ -352,7 +375,7 @@ System Design Readiness
 
 ```
 Implementation
-███████████████████░  96%
+███████████████████░  97%
 ```
 
 ---
@@ -433,6 +456,34 @@ Target Outcome:
 - Catalog terhubung ke database sungguhan (bukan in-memory).
 - Admin dapat mengelola produk, varian, dan kategori via API.
 - Phase 2 exit criteria terpenuhi sepenuhnya.
+
+---
+
+## 🔄 Milestone 7 — Checkout & Order (In Progress)
+
+Breakdown — Backend:
+
+- [x] M7.1 Checkout Domain Foundation
+- [ ] M7.2 Order Domain Foundation ← next
+- [ ] M7.3 Checkout Customer API
+- [ ] M7.4 Order Customer + Admin API
+- [ ] M7.5 Phase 5 Backend Exit Validation
+
+Breakdown — UI:
+
+- [ ] M7.6 UI: Checkout Flow
+- [ ] M7.7 UI: Order History + Detail
+
+Target Outcome:
+
+Backend:
+- Customer dapat place-order hingga `WAITING_PAYMENT` via API.
+- Stok di-reserve saat place order; admin dapat kelola status order.
+- Shipping/payment options via stub ports (Decision 027); provider real di Phase 6.
+
+UI:
+- `/checkout`, `/orders`, `/orders/[id]` berfungsi di browser.
+- Responsive + accessible (WCAG AA minimum).
 
 ---
 

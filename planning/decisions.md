@@ -1,5 +1,35 @@
 # Project Decisions
 
+## Decision 027
+
+Tanggal: 2026-07-22
+
+Judul:
+
+Phase 5 milestone breakdown (M7.1–M7.7) + strategi stub shipping/payment.
+
+Keputusan:
+
+* Phase 5 dipecah menjadi milestone implementasi:
+  * Backend: **M7.1** Checkout Domain Foundation → **M7.2** Order Domain Foundation → **M7.3** Checkout Customer API → **M7.4** Order Customer + Admin API → **M7.5** Phase 5 Backend Exit Validation.
+  * UI (Decision 022): **M7.6** UI Checkout Flow → **M7.7** UI Order History + Detail.
+* **Shipping & payment di Phase 5 memakai stub/port adapter** di module `checkout` (opsi kurir & metode bayar tetap/mock via port). Integrasi Midtrans/Biteship tetap di Phase 6 — hanya mengganti implementasi port/provider, tanpa mengubah kontrak checkout customer-facing.
+* Place order di Phase 5 menghasilkan order hingga status **`WAITING_PAYMENT`** + reserve stock (Decision 025). Inisiasi payment gateway penuh bukan scope Phase 5.
+
+Alasan:
+
+* Menyamakan granularitas Phase 4 (domain → API → exit gate → UI) agar eksekusi dan pelaporan progress konsisten.
+* FR `CHECKOUT-002/003` wajib terpenuhi di Phase 5, sementara provider eksternal baru di Phase 6 — stub/port menjaga boundary tanpa memblokir checkout E2E.
+
+Dampak:
+
+* `docs/11-development-roadmap.md` — Phase 5 milestones + catatan stub.
+* `docs/05-domain-modules.md` — catatan Phase 5 stub ports pada Checkout dependencies.
+* `planning/backlog.md` — breakdown M7.1–M7.7.
+* `PROJECT_STATE.md`, `planning/changelog.md`, `context/ctx-implementation.md`.
+
+---
+
 ## Decision 026
 
 Tanggal: 2026-07-21

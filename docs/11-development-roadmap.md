@@ -230,11 +230,11 @@ UI (✅ terpenuhi M6.8):
 
 # Phase 5 — Checkout & Order
 
-Status: ⏳ Planned
+Status: 🔄 In Progress (kicked off 2026-07-22)
 
 Tujuan:
 
-Membangun proses transaksi end-to-end dari cart hingga order terbuat.
+Membangun proses transaksi end-to-end dari cart hingga order terbuat. Shipping rate & payment method di Phase 5 memakai stub/port adapter; integrasi Midtrans/Biteship di Phase 6 (Decision 027).
 
 Deliverables:
 
@@ -244,22 +244,45 @@ Backend:
 - Order status lifecycle (PENDING → WAITING_PAYMENT → ...).
 - Order list + detail API untuk customer.
 - Admin order management API.
+- Stock reservation saat place order (via inventory public facade).
 
 UI:
 - Checkout flow (`/checkout`) — address selection, shipping, payment method, order summary.
 - Order history (`/orders`).
 - Order detail (`/orders/[id]`) — status timeline, item list, shipping info.
+- Aktifkan CTA "Lanjut ke Checkout" di `/cart`.
 
 Modules:
 
 - Checkout
 - Order
 
+Milestones:
+
+Backend:
+- ✅ M7.1 — Checkout Domain Foundation
+- ⏳ M7.2 — Order Domain Foundation
+- ⏳ M7.3 — Checkout Customer API
+- ⏳ M7.4 — Order Customer + Admin API
+- ⏳ M7.5 — Phase 5 Backend Exit Validation
+
+UI:
+- ⏳ M7.6 — UI: Checkout Flow
+- ⏳ M7.7 — UI: Order History + Detail
+
 Exit Criteria:
 
-- Customer dapat membuat pesanan dari cart hingga status WAITING_PAYMENT.
-- Order tersimpan dan dapat dilihat di halaman account.
-- Checkout flow berjalan di browser, responsive, dan accessible.
+Backend (target M7.5):
+- Customer dapat `prepareCheckout` → pilih alamat/shipping/payment → `place-order` hingga status `WAITING_PAYMENT` via API.
+- Stok di-reserve saat place order; cart ditandai checked-out / dikosongkan sesuai rule domain.
+- Admin dapat list/detail/update status order via API.
+- Kontrak lintas module (`checkout` → cart/customer/order; `order` → inventory) hanya via public facade/ports.
+- `bun run check` hijau.
+
+UI (target M7.7):
+- Customer dapat menyelesaikan checkout di browser hingga order `WAITING_PAYMENT`.
+- Customer dapat melihat daftar + detail order.
+- Halaman responsive (mobile-first), accessible (WCAG AA minimum).
 
 ---
 

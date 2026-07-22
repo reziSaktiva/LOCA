@@ -437,3 +437,45 @@ model CartItem {
   @@index([cartId])
   @@map("cart_items")
 }
+
+// ---------------------------------------------------------------------------
+// Checkout Module
+// ---------------------------------------------------------------------------
+
+enum CheckoutStatus {
+  STARTED
+  ADDRESS_CONFIRMED
+  SHIPPING_SELECTED
+  PAYMENT_METHOD_SELECTED
+  ORDER_PLACED
+}
+
+/// Sesi checkout aktif milik customer — aggregate root modul checkout.
+model CheckoutSession {
+  id                           String         @id @default(cuid())
+  customerId                   String
+  cartId                       String
+  checkoutStatus               CheckoutStatus @default(STARTED)
+  selectedAddressId            String?
+  selectedShippingOptionId     String?
+  selectedShippingServiceName  String?
+  selectedShippingFee          Float?
+  selectedPaymentMethod        String?
+  currency                     String         @default("IDR")
+  itemsSubtotal                Float          @default(0)
+  shippingFee                  Float          @default(0)
+  grandTotal                   Float          @default(0)
+  orderId                      String?
+  /// CheckoutSnapshot JSON saat ORDER_PLACED (immutable).
+  snapshotJson                 Json?
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  @@index([customerId, checkoutStatus])
+  @@index([cartId])
+  @@map("checkout_sessions")
+}

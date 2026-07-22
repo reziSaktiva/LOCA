@@ -9,6 +9,41 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (8)
+
+### Added
+
+- **M7.4 — Order Customer + Admin API**:
+  - Customer: `GET /api/v1/orders`, `GET /api/v1/orders/[id]`, `POST /api/v1/orders/[id]/cancel`.
+  - Admin: `GET /api/v1/admin/orders`, `GET /api/v1/admin/orders/[id]`, `PATCH /api/v1/admin/orders/[id]/status`.
+  - Presentation: `orderErrorStatus`, `parseOrderListQuery`, `isOrderStatus` + unit tests.
+  - Ownership: customer detail non-owner → `ORDER_NOT_FOUND` 404; cancel via actor check domain.
+  - Admin status update mengikuti state machine (`transitionOrderStatusForActor`).
+
+### Verified
+
+- `bun run check` hijau (279 test).
+
+### Notes
+
+- Facade list/get/cancel/transition sudah ada sejak M7.2; M7.4 fokus HTTP + presentation.
+- Next: **M7.5 — Phase 5 Backend Exit Validation**.
+
+---
+
+## 2026-07-22 (7)
+
+### Fixed
+
+- Sync checklist Milestone 7 di `PROJECT_STATE.md`: M7.3 ditandai selesai; `← next` dipindah ke M7.4.
+- `planning/backlog.md` M7.4 status → In Progress (branch `feat/m7.4-order-customer-admin-api`).
+
+### Notes
+
+- Dokumen lain (`docs/11`, `ctx-implementation`, bagian atas `PROJECT_STATE`) sudah selaras sejak merge M7.3; hanya checklist breakdown yang tertinggal.
+
+---
+
 ## 2026-07-22 (6)
 
 ### Added

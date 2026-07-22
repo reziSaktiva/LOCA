@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Phase 5 In Progress — M7.3 Checkout Customer API selesai; next M7.4
+Status: Phase 5 In Progress — M7.4 Order Customer + Admin API selesai; next M7.5
 
-Current Version: v0.99
+Current Version: v1.00
 
 Project Type:
 
@@ -55,11 +55,11 @@ Progress:
 
 Sedang dikerjakan:
 
-`phase-5 checkout & order` — **M7.4 Order Customer + Admin API** (next)
+`phase-5 checkout & order` — **M7.5 Phase 5 Backend Exit Validation** (next)
 
 Tujuan:
 
-Membangun proses transaksi end-to-end dari cart hingga order `WAITING_PAYMENT` (M7.1–M7.7). Shipping/payment Phase 5 via stub/port adapter; Midtrans/Biteship di Phase 6 (Decision 027). M7.1–M7.3 selesai: domain checkout/order + customer checkout API (prepare → shipping → payment → place-order).
+Membangun proses transaksi end-to-end dari cart hingga order `WAITING_PAYMENT` (M7.1–M7.7). Shipping/payment Phase 5 via stub/port adapter; Midtrans/Biteship di Phase 6 (Decision 027). M7.1–M7.4 selesai: domain checkout/order + customer checkout API + customer/admin order API.
 
 ---
 
@@ -168,7 +168,7 @@ Belum diputuskan:
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
 - `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 026** (proactive-clarification skill).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-22** (entry 6 — M7.3).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-22** (entry 8 — M7.4).
 
 ## Agent Governance
 
@@ -208,6 +208,7 @@ Belum diputuskan:
 - ✅ **M7.1 — Checkout Domain Foundation**: Module `checkout` aktif. Domain: `CheckoutSession`, `CheckoutSnapshot`, status lifecycle, typed `CheckoutResult`/`CheckoutError`, invariants (`isCartNonEmpty`, `isReadyToPlaceOrder`, …). Ports: cart/customer/shipping/payment/order. Application: `prepareCheckout`, `selectCheckoutAddress`, `selectCheckoutShippingOption`, `selectCheckoutPaymentMethod`, `placeOrder`. Stub shipping/payment (Decision 027). Infrastructure: `PrismaCheckoutRepository`. Public facade: `checkout-service.ts`. Migration `20260722030000_checkout_domain_foundation` diapply ke Supabase.
 - ✅ **M7.2 — Order Domain Foundation**: Module `order` aktif. Domain: `Order`, `OrderItem`, `OrderStatusHistory`, state machine `ORDER_STATUS_TRANSITIONS`, typed `OrderResult`/`OrderError`, invariants (item/total/currency/transition/cancel policy). Application: `createOrderFromCheckout` (reserve stock dulu → persist `WAITING_PAYMENT`; gagal stok → order tidak terbentuk), `transitionOrderStatus`, `cancelOrder` (release stock), `getOrderDetail`. Ports: catalog + inventory. Infrastructure: `PrismaOrderRepository`. Public facade: `order-service.ts`. `CheckoutOrderPort` di-wire ke order facade. `VariantSnapshot` catalog diperkaya `brand` + `categoryName`. Migration `20260722040000_order_domain_foundation` diapply ke Supabase. `bun run check` hijau (268 test).
 - ✅ **M7.3 — Checkout Customer API**: Endpoint customer checkout aktif di `src/app/api/v1/checkout/`. `GET /api/v1/checkout` (prepare), `POST /api/v1/checkout/shipping` (`optionId`), `POST /api/v1/checkout/payment` (`method`), `POST /api/v1/checkout/place-order` → `orderId` + status `WAITING_PAYMENT` (201). Dilindungi `requireCustomer()`. Presentation: `checkoutErrorStatus` di `src/modules/checkout/presentation/checkout-http.ts`. Facade existing (`checkoutPrepare` / select / place). Alamat default di-auto-confirm saat prepare. `bun run check` hijau (271 test).
+- ✅ **M7.4 — Order Customer + Admin API**: Customer routes `GET /api/v1/orders`, `GET /api/v1/orders/[id]`, `POST /api/v1/orders/[id]/cancel` (`requireCustomer`, ownership). Admin routes `GET /api/v1/admin/orders`, `GET /api/v1/admin/orders/[id]`, `PATCH /api/v1/admin/orders/[id]/status` (`requireAdmin`, state machine). Presentation: `orderErrorStatus` + `parseOrderListQuery`. Facade M7.2 dipakai langsung. `bun run check` hijau (279 test).
 
 ---
 
@@ -215,7 +216,7 @@ Belum diputuskan:
 
 **Phase 5 — Checkout & Order** in progress (Decision 027).
 
-Immediate next: **M7.4 — Order Customer + Admin API**.
+Immediate next: **M7.5 — Phase 5 Backend Exit Validation**.
 
 Workflow (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -227,6 +228,7 @@ Prasyarat Phase 5 (sudah siap):
 - ✅ Checkout domain + stub shipping/payment ports (M7.1)
 - ✅ Order domain + `createOrderFromCheckout` + reserve stock (M7.2)
 - ✅ Checkout Customer API (M7.3)
+- ✅ Order Customer + Admin API (M7.4)
 
 Urutan milestone Phase 5:
 
@@ -234,8 +236,8 @@ Backend:
 1. ✅ **M7.1 — Checkout Domain Foundation**
 2. ✅ **M7.2 — Order Domain Foundation**
 3. ✅ **M7.3 — Checkout Customer API**
-4. ⏳ **M7.4 — Order Customer + Admin API** ← next
-5. ⏳ **M7.5 — Phase 5 Backend Exit Validation**
+4. ✅ **M7.4 — Order Customer + Admin API**
+5. ⏳ **M7.5 — Phase 5 Backend Exit Validation** ← next
 
 UI:
 6. ⏳ **M7.6 — UI: Checkout Flow**
@@ -379,7 +381,7 @@ System Design Readiness
 
 ```
 Implementation
-███████████████████░  98%
+███████████████████░  99%
 ```
 
 ---
@@ -469,9 +471,9 @@ Breakdown — Backend:
 
 - [x] M7.1 Checkout Domain Foundation
 - [x] M7.2 Order Domain Foundation
-- [ ] M7.3 Checkout Customer API ← next
-- [ ] M7.4 Order Customer + Admin API
-- [ ] M7.5 Phase 5 Backend Exit Validation
+- [x] M7.3 Checkout Customer API
+- [x] M7.4 Order Customer + Admin API
+- [ ] M7.5 Phase 5 Backend Exit Validation ← next
 
 Breakdown — UI:
 

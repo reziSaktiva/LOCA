@@ -59,7 +59,7 @@ export type CreateOrderFromCheckoutResult =
   | { success: true; orderId: string }
   | { success: false; code: "ORDER_CREATE_FAILED" | "ORDER_MODULE_UNAVAILABLE"; message: string };
 
-/** Diisi penuh di M7.2; M7.1 memakai stub yang mengembalikan ORDER_MODULE_UNAVAILABLE. */
+/** Di-wire ke order public facade (`createOrderFromCheckout`). */
 export type CheckoutOrderPort = {
   createOrderFromCheckout(snapshot: CheckoutSnapshot): Promise<CreateOrderFromCheckoutResult>;
 };

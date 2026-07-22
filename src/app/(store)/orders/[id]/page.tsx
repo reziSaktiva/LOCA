@@ -25,13 +25,13 @@ export async function generateMetadata({ params }: OrderDetailPageProps) {
 }
 
 export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
+  const { id } = await params;
+
   const guard = await requireCustomer();
   if (!guard.authorized) {
-    const { id } = await params;
     redirect(`/login?next=/orders/${id}`);
   }
 
-  const { id } = await params;
   const result = await getOrder(id);
 
   if (!result.success || result.data.order.customerId !== guard.userId) {

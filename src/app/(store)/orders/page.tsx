@@ -29,6 +29,10 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
 
   const totalPages = Math.max(1, Math.ceil(result.total / result.limit));
 
+  if (result.items.length === 0 && result.total > 0 && result.page > totalPages) {
+    redirect(totalPages > 1 ? `/orders?page=${totalPages}` : "/orders");
+  }
+
   return (
     <Container className="flex flex-col gap-8 py-8 md:py-12">
       <header className="flex flex-col gap-2">

@@ -164,7 +164,7 @@ Exit Criteria:
 
 # Phase 4 — Cart & Inventory
 
-Status: 🔄 In Progress
+Status: ✅ Completed (2026-07-21)
 
 Tujuan:
 
@@ -210,21 +210,21 @@ Backend:
 UI Catch-up:
 - ✅ M6.6 — UI Foundation: Route Groups + Shared Layout
 - ✅ M6.7 — UI: Homepage + Catalog + Product Detail
-- M6.8 — UI: Auth + Account + Cart
+- ✅ M6.8 — UI: Auth + Account + Cart
 
 Exit Criteria:
 
 Backend (✅ terpenuhi M6.5):
-- Customer dapat menambahkan produk ke cart via API.
-- Stok divalidasi real-time saat operasi cart.
-- Admin dapat mengelola stok via API.
-- Kontrak `getCartSnapshot` (`getCartSnapshotForCheckout`) dan `reserveStock` (`inventoryReserveStock`) siap untuk Phase 5 (Checkout & Order).
-- `bun run check` hijau.
+- Customer dapat menambahkan produk ke cart via API. ✅
+- Stok divalidasi real-time saat operasi cart. ✅
+- Admin dapat mengelola stok via API. ✅
+- Kontrak `getCartSnapshot` (`getCartSnapshotForCheckout`) dan `reserveStock` (`inventoryReserveStock`) siap untuk Phase 5 (Checkout & Order). ✅
+- `bun run check` hijau. ✅
 
-UI:
-- Customer dapat mengakses homepage, browse produk, login, dan melihat cart di browser.
-- Halaman responsive (mobile-first), accessible (WCAG AA minimum), tidak ada halaman kosong.
-- Route groups aktif dengan layout terpisah per audience.
+UI (✅ terpenuhi M6.8):
+- Customer dapat mengakses homepage, browse produk, login, dan melihat cart di browser. ✅
+- Halaman responsive (mobile-first), accessible (WCAG AA minimum), tidak ada halaman kosong. ✅
+- Route groups aktif dengan layout terpisah per audience. ✅
 
 ---
 

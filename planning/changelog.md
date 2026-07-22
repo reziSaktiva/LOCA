@@ -9,6 +9,32 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-21 (7)
+
+### Added
+
+- **M6.8 — UI Auth + Account + Cart** (Phase 4 selesai penuh):
+  - `/login`, `/register` — form penuh via `POST /api/v1/auth/login|register`; redirect aman (`safeRedirectPath`).
+  - `/account` — tab Profil + Alamat; logout; CRUD alamat + set default.
+  - `/cart` — list item, quantity stepper, remove, summary; checkout CTA disabled (Phase 5).
+  - Presentation: auth (`LoginForm`, `RegisterForm`, `LogoutButton`), customer (`ProfileForm`, `AddressCard`, `AddressForm`, `AddressSection`), cart (`CartPanel`, `CartItemRow`, `CartSummary`, `QuantityStepper`).
+
+### Changed
+
+- `formatIdr` dipindah ke `src/shared/kernel/format-idr.ts` (re-export dari catalog presentation).
+- Progress docs: `PROJECT_STATE.md`, roadmap, backlog, `ctx-implementation.md` — M6.8 ✅; Phase 4 ✅; next Phase 5.
+
+### Verified
+
+- `bun run check` hijau (239 test).
+- `bun run build` hijau — routes `/login`, `/register`, `/account`, `/cart` terdaftar.
+
+### Notes
+
+- Next: **Phase 5 — Checkout & Order**.
+
+---
+
 ## 2026-07-21 (6)
 
 ### Added

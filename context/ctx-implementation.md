@@ -8,15 +8,16 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 1 (Project Foundation / Implementation Setup): **completed**
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
-- Phase 4 (Cart & Inventory): **in progress** — M6.1–M6.7 selesai; lanjut M6.8 UI auth/account/cart
-- Current implementation progress: **94%**
+- Phase 4 (Cart & Inventory): **completed** — M6.1–M6.8 selesai (backend + UI catch-up)
+- Phase 5 (Checkout & Order): **next**
+- Current implementation progress: **96%**
 
 ## Current Focus
 
-- Phase 4 — Cart & Inventory. **M6.7 selesai penuh.** Lanjut **M6.8 — UI Auth + Account + Cart**.
-- Workflow **UI paralel per phase** (Decision 022): UI catch-up M6.8 sebelum Phase 5.
+- Phase 4 selesai penuh. Siap **Phase 5 — Checkout & Order**.
+- Workflow **UI paralel per phase** (Decision 022) tetap berlaku untuk Phase 5+.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
-- Decision 025: kontrak Phase 5 terdokumentasi.
+- Decision 025: kontrak Phase 5 (`getCartSnapshotForCheckout`, inventory reserve/commit/release) terdokumentasi.
 
 ## Completed (Planning Side)
 
@@ -228,24 +229,24 @@ Target setup awal (Phase 2 selesai):
 - M6.3: domain (`Cart`, `CartItem`, `CartStatus`, `CartSnapshot`), invariants, repository contract, port pattern, application services, `PrismaCartRepository`, public facade. Migration `20260710042405_cart_domain_foundation` diapply.
 - M6.4: customer routes `GET/DELETE /api/v1/cart`, `POST /api/v1/cart/items`, `PATCH/DELETE /api/v1/cart/items/[id]` (semua `requireCustomer()`). Application `get-cart-customer-view.ts` + presentation `cart-http.ts`. Facade `cartGetCustomerView`.
 - M6.5: exit gate — smoke/contract test `phase-4-backend-exit.test.ts`; migrations up to date; kontrak Phase 5 terpasang (Decision 025).
-- 229 test lolos. Next: M6.6 — UI catch-up.
+- 229 test lolos pada M6.5; suite terkini 239 test (setelah M6.8).
 
 ### UI — Phase 4 (Catch-up M6.6–M6.8)
 
-- Status: **M6.6–M6.7 Completed**.
+- Status: **M6.6–M6.8 Completed** (Phase 4 selesai).
 - M6.6: `(store)` Navbar+Footer, `(auth)` logo-centered, `(admin)` Sidebar+`requireAdmin()`.
 - M6.7: `/`, `/products`, `/products/[slug]`, `/search` — data real; Add to Cart via API; search debounce.
-- `getPublicProductBySlug` → variants + media + stock (Inventory public facade).
-- 236 test lolos; `bun run build` hijau.
-- Next: **M6.8** Auth + Account + Cart pages.
+- M6.8: `/login`, `/register`, `/account`, `/cart` — auth forms, profil+alamat, cart ops; protected redirect ke login.
+- 239 test lolos; `bun run build` hijau.
 - Route strategy: `(store)`, `(auth)`, `(admin)/admin/*` — lihat `docs/04-system-architecture.md` §9
+- Next: **Phase 5 — Checkout & Order**.
 
 ## Remaining Priority Flows
 
 ### Checkout
 
 - Belum diimplementasikan.
-- Target: Phase 5.
+- Target: Phase 5 (next).
 
 ### Payment
 

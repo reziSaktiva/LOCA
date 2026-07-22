@@ -6,9 +6,9 @@
 
 # Project
 
-Status: Phase 4 In Progress — M6.7 UI store catalog selesai; next M6.8
+Status: Phase 4 Completed — M6.8 UI Auth + Account + Cart selesai; next Phase 5
 
-Current Version: v0.95
+Current Version: v0.96
 
 Project Type:
 
@@ -30,6 +30,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 ✅ Phase 1 — Project Foundation (Completed)
 ✅ Phase 2 — Catalog Foundation (Completed)
 ✅ Phase 3 — Customer & Homepage (Completed)
+✅ Phase 4 — Cart & Inventory (Completed)
 
 Progress:
 
@@ -51,13 +52,13 @@ Progress:
 
 # Current Focus
 
-Sedang mengerjakan:
+Siap mulai:
 
-`phase-4 cart & checkout`
+`phase-5 checkout & order`
 
 Tujuan:
 
-M6.7 selesai penuh: Homepage, Catalog listing, Product Detail (`/products/[slug]`), Search (`/search`). Detail: galeri, variant selector, stok, Add to Cart (401→login). Search dengan debounce URL-state. Next: M6.8 — UI Auth + Account + Cart.
+Phase 4 selesai penuh (backend inventory/cart + UI catch-up M6.6–M6.8). Customer dapat login/register, kelola akun, dan kelola cart di browser. Next: Phase 5 — Checkout & Order.
 
 ---
 
@@ -165,7 +166,7 @@ Belum diputuskan:
 
 - `planning/README.md` sudah memuat ringkasan seluruh dokumen `docs/`.
 - `planning/decisions.md` memuat keputusan teknis terbaru sampai **Decision 026** (proactive-clarification skill).
-- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-21** (entry 4).
+- `planning/changelog.md` memuat log update terbaru tanggal **2026-07-21** (entry 7).
 
 ## Agent Governance
 
@@ -201,30 +202,31 @@ Belum diputuskan:
 - ✅ **M6.5 — Phase 4 Backend Exit Validation**: Exit gate backend Phase 4 lolos. Cross-module: cart hanya mengakses catalog/inventory via public facade + ports. Kontrak Phase 5: `getCartSnapshotForCheckout`, `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`. Smoke test flow add→stock→total→remove→empty. Migrations inventory+cart applied (`prisma migrate status` up to date). Docs Public Services dipetakan ke facade names. Decision 025. `bun run check` hijau (229 test).
 - ✅ **M6.6 — UI Route Groups + Shared Layout**: Route groups `(store)`, `(auth)`, `(admin)` aktif. Shared layout di `src/shared/ui/layout/` (`Navbar`, `Footer`, `AdminSidebar`, `Container` re-export). Store layout fetch kategori + cart count lalu inject ke Navbar (boundary shared↛modules dipatuhi). Auth layout minimalist + redirect jika sudah login. Admin layout + topbar + `requireAdmin()` (401→`/login`, 403→`/`). Placeholder pages: `/`, `/login`, `/register`, `/admin/*`. shadcn `sheet`/`skeleton`/`separator`. `bun run check` + `bun run build` hijau.
 - ✅ **M6.7 — UI Homepage + Catalog + Product Detail**: Slice 1+2 selesai. Homepage + `/products` + `/products/[slug]` + `/search`. `getPublicProductBySlug` diperkaya (variants ACTIVE + media + stok via Inventory port). Presentation: `ProductGallery`, `VariantSelector`, `ProductDetailPanel`, `AddToCartButton`, `SearchForm`. Docs `07` diperbarui untuk shape detail. `bun run check` hijau (236 test) + `bun run build` hijau.
+- ✅ **M6.8 — UI Auth + Account + Cart**: `/login`, `/register`, `/account`, `/cart` berfungsi penuh. Auth presentation: `LoginForm`, `RegisterForm`, `LogoutButton`, `safeRedirectPath`. Customer presentation: `ProfileForm`, `AddressCard`, `AddressForm`, `AddressSection`. Cart presentation: `CartPanel`, `CartItemRow`, `CartSummary`, `QuantityStepper`. Protected pages redirect ke `/login?next=…`. Checkout CTA disabled (aktif di Phase 5). `formatIdr` dipindah ke `src/shared/kernel/`. `bun run check` hijau (239 test) + `bun run build` hijau. **Phase 4 selesai.**
 
 ---
 
 # Next Action
 
-**Milestone 3–5** sudah selesai. **M6.1–M6.7** sudah selesai.
+**Phase 0–4** sudah selesai (termasuk UI catch-up M6.6–M6.8).
 
-Next action: **M6.8 — UI: Auth + Account + Cart** — `/login`, `/register`, `/account`, `/cart`.
+Next action: **Phase 5 — Checkout & Order** — mulai fondasi domain `checkout` + `order` (vertical slice pertama sesuai roadmap).
 
-Workflow baru (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
+Workflow (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
-Urutan milestone Phase 4:
+Urutan milestone Phase 4 (semua ✅):
 
 Backend:
-1. **M6.1 — Inventory Domain Foundation** — domain entities, invariants, repository contract, application services, public facade, Prisma schema + migration.
-2. **M6.2 — Admin Inventory API** — endpoint admin: lihat stok, adjustment, movement history.
-3. **M6.3 — Cart Domain Foundation** — domain entities (Cart, CartItem), invariants, port pattern (CartCatalogPort, CartInventoryPort), application services, Prisma schema + migration.
-4. **M6.4 — Cart Customer API** — endpoint customer: GET/POST/PATCH/DELETE cart + items.
-5. ✅ **M6.5 — Phase 4 Backend Exit Validation** — cross-module contracts, quality gate, kontrak Phase 5 terpasang.
+1. ✅ **M6.1 — Inventory Domain Foundation**
+2. ✅ **M6.2 — Admin Inventory API**
+3. ✅ **M6.3 — Cart Domain Foundation**
+4. ✅ **M6.4 — Cart Customer API**
+5. ✅ **M6.5 — Phase 4 Backend Exit Validation**
 
 UI Catch-up (Phase 2–4):
-6. ✅ **M6.6 — UI Route Groups + Shared Layout** — setup `(store)`, `(auth)`, `(admin)` dengan layout masing-masing (Navbar, Footer, AdminSidebar).
-7. ✅ **M6.7 — UI: Homepage + Catalog + Product Detail** — `/`, `/products`, `/products/[slug]`, `/search`.
-8. **M6.8 — UI: Auth + Account + Cart** — halaman protected: `/login`, `/register`, `/account`, `/cart`.
+6. ✅ **M6.6 — UI Route Groups + Shared Layout**
+7. ✅ **M6.7 — UI: Homepage + Catalog + Product Detail**
+8. ✅ **M6.8 — UI: Auth + Account + Cart**
 
 ---
 
@@ -350,7 +352,7 @@ System Design Readiness
 
 ```
 Implementation
-███████████████████░  94%
+███████████████████░  96%
 ```
 
 ---
@@ -434,7 +436,7 @@ Target Outcome:
 
 ---
 
-## 🔄 Milestone 6 — Cart, Inventory & UI Catch-up (In Progress)
+## ✅ Milestone 6 — Cart, Inventory & UI Catch-up (Completed)
 
 Breakdown — Backend:
 
@@ -448,20 +450,20 @@ Breakdown — UI Catch-up Phase 2–4:
 
 - [x] M6.6 UI: Route Groups + Shared Layout
 - [x] M6.7 UI: Homepage + Catalog + Product Detail
-- [ ] M6.8 UI: Auth + Account + Cart
+- [x] M6.8 UI: Auth + Account + Cart
 
 Target Outcome:
 
 Backend:
-- Customer dapat menambahkan produk ke cart via API.
-- Stok divalidasi real-time saat operasi cart.
-- Admin dapat mengelola stok via API.
-- Kontrak `getCartSnapshot` dan `reserveStock/commitStock/releaseStock` siap untuk Phase 5.
+- ✅ Customer dapat menambahkan produk ke cart via API.
+- ✅ Stok divalidasi real-time saat operasi cart.
+- ✅ Admin dapat mengelola stok via API.
+- ✅ Kontrak `getCartSnapshot` dan `reserveStock/commitStock/releaseStock` siap untuk Phase 5.
 
 UI:
-- Customer dapat browse, login, dan melihat cart di browser.
-- Halaman responsive (mobile-first), accessible, tidak ada halaman kosong.
-- Route groups aktif dengan layout terpisah per audience (Decision 022).
+- ✅ Customer dapat browse, login, dan melihat cart di browser.
+- ✅ Halaman responsive (mobile-first), accessible, tidak ada halaman kosong.
+- ✅ Route groups aktif dengan layout terpisah per audience (Decision 022).
 
 ---
 

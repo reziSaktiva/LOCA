@@ -9,13 +9,13 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
 - Phase 4 (Cart & Inventory): **completed** — M6.1–M6.8 selesai (backend + UI catch-up)
-- Phase 5 (Checkout & Order): **in progress** — kicked off 2026-07-22
-- Current implementation progress: **96%**
+- Phase 5 (Checkout & Order): **in progress** — M7.1 ✅; next M7.2
+- Current implementation progress: **97%**
 
 ## Current Focus
 
 - **Phase 5 — Checkout & Order** in progress (Decision 027: M7.1–M7.7).
-- Immediate next: **M7.1 — Checkout Domain Foundation**.
+- Immediate next: **M7.2 — Order Domain Foundation**.
 - Shipping/payment Phase 5 via **stub/port adapter**; Midtrans/Biteship di Phase 6.
 - Workflow **UI paralel per phase** (Decision 022) tetap berlaku.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
@@ -246,8 +246,8 @@ Target setup awal (Phase 2 selesai):
 ## Phase 5 (In Progress — M7.1–M7.7)
 
 Milestones:
-1. ⏳ M7.1 Checkout Domain Foundation ← next
-2. ⏳ M7.2 Order Domain Foundation
+1. ✅ M7.1 Checkout Domain Foundation
+2. ⏳ M7.2 Order Domain Foundation ← next
 3. ⏳ M7.3 Checkout Customer API
 4. ⏳ M7.4 Order Customer + Admin API
 5. ⏳ M7.5 Phase 5 Backend Exit Validation
@@ -256,21 +256,22 @@ Milestones:
 
 ### Checkout Module
 
-- Status: **M7.1 next** — belum diimplementasikan.
+- Status: **M7.1 Completed** — domain, application, Prisma repo, public facade, stub shipping/payment.
+- Migration `20260722030000_checkout_domain_foundation` applied.
+- `placeOrder` menunggu M7.2 (`ORDER_MODULE_UNAVAILABLE` via order port stub).
 - Target phase: Phase 5 🔄
-- Depends on: `getCartSnapshotForCheckout` (cart), customer address; shipping/payment via stub ports (Decision 027).
 
 ### Order Module
 
-- Status: **M7.2 planned** — belum diimplementasikan.
+- Status: **M7.2 next** — belum diimplementasikan.
 - Target phase: Phase 5 🔄
-- Depends on: inventory reserve/commit/release (Decision 025), checkout snapshot.
+- Depends on: inventory reserve/commit/release (Decision 025), `CheckoutSnapshot` dari checkout.
 
 ## Remaining Priority Flows
 
 ### Checkout
 
-- Phase 5 M7.1 next — domain belum dimulai; shipping/payment stub (Decision 027).
+- M7.1 selesai; next wire order module (M7.2) lalu Checkout Customer API (M7.3).
 - Target: Phase 5 (in progress).
 
 ### Payment

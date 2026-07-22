@@ -9,6 +9,28 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (3)
+
+### Added
+
+- **M7.1 — Checkout Domain Foundation**:
+  - Domain: `CheckoutSession`, `CheckoutSnapshot`, status lifecycle, invariants, repository contract.
+  - Application: `prepareCheckout`, select address/shipping/payment, `placeOrder`.
+  - Ports + stubs: cart/customer facades; shipping/payment stub (Decision 027); order port `ORDER_MODULE_UNAVAILABLE` hingga M7.2.
+  - Infrastructure: `PrismaCheckoutRepository`; migration `20260722030000_checkout_domain_foundation` (applied).
+  - Public facade: `src/modules/checkout/public/checkout-service.ts`.
+
+### Verified
+
+- `bun run check` hijau (253 test).
+- `prisma migrate deploy` — checkout migration applied.
+
+### Notes
+
+- Next: **M7.2 — Order Domain Foundation** (wire `CheckoutOrderPort` + reserve stock).
+
+---
+
 ## 2026-07-22 (2)
 
 ### Added

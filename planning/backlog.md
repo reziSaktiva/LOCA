@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.1 — Checkout Domain Foundation**
+Immediate next: **M7.2 — Order Domain Foundation**
 
 ---
 
@@ -38,7 +38,7 @@ Immediate next: **M7.1 — Checkout Domain Foundation**
 
 Priority: P0
 
-Status: Ready
+Status: Completed (2026-07-22)
 
 Feature: `checkout-domain`
 
@@ -73,15 +73,16 @@ Scope implementasi:
 6. **Public facade** `checkout-service.ts`.
 
 Acceptance criteria:
-- `prepareCheckout` gagal jika cart kosong / tidak ada alamat.
-- Select shipping/payment hanya dari opsi stub yang valid.
-- `placeOrder` menolak jika prasyarat belum lengkap.
-- Tidak ada import langsung ke internal module lain (hanya ports/facade).
-- `bun run check` hijau.
+- ✅ `prepareCheckout` gagal jika cart kosong / tidak ada alamat.
+- ✅ Select shipping/payment hanya dari opsi stub yang valid.
+- ✅ `placeOrder` menolak jika prasyarat belum lengkap; order port stub → `ORDER_MODULE_UNAVAILABLE` tanpa clear cart.
+- ✅ Tidak ada import langsung ke internal module lain (hanya ports/facade).
+- ✅ Migration `20260722030000_checkout_domain_foundation` applied.
+- ✅ `bun run check` hijau (253 test).
 
 Dependency:
 - Cart + customer + inventory facades stabil (Phase 3–4 ✅).
-- Order create port bisa di-stub sementara sampai M7.2 selesai, lalu di-wire.
+- Order create port di-stub (`ORDER_MODULE_UNAVAILABLE`) sampai M7.2 selesai, lalu di-wire.
 
 ---
 

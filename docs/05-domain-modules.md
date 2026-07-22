@@ -520,11 +520,12 @@ Mengubah cart valid menjadi order draft siap pembayaran.
 
 ### Public Services
 
-- `prepareCheckout(customerId)`
-- `getShippingOptions(customerId, cartId, destination)`
-- `selectShippingOption(customerId, cartId, optionId)`
-- `selectPaymentMethod(customerId, cartId, method)`
-- `placeOrder(customerId, payload)`
+- `prepareCheckout(customerId)` — facade: `prepareCheckoutForCustomer` / `checkoutPrepare`
+- `getShippingOptions(customerId, cartId, destination)` — facade: `getShippingOptionsForCustomer` / `checkoutGetShippingOptions` (destination dari alamat terpilih di session)
+- `selectShippingOption(customerId, cartId, optionId)` — facade: `checkoutSelectShippingOption`
+- `selectPaymentMethod(customerId, cartId, method)` — facade: `checkoutSelectPaymentMethod`
+- `placeOrder(customerId, payload)` — facade: `placeOrderForCustomer` / `checkoutPlaceOrder` (M7.1: order port belum wired → `ORDER_MODULE_UNAVAILABLE` hingga M7.2)
+- Tambahan M7.1: `checkoutSelectAddress(customerId, addressId)` untuk lifecycle `ADDRESS_CONFIRMED`
 
 ### Owned Entities
 

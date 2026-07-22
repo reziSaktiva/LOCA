@@ -9,6 +9,29 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (10)
+
+### Added
+
+- **M7.6 — UI: Checkout Flow**: halaman `/checkout` aktif di `src/app/(store)/checkout/page.tsx` (server component, `requireCustomer()` → redirect `/login?next=/checkout`).
+  - Presentation baru di `src/modules/checkout/presentation/`: `CheckoutEmptyState` (empty/error state generik), `CheckoutAddressSummary` (alamat view-only + link "Kelola alamat" ke `/account`), `CheckoutOrderSummary` (item cart + subtotal/ongkir/total), `CheckoutFlow` (client — pilih shipping via `POST .../shipping`, pilih payment via `POST .../payment`, place order via `POST .../place-order`, lalu render success state inline dengan ringkasan order).
+  - `CheckoutPage` menangani error `CART_EMPTY` (CTA ke `/products`) dan `ADDRESS_REQUIRED` (CTA ke `/account`) dari `checkoutPrepare`.
+  - Data digabung dari 3 facade: `checkoutPrepare` (session + shipping/payment options), `customerListAddresses` (detail alamat terpilih), `cartGetCustomerView` (item cart untuk ringkasan) — komposisi di layer presentation (page), tidak melanggar boundary module.
+  - `CartSummary` (`src/modules/cart/presentation/cart-summary.tsx`): CTA "Lanjut ke Checkout" diaktifkan (link ke `/checkout`, sebelumnya disabled sejak M6.8).
+- Decision 028: scope M7.6 — alamat checkout view-only (bukan selectable), sukses order ditampilkan inline (bukan redirect ke `/orders/[id]` yang belum ada sampai M7.7).
+
+### Verified
+
+- `bun run check` hijau (lint + typecheck + test — 286 test, tidak berubah karena murni UI tanpa test baru di layer domain/application).
+- `bun run build` hijau — route `/checkout` terdaftar sebagai dynamic route.
+
+### Notes
+
+- Tidak ada perubahan API contract (`docs/07`) — `checkoutSelectAddress` di facade tetap tidak diekspos lewat HTTP (gap yang sama sejak M7.3, dikonfirmasi ulang di Decision 028).
+- Next: **M7.7 — UI: Order History + Detail** (setelah itu Phase 5 selesai penuh).
+
+---
+
 ## 2026-07-22 (9)
 
 ### Added

@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.5 — Phase 5 Backend Exit Validation**
+Immediate next: **M7.6 — UI: Checkout Flow** (backend Phase 5 / M7.1–M7.5 selesai)
 
 ---
 
@@ -193,7 +193,7 @@ Dependency: M7.2 ✅.
 
 Priority: P0
 
-Status: Ready (setelah M7.1–M7.4)
+Status: Completed (2026-07-22)
 
 Feature: `phase-5-backend-exit`
 

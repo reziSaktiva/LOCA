@@ -9,13 +9,13 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
 - Phase 4 (Cart & Inventory): **completed** — M6.1–M6.8 selesai (backend + UI catch-up)
-- Phase 5 (Checkout & Order): **in progress** — M7.1–M7.4 ✅; next M7.5
+- Phase 5 (Checkout & Order): **in progress** — Backend M7.1–M7.5 ✅ selesai; next UI M7.6
 - Current implementation progress: **99%**
 
 ## Current Focus
 
 - **Phase 5 — Checkout & Order** in progress (Decision 027: M7.1–M7.7).
-- Immediate next: **M7.5 — Phase 5 Backend Exit Validation**.
+- Backend Phase 5 ✅ selesai. Immediate next: **M7.6 — UI: Checkout Flow**.
 - Shipping/payment Phase 5 via **stub/port adapter**; Midtrans/Biteship di Phase 6.
 - Workflow **UI paralel per phase** (Decision 022) tetap berlaku.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
@@ -23,6 +23,7 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - M7.2: `createOrderFromCheckout` + reserve stock; `CheckoutOrderPort` wired.
 - M7.3: customer checkout API `GET/POST /api/v1/checkout/*` hingga place-order `WAITING_PAYMENT`.
 - M7.4: customer/admin order API (`/api/v1/orders`, `/api/v1/admin/orders`).
+- M7.5: exit gate backend Phase 5 — smoke test `checkout/application/phase-5-backend-exit.test.ts` + `order/application/phase-5-backend-exit.test.ts` (dipecah 2 file agar patuh boundary rule), migrations checkout/order terverifikasi urut. `bun run check` hijau (286 test).
 
 ## Completed (Planning Side)
 
@@ -253,33 +254,35 @@ Milestones:
 2. ✅ M7.2 Order Domain Foundation
 3. ✅ M7.3 Checkout Customer API
 4. ✅ M7.4 Order Customer + Admin API
-5. ⏳ M7.5 Phase 5 Backend Exit Validation ← next
-6. ⏳ M7.6 UI: Checkout Flow
+5. ✅ M7.5 Phase 5 Backend Exit Validation
+6. ⏳ M7.6 UI: Checkout Flow ← next
 7. ⏳ M7.7 UI: Order History + Detail
 
 ### Checkout Module
 
-- Status: **M7.1 + M7.3 Completed** — domain/application/Prisma/facade + customer REST API.
+- Status: **M7.1 + M7.3 + M7.5 Completed** — domain/application/Prisma/facade + customer REST API + exit validation.
 - Routes: `GET /api/v1/checkout`, `POST .../shipping|payment|place-order` (`requireCustomer`).
 - Migration `20260722030000_checkout_domain_foundation` applied.
 - `CheckoutOrderPort` wired ke `createOrderFromCheckout` (M7.2).
-- Target phase: Phase 5 🔄
+- Smoke test: `checkout/application/phase-5-backend-exit.test.ts`.
+- Target phase: Phase 5 🔄 — backend closed, next UI (M7.6).
 
 ### Order Module
 
-- Status: **M7.2 + M7.4 Completed** — domain + customer/admin REST API.
+- Status: **M7.2 + M7.4 + M7.5 Completed** — domain + customer/admin REST API + exit validation.
 - Routes customer: `GET /api/v1/orders`, `GET .../[id]`, `POST .../[id]/cancel`.
 - Routes admin: `GET /api/v1/admin/orders`, `GET .../[id]`, `PATCH .../[id]/status`.
 - Migration `20260722040000_order_domain_foundation` applied.
-- Target phase: Phase 5 🔄 — next backend exit validation (M7.5).
+- Smoke test: `order/application/phase-5-backend-exit.test.ts`.
+- Target phase: Phase 5 🔄 — backend closed, next UI (M7.6).
 - Depends on: inventory reserve/commit/release (Decision 025), checkout snapshot input.
 
 ## Remaining Priority Flows
 
 ### Checkout
 
-- M7.1–M7.4 selesai; next Phase 5 Backend Exit Validation (M7.5).
-- Target: Phase 5 (in progress).
+- M7.1–M7.5 selesai (backend Phase 5 closed); next UI: Checkout Flow (M7.6).
+- Target: Phase 5 (in progress, UI stage).
 
 ### Payment
 

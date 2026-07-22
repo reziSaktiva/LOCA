@@ -1,8 +1,5 @@
-import {
-  ORDER_STATUSES,
-  type OrderError,
-  type OrderStatus,
-} from "../domain/order-entities";
+import { ORDER_STATUSES, type OrderError, type OrderStatus } from "../domain/order-entities";
+import { isCancellableStatus } from "../domain/order-invariants";
 import type { ListOrdersQuery } from "../domain/order-repository";
 
 /** Maps domain order error codes to HTTP status for customer/admin API routes. */
@@ -28,6 +25,11 @@ export function orderErrorStatus(error: OrderError): number {
 
 export function isOrderStatus(value: unknown): value is OrderStatus {
   return typeof value === "string" && (ORDER_STATUSES as readonly string[]).includes(value);
+}
+
+/** Dipakai UI untuk menampilkan/menyembunyikan CTA "Batalkan Pesanan". */
+export function isOrderCancellable(status: OrderStatus): boolean {
+  return isCancellableStatus(status);
 }
 
 /** Parse `page`, `limit`, `status` from URL search params for order list endpoints. */

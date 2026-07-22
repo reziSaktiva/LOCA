@@ -263,7 +263,7 @@ Backend:
 - ✅ M7.1 — Checkout Domain Foundation
 - ✅ M7.2 — Order Domain Foundation
 - ✅ M7.3 — Checkout Customer API
-- ⏳ M7.4 — Order Customer + Admin API
+- ✅ M7.4 — Order Customer + Admin API
 - ⏳ M7.5 — Phase 5 Backend Exit Validation
 
 UI:

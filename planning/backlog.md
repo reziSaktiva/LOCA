@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.4 — Order Customer + Admin API**
+Immediate next: **M7.5 — Phase 5 Backend Exit Validation**
 
 ---
 
@@ -162,7 +162,7 @@ Dependency: M7.1 ✅, M7.2 ✅.
 
 Priority: P0
 
-Status: In Progress (branch `feat/m7.4-order-customer-admin-api`)
+Status: Completed (2026-07-22)
 
 Feature: `order-api`
 

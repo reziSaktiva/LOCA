@@ -26,19 +26,20 @@ import type {
 import type { ListOrdersQuery, ListOrdersResult } from "../domain/order-repository";
 import { PrismaOrderRepository } from "../infrastructure/prisma-order-repository";
 
-export type {
-  CancelOrderCommand,
-  CreateOrderFromCheckoutInput,
-  Order,
-  OrderActorContext,
-  OrderActorRole,
-  OrderDetail,
-  OrderError,
-  OrderItem,
-  OrderResult,
-  OrderStatus,
-  OrderStatusHistory,
-  TransitionOrderStatusCommand,
+export {
+  ORDER_STATUSES,
+  type CancelOrderCommand,
+  type CreateOrderFromCheckoutInput,
+  type Order,
+  type OrderActorContext,
+  type OrderActorRole,
+  type OrderDetail,
+  type OrderError,
+  type OrderItem,
+  type OrderResult,
+  type OrderStatus,
+  type OrderStatusHistory,
+  type TransitionOrderStatusCommand,
 } from "../domain/order-entities";
 
 export type { ListOrdersQuery, ListOrdersResult } from "../domain/order-repository";

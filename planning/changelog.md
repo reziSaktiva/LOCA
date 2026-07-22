@@ -9,6 +9,29 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (6)
+
+### Added
+
+- **M7.3 — Checkout Customer API**:
+  - `GET /api/v1/checkout` — prepare/refresh session + shipping/payment options.
+  - `POST /api/v1/checkout/shipping` — body `{ optionId }`.
+  - `POST /api/v1/checkout/payment` — body `{ method }`.
+  - `POST /api/v1/checkout/place-order` — 201 + `{ orderId, status: WAITING_PAYMENT, snapshot }`.
+  - Presentation helper `checkoutErrorStatus` + unit test.
+  - Semua route dilindungi `requireCustomer()`.
+
+### Verified
+
+- `bun run check` hijau (271 test).
+
+### Notes
+
+- Alamat default di-auto-confirm saat prepare (sesuai domain M7.1); tidak ada endpoint select-address terpisah di `docs/07`.
+- Next: **M7.4 — Order Customer + Admin API**.
+
+---
+
 ## 2026-07-22 (5)
 
 ### Added

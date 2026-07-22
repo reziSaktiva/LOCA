@@ -9,6 +9,21 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (5)
+
+### Added
+
+- **Demo seed script** `scripts/seed-demo-data.ts` + command `bun run db:seed:demo`:
+  - Membuat/memastikan akun admin Supabase Auth (`app_metadata.role = admin`).
+  - Seed 5 kategori, 5 produk ACTIVE (13 varian) + stok inventory ke Supabase.
+  - Idempotent; kredensial override via `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`.
+
+### Notes
+
+- Default login admin seed: `admin@loca.id` / `LocaAdmin!2026` (wajib diganti setelah login pertama).
+
+---
+
 ## 2026-07-22 (4)
 
 ### Added

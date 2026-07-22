@@ -1,16 +1,14 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { LogoutButton } from "@/modules/auth/presentation";
-import {
-  AddressSection,
-  ProfileForm,
-  type AddressCardData,
-} from "@/modules/customer/presentation";
+import { AddressSection, ProfileForm, type AddressCardData } from "@/modules/customer/presentation";
 import {
   customerGetProfile,
   customerListAddresses,
 } from "@/modules/customer/public/customer-service";
 import { requireCustomer } from "@/shared/infrastructure/auth/customer-guard";
+import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { Separator } from "@/shared/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -52,13 +50,18 @@ export default async function AccountPage() {
 
   return (
     <Container className="flex flex-col gap-8 py-8 md:py-12">
-      <header className="flex flex-col gap-2">
-        <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
-          Akun
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Kelola profil dan alamat pengiriman untuk pengalaman belanja yang lebih mudah.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
+            Akun
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Kelola profil dan alamat pengiriman untuk pengalaman belanja yang lebih mudah.
+          </p>
+        </div>
+        <Button variant="outline" nativeButton={false} render={<Link href="/orders" />}>
+          Pesanan Saya
+        </Button>
       </header>
 
       <Tabs defaultValue="profile" className="gap-6">

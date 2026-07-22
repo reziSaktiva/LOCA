@@ -572,6 +572,10 @@ Order Placed
 - `order` (create order draft).
 - `payment` (payment channel availability metadata).
 
+### Phase 5 note (Decision 027)
+
+Hingga Phase 6, dependency `shipping` dan `payment` di-checkout diakses via **port adapter stub** di application layer `checkout` (opsi kurir & metode bayar tetap/mock). Kontrak public service checkout tetap sama; Phase 6 mengganti implementasi port ke provider nyata (Biteship / Midtrans metadata) tanpa mengubah flow customer `prepare → select → place-order`.
+
 ### Events
 
 - `checkout.started`

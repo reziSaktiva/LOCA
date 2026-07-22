@@ -13,11 +13,267 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 ## Current Backlog
 
+### Checkout & Order Phase 5 (M7.1–M7.7)
+
+Priority: P0
+
+Status: In Progress — kicked off 2026-07-22; milestone breakdown Decision 027
+
+Owner: `checkout` module, `order` module
+
+Tujuan:
+
+Membangun proses transaksi end-to-end dari cart hingga order terbuat (status hingga `WAITING_PAYMENT`), termasuk API customer/admin order dan UI checkout + order history. Shipping/payment di Phase 5 via stub/port adapter; Midtrans/Biteship di Phase 6.
+
+Prasyarat (sudah siap):
+- `getCartSnapshotForCheckout` (Decision 025)
+- `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
+- Customer address API/UI, cart API/UI
+
+Immediate next: **M7.1 — Checkout Domain Foundation**
+
+---
+
+#### M7.1 — Checkout Domain Foundation
+
+Priority: P0
+
+Status: Ready
+
+Feature: `checkout-domain`
+
+Output:
+- Domain layer module `checkout` aktif: entity, invariant, repository contract, port contracts.
+- Application services untuk prepare/select/place (tanpa HTTP dulu).
+- Public facade siap dikonsumsi API layer.
+- Stub ports shipping + payment method (Decision 027).
+- Unit test domain + application lolos.
+
+Scope implementasi:
+
+1. **Domain entities** (`src/modules/checkout/domain/`):
+   - `CheckoutSession` — aggregate root (customerId, cartId, addressId, shippingOption, paymentMethod, status, totals).
+   - `CheckoutSnapshot` — immutable snapshot saat place order (items + prices + shipping + payment + address).
+   - Enum status lifecycle: `STARTED` → `ADDRESS_CONFIRMED` → `SHIPPING_SELECTED` → `PAYMENT_METHOD_SELECTED` → `ORDER_PLACED` (+ expired/cancelled jika diperlukan).
+   - Typed `CheckoutResult<T>` / `CheckoutError`.
+
+2. **Invariants**:
+   - Cart tidak kosong; alamat valid milik customer; shipping + payment wajib sebelum place order.
+   - Snapshot immutable setelah `ORDER_PLACED`.
+
+3. **Ports** (`application/checkout-ports.ts`):
+   - `CheckoutCartPort` → `getCartSnapshotForCheckout`.
+   - `CheckoutCustomerPort` → alamat customer.
+   - `CheckoutShippingPort` → **stub** daftar opsi kurir + biaya.
+   - `CheckoutPaymentMethodPort` → **stub** daftar metode bayar (metadata saja).
+   - `CheckoutOrderPort` → `createOrderFromCheckout` (diisi penuh setelah M7.2).
+
+4. **Application services**: `prepareCheckout`, `selectShippingOption`, `selectPaymentMethod`, `placeOrder` (orchestrate snapshot + order port + clear/checkout cart sesuai rule).
+5. **Repository contract** + Prisma model `CheckoutSession` (jika session perlu persist; boleh in-memory/session DB sesuai data model).
+6. **Public facade** `checkout-service.ts`.
+
+Acceptance criteria:
+- `prepareCheckout` gagal jika cart kosong / tidak ada alamat.
+- Select shipping/payment hanya dari opsi stub yang valid.
+- `placeOrder` menolak jika prasyarat belum lengkap.
+- Tidak ada import langsung ke internal module lain (hanya ports/facade).
+- `bun run check` hijau.
+
+Dependency:
+- Cart + customer + inventory facades stabil (Phase 3–4 ✅).
+- Order create port bisa di-stub sementara sampai M7.2 selesai, lalu di-wire.
+
+---
+
+#### M7.2 — Order Domain Foundation
+
+Priority: P0
+
+Status: Ready (setelah / paralel akhir M7.1)
+
+Feature: `order-domain`
+
+Output:
+- Domain layer module `order` aktif: entity, state machine, repository contract.
+- Application: create dari checkout snapshot, transition status, cancel (policy MVP).
+- Integrasi reserve stock via inventory facade saat order dibuat.
+- Public facade untuk `checkout` dan API layer.
+- Unit test domain + application lolos.
+
+Scope implementasi:
+
+1. **Domain entities**:
+   - `Order`, `OrderItem`, `OrderTimeline` / `OrderStatusTransition`.
+   - Status: `PENDING` → `WAITING_PAYMENT` → … (+ `CANCELLED`) sesuai `docs/03` / `docs/06`.
+2. **Invariants**: minimal 1 item; total ≥ 0; currency konsisten; transisi status legal; completed/cancelled immutable sesuai rule.
+3. **Application**:
+   - `createOrderFromCheckout(snapshot)` → persist order + timeline + `inventoryReserveStock` → status `WAITING_PAYMENT` (atau `PENDING` lalu segera `WAITING_PAYMENT` sesuai model detail).
+   - `transitionOrderStatus`, `cancelOrder` (release reserved stock jika applicable).
+4. **Prisma models** + migration: `Order`, `OrderItem`, timeline/transitions.
+5. **Public facade** `order-service.ts` — termasuk export untuk `CheckoutOrderPort`.
+
+Acceptance criteria:
+- Order dari snapshot valid tersimpan dengan item + total konsisten.
+- Reserve stock dipanggil saat create; gagal stok → order tidak terbentuk (transaksi atomic).
+- Transisi ilegal ditolak typed error.
+- `bun run check` hijau.
+
+Dependency:
+- M7.1 ports order terdefinisi.
+- Inventory reserve/release facade (Decision 025) ✅.
+
+---
+
+#### M7.3 — Checkout Customer API
+
+Priority: P0
+
+Status: Ready (setelah M7.1 + M7.2)
+
+Feature: `checkout-customer-api`
+
+Output:
+- Endpoint customer checkout sesuai `docs/07-api-specification.md` §Checkout.
+- Dilindungi `requireCustomer()`.
+- Place-order E2E via API hingga `WAITING_PAYMENT`.
+
+Scope implementasi:
+
+1. Routes (`src/app/api/v1/checkout/`):
+   - `GET /api/v1/checkout` — session / prepare view.
+   - `POST /api/v1/checkout/shipping` — select shipping.
+   - `POST /api/v1/checkout/payment` — select payment method.
+   - `POST /api/v1/checkout/place-order` — place order.
+2. HTTP mapping error → status code; presentation helpers di module checkout.
+3. Wire ports ke cart/customer/order/inventory facades + stub shipping/payment.
+
+Acceptance criteria:
+- Flow prepare → shipping → payment → place-order berhasil untuk customer beralamat + cart terisi.
+- Response place-order mengandung `orderId` + status `WAITING_PAYMENT`.
+- Unauthorized tanpa session.
+- `bun run check` hijau.
+
+Dependency: M7.1 ✅, M7.2 ✅.
+
+---
+
+#### M7.4 — Order Customer + Admin API
+
+Priority: P0
+
+Status: Ready (setelah M7.2; bisa paralel akhir M7.3)
+
+Feature: `order-api`
+
+Output:
+- Customer: list, detail, cancel order.
+- Admin: list, detail, patch status.
+- Auth: `requireCustomer()` / `requireAdmin()`.
+
+Scope implementasi:
+
+1. Customer routes (`/api/v1/orders`):
+   - `GET /` list, `GET /{id}` detail, `POST /{id}/cancel`.
+2. Admin routes (`/api/v1/admin/orders`):
+   - `GET /` list (+ filter), `GET /{id}` detail, `PATCH /{id}/status`.
+3. Ownership check: customer hanya order miliknya.
+
+Acceptance criteria:
+- Customer melihat hanya order sendiri; admin melihat semua.
+- Cancel me-release reserved stock bila policy MVP mengizinkan.
+- Admin status update mengikuti state machine.
+- `bun run check` hijau.
+
+Dependency: M7.2 ✅.
+
+---
+
+#### M7.5 — Phase 5 Backend Exit Validation
+
+Priority: P0
+
+Status: Ready (setelah M7.1–M7.4)
+
+Feature: `phase-5-backend-exit`
+
+Output:
+- Exit gate backend Phase 5 lolos.
+- Smoke/contract test flow checkout → order → reserve stock.
+- Docs/facade naming selaras (pola Decision 025).
+
+Scope validasi:
+
+1. Cross-module: `checkout`/`order` hanya via ports + public facades.
+2. Smoke: prepare → select shipping/payment → place-order → `WAITING_PAYMENT` + reservation ACTIVE → customer get order → (opsional) cancel → RELEASED.
+3. Migrations order/checkout applied.
+4. `bun run check` hijau; tidak ada boundary violation.
+
+Acceptance criteria:
+- Seluruh kriteria backend Phase 5 di roadmap terpenuhi.
+- Kontrak siap untuk UI M7.6–M7.7 dan Phase 6 payment initiation.
+
+Dependency: M7.1–M7.4 ✅.
+
+---
+
+#### M7.6 — UI: Checkout Flow
+
+Priority: P0
+
+Status: Ready (setelah M7.5)
+
+Feature: `checkout-ui`
+
+Output:
+- Halaman `/checkout` berfungsi penuh.
+- CTA cart "Lanjut ke Checkout" diaktifkan.
+- Presentation components di `src/modules/checkout/presentation/`.
+
+Scope implementasi:
+
+1. Page `(store)/checkout` — pilih alamat, opsi shipping (stub), metode bayar (stub), ringkasan, place order.
+2. Redirect sukses ke `/orders/[id]` (atau confirmation state).
+3. Empty cart / no address → empty/error state yang jelas.
+4. Protected: redirect login dengan `next=/checkout`.
+
+Acceptance criteria:
+- Customer dapat menyelesaikan checkout di browser hingga order `WAITING_PAYMENT`.
+- Responsive + accessible (WCAG AA minimum).
+- `bun run check` + `bun run build` hijau.
+
+Dependency: M7.5 ✅.
+
+---
+
+#### M7.7 — UI: Order History + Detail
+
+Priority: P0
+
+Status: Ready (setelah M7.3/M7.4 API; idealnya setelah M7.6)
+
+Feature: `order-ui`
+
+Output:
+- `/orders` — daftar pesanan customer.
+- `/orders/[id]` — detail, status timeline, items, shipping/payment summary.
+- Presentation di `src/modules/order/presentation/`.
+- Phase 5 UI exit criteria terpenuhi → **Phase 5 selesai**.
+
+Acceptance criteria:
+- Customer melihat history + detail order milik sendiri.
+- Status/timeline terbaca; empty state jika belum ada order.
+- Responsive + accessible.
+- `bun run check` + `bun run build` hijau.
+
+Dependency: M7.4 ✅; M7.6 ✅ (untuk E2E visual dari cart → checkout → order).
+
+---
+
 ### Cart & Inventory Phase 4 (M6.1–M6.8)
 
 Priority: P0
 
-Status: Completed — M6.1–M6.8 ✅ (Phase 4 selesai); next Phase 5 Checkout & Order
+Status: Completed — M6.1–M6.8 ✅ (Phase 4 selesai); digantikan fokus Phase 5
 
 Owner: `cart` module, `inventory` module
 

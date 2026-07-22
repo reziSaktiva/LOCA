@@ -9,6 +9,44 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (2)
+
+### Added
+
+- **Decision 027 — Phase 5 milestones M7.1–M7.7** + strategi stub shipping/payment:
+  - Backend: M7.1 Checkout Domain → M7.2 Order Domain → M7.3 Checkout API → M7.4 Order API → M7.5 Backend Exit.
+  - UI: M7.6 Checkout Flow → M7.7 Order History + Detail.
+  - Shipping/payment Phase 5 via port stub; Midtrans/Biteship di Phase 6.
+
+### Changed
+
+- `docs/11-development-roadmap.md` — Phase 5 milestones + exit criteria backend/UI.
+- `docs/05-domain-modules.md` — catatan Phase 5 stub ports pada Checkout.
+- `planning/backlog.md` — breakdown lengkap M7.1–M7.7.
+- Progress docs: `PROJECT_STATE.md`, `context/ctx-implementation.md`.
+
+### Notes
+
+- Immediate next: **M7.1 — Checkout Domain Foundation**.
+
+---
+
+## 2026-07-22
+
+### Changed
+
+- **Phase 5 kickoff — Checkout & Order** dilaporkan ke PM:
+  - Status project: Phase 4 ✅ closed → Phase 5 🔄 In Progress.
+  - Fokus: checkout session → order creation → order lifecycle + UI `/checkout`, `/orders`.
+  - Prasyarat siap (Decision 025): `getCartSnapshotForCheckout`, inventory reserve/commit/release.
+
+### Notes
+
+- Dokumen terdampak: `PROJECT_STATE.md`, `docs/11-development-roadmap.md`, `planning/backlog.md`, `context/ctx-implementation.md`.
+- Immediate next: vertical slice fondasi domain `checkout` + `order`.
+
+---
+
 ## 2026-07-21 (7)
 
 ### Added

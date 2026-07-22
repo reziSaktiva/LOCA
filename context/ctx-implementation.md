@@ -9,15 +9,17 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
 - Phase 4 (Cart & Inventory): **completed** — M6.1–M6.8 selesai (backend + UI catch-up)
-- Phase 5 (Checkout & Order): **next**
+- Phase 5 (Checkout & Order): **in progress** — kicked off 2026-07-22
 - Current implementation progress: **96%**
 
 ## Current Focus
 
-- Phase 4 selesai penuh. Siap **Phase 5 — Checkout & Order**.
-- Workflow **UI paralel per phase** (Decision 022) tetap berlaku untuk Phase 5+.
+- **Phase 5 — Checkout & Order** in progress (Decision 027: M7.1–M7.7).
+- Immediate next: **M7.1 — Checkout Domain Foundation**.
+- Shipping/payment Phase 5 via **stub/port adapter**; Midtrans/Biteship di Phase 6.
+- Workflow **UI paralel per phase** (Decision 022) tetap berlaku.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
-- Decision 025: kontrak Phase 5 (`getCartSnapshotForCheckout`, inventory reserve/commit/release) terdokumentasi.
+- Decision 025: kontrak Phase 5 (`getCartSnapshotForCheckout`, inventory reserve/commit/release) siap dipakai.
 
 ## Completed (Planning Side)
 
@@ -213,7 +215,7 @@ Target setup awal (Phase 2 selesai):
 - Scope awal: schema baseline, migration strategy, repository contract
 - Current: catalog terhubung ke database sungguhan via `PrismaCatalogRepository`
 
-## Phase 4 (In Progress — Next Targets)
+## Phase 4 (Completed)
 
 ### Inventory Module
 
@@ -239,14 +241,37 @@ Target setup awal (Phase 2 selesai):
 - M6.8: `/login`, `/register`, `/account`, `/cart` — auth forms, profil+alamat, cart ops; protected redirect ke login.
 - 239 test lolos; `bun run build` hijau.
 - Route strategy: `(store)`, `(auth)`, `(admin)/admin/*` — lihat `docs/04-system-architecture.md` §9
-- Next: **Phase 5 — Checkout & Order**.
+- Closed. Active work moved to Phase 5.
+
+## Phase 5 (In Progress — M7.1–M7.7)
+
+Milestones:
+1. ⏳ M7.1 Checkout Domain Foundation ← next
+2. ⏳ M7.2 Order Domain Foundation
+3. ⏳ M7.3 Checkout Customer API
+4. ⏳ M7.4 Order Customer + Admin API
+5. ⏳ M7.5 Phase 5 Backend Exit Validation
+6. ⏳ M7.6 UI: Checkout Flow
+7. ⏳ M7.7 UI: Order History + Detail
+
+### Checkout Module
+
+- Status: **M7.1 next** — belum diimplementasikan.
+- Target phase: Phase 5 🔄
+- Depends on: `getCartSnapshotForCheckout` (cart), customer address; shipping/payment via stub ports (Decision 027).
+
+### Order Module
+
+- Status: **M7.2 planned** — belum diimplementasikan.
+- Target phase: Phase 5 🔄
+- Depends on: inventory reserve/commit/release (Decision 025), checkout snapshot.
 
 ## Remaining Priority Flows
 
 ### Checkout
 
-- Belum diimplementasikan.
-- Target: Phase 5 (next).
+- Phase 5 M7.1 next — domain belum dimulai; shipping/payment stub (Decision 027).
+- Target: Phase 5 (in progress).
 
 ### Payment
 

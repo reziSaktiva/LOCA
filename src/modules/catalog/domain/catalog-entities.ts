@@ -65,6 +65,8 @@ export type VariantSnapshot = {
   compareAtPrice: number | null;
   thumbnailUrl: string;
   variantLabel: string;
+  brand: string;
+  categoryName: string;
   status: CatalogVariantStatus;
 };
 

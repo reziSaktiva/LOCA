@@ -450,6 +450,8 @@ export class InMemoryCatalogRepository implements CatalogRepository {
       return null;
     }
 
+    const category = this.categories.find((c) => c.id === product.categoryId);
+
     return {
       variantId: variant.id,
       sku: variant.sku,
@@ -459,6 +461,8 @@ export class InMemoryCatalogRepository implements CatalogRepository {
       compareAtPrice: variant.compareAtPrice,
       thumbnailUrl: product.thumbnailUrl,
       variantLabel: variant.variantLabel,
+      brand: product.brand,
+      categoryName: category?.name ?? "",
       status: variant.status,
     };
   }

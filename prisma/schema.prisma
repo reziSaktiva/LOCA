@@ -479,3 +479,107 @@ model CheckoutSession {
   @@index([cartId])
   @@map("checkout_sessions")
 }
+
+// ---------------------------------------------------------------------------
+// Order Module
+// ---------------------------------------------------------------------------
+
+enum OrderStatus {
+  PENDING
+  WAITING_PAYMENT
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  COMPLETED
+  CANCELLED
+}
+
+/// Transaksi pembelian — aggregate root modul order.
+model Order {
+  id                String      @id @default(cuid())
+  orderNumber       String      @unique
+  customerId        String
+  checkoutSessionId String?
+  orderStatus       OrderStatus @default(PENDING)
+  currency          String      @default("IDR")
+  subtotal          Float
+  shippingFee       Float       @default(0)
+  discountTotal     Float       @default(0)
+  grandTotal        Float
+
+  // Shipping address snapshot (immutable at place-order)
+  shippingRecipientName String
+  shippingPhone         String
+  shippingStreet        String
+  shippingDistrict      String
+  shippingCity          String
+  shippingProvince      String
+  shippingPostalCode    String
+
+  // Shipping option snapshot
+  shippingProvider    String
+  shippingServiceCode String
+  shippingServiceName String
+
+  // Payment method snapshot (gateway di Phase 6)
+  paymentMethod      String
+  paymentMethodLabel String
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  items          OrderItem[]
+  statusHistory  OrderStatusHistory[]
+
+  @@index([customerId, createdAt])
+  @@index([orderStatus, createdAt])
+  @@map("orders")
+}
+
+/// Item order — snapshot immutable produk/varian saat order dibuat.
+model OrderItem {
+  id                    String @id @default(cuid())
+  orderId               String
+  variantId             String
+  productNameSnapshot   String
+  skuSnapshot           String
+  variantLabelSnapshot  String
+  thumbnailSnapshot     String @default("")
+  categorySnapshot      String @default("")
+  brandSnapshot         String @default("")
+  unitPriceSnapshot     Float
+  quantity              Int
+  lineTotal             Float
+
+  // Audit
+  createdAt DateTime @default(now())
+  createdBy String?
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([variantId])
+  @@map("order_items")
+}
+
+/// Riwayat perubahan status order (append-only).
+model OrderStatusHistory {
+  id         String       @id @default(cuid())
+  orderId    String
+  fromStatus OrderStatus?
+  toStatus   OrderStatus
+  changedAt  DateTime     @default(now())
+  changedBy  String
+  reason     String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, changedAt])
+  @@map("order_status_histories")
+}

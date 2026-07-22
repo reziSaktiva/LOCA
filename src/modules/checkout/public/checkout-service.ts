@@ -1,15 +1,16 @@
 /**
  * Checkout Public Service / Facade
  *
- * Entry point untuk consumer lintas module (API layer, kelak order).
+ * Entry point untuk consumer lintas module (API layer, order).
  * Semua akses ke Checkout harus melalui fungsi di file ini.
  *
  * Decision 027: shipping/payment memakai stub ports hingga Phase 6.
- * M7.1: order port belum tersedia (ORDER_MODULE_UNAVAILABLE) hingga M7.2.
+ * M7.2: CheckoutOrderPort di-wire ke order public facade.
  */
 
 import { cartClear, getCartSnapshotForCheckout } from "../../cart/public/cart-service";
 import { customerListAddresses } from "../../customer/public/customer-service";
+import { createOrderFromCheckout } from "../../order/public/order-service";
 import type {
   CheckoutCartPort,
   CheckoutCustomerPort,
@@ -25,7 +26,6 @@ import { placeOrder, type PlaceOrderResult } from "../application/place-order";
 import { prepareCheckout, type PrepareCheckoutView } from "../application/prepare-checkout";
 import { createStubPaymentMethodPort } from "../application/stub-payment-method-port";
 import { createStubShippingPort } from "../application/stub-shipping-port";
-import { createUnavailableOrderPort } from "../application/unavailable-order-port";
 import type {
   CheckoutResult,
   CheckoutSession,
@@ -50,7 +50,24 @@ export type { PlaceOrderResult } from "../application/place-order";
 const repository = new PrismaCheckoutRepository();
 const shippingPort = createStubShippingPort();
 const paymentPort = createStubPaymentMethodPort();
-const orderPort: CheckoutOrderPort = createUnavailableOrderPort();
+
+function makeOrderPort(): CheckoutOrderPort {
+  return {
+    async createOrderFromCheckout(snapshot) {
+      const result = await createOrderFromCheckout(snapshot);
+      if (!result.success) {
+        return {
+          success: false,
+          code: "ORDER_CREATE_FAILED",
+          message: result.error.message,
+        };
+      }
+      return { success: true, orderId: result.data.id };
+    },
+  };
+}
+
+const orderPort = makeOrderPort();
 
 function makeCartPort(): CheckoutCartPort {
   return {
@@ -166,8 +183,7 @@ export async function checkoutListPaymentMethods(): Promise<PaymentMethodOption[
 }
 
 /**
- * Place order. M7.1 mengembalikan ORDER_MODULE_UNAVAILABLE sampai M7.2
- * men-wire CheckoutOrderPort ke order public facade.
+ * Place order — membuat order WAITING_PAYMENT via order facade + reserve stock.
  */
 export async function checkoutPlaceOrder(
   customerId: string,

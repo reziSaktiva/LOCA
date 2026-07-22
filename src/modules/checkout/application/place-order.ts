@@ -23,7 +23,6 @@ export type PlaceOrderResult = {
 /**
  * Membangun CheckoutSnapshot immutable lalu membuat order via CheckoutOrderPort.
  * Cart dikosongkan hanya setelah order berhasil dibuat.
- * M7.1: order port biasanya stub → ORDER_MODULE_UNAVAILABLE (diisi penuh di M7.2).
  */
 export async function placeOrder(
   repository: CheckoutRepository,

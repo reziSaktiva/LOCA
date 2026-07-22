@@ -322,7 +322,13 @@ export class PrismaCatalogRepository implements CatalogRepository {
       where: { id: variantId, isDeleted: false },
       include: {
         product: {
-          select: { id: true, name: true, thumbnailUrl: true },
+          select: {
+            id: true,
+            name: true,
+            thumbnailUrl: true,
+            brand: true,
+            category: { select: { name: true } },
+          },
         },
       },
     });
@@ -338,6 +344,8 @@ export class PrismaCatalogRepository implements CatalogRepository {
       compareAtPrice: row.compareAtPrice,
       thumbnailUrl: row.product.thumbnailUrl,
       variantLabel: row.variantLabel,
+      brand: row.product.brand,
+      categoryName: row.product.category.name,
       status: row.status,
     };
   }

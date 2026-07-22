@@ -1,5 +1,32 @@
 # Project Decisions
 
+## Decision 028
+
+Tanggal: 2026-07-22
+
+Judul:
+
+Scope M7.6 UI Checkout Flow — alamat view-only + success state inline.
+
+Keputusan:
+
+* **Alamat pengiriman di halaman `/checkout` bersifat view-only** — memakai alamat yang sudah di-auto-confirm oleh `prepareCheckout` (default/pertama, sesuai keputusan M7.3). Tidak ditambahkan endpoint baru untuk mengganti alamat saat checkout; customer yang ingin memakai alamat lain wajib mengubah dulu di halaman `/account` lalu mengulang checkout. Konsisten dengan catatan M7.3 (`docs/07` tidak mendefinisikan endpoint select-address terpisah).
+* **Redirect sukses setelah `place-order` memakai success state inline di halaman `/checkout`** (ringkasan orderId, alamat, opsi pengiriman, metode bayar, total dibayar + CTA "Lanjut belanja"), bukan redirect ke `/orders/[id]` — karena halaman detail order baru dibangun di M7.7. Pendekatan ini menjaga M7.6 bisa dipakai end-to-end tanpa bergantung ke milestone berikutnya.
+
+Alasan:
+
+* Menghindari scope creep API (menambah endpoint `POST /checkout/address` di luar kontrak `docs/07` yang sudah difinalisasi di M7.3) tanpa keputusan eksplisit.
+* Menjaga M7.6 dapat diverifikasi end-to-end secara mandiri (cart -> checkout -> order `WAITING_PAYMENT`) tanpa 404 ke halaman yang belum ada.
+
+Dampak:
+
+* `src/app/(store)/checkout/page.tsx`, `src/modules/checkout/presentation/*` (komponen baru: `CheckoutAddressSummary`, `CheckoutEmptyState`, `CheckoutOrderSummary`, `CheckoutFlow`).
+* `src/modules/cart/presentation/cart-summary.tsx` — CTA "Lanjut ke Checkout" diaktifkan, mengarah ke `/checkout`.
+* Tidak ada perubahan `docs/07-api-specification.md` (tidak ada endpoint baru).
+* `PROJECT_STATE.md`, `planning/changelog.md`, `planning/backlog.md`, `context/ctx-implementation.md`.
+
+---
+
 ## Decision 027
 
 Tanggal: 2026-07-22

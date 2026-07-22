@@ -26,11 +26,10 @@ export function CartSummary({ subtotal, itemCount }: CartSummaryProps) {
         </div>
       </dl>
 
-      <Button type="button" size="lg" className="w-full" disabled>
+      <Button nativeButton={false} render={<Link href="/checkout" />} size="lg" className="w-full">
         Lanjut ke Checkout
       </Button>
       <p className="text-xs text-muted-foreground">
-        Checkout akan aktif di fase berikutnya.{" "}
         <Link
           href="/products"
           className="font-medium text-brand-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

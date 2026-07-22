@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.6 — UI: Checkout Flow** (backend Phase 5 / M7.1–M7.5 selesai)
+Immediate next: **M7.7 — UI: Order History + Detail** (M7.1–M7.6 selesai)
 
 ---
 
@@ -221,28 +221,30 @@ Dependency: M7.1–M7.4 ✅.
 
 Priority: P0
 
-Status: Ready (setelah M7.5)
+Status: Completed (2026-07-22)
 
 Feature: `checkout-ui`
 
 Output:
-- Halaman `/checkout` berfungsi penuh.
-- CTA cart "Lanjut ke Checkout" diaktifkan.
-- Presentation components di `src/modules/checkout/presentation/`.
+- Halaman `/checkout` berfungsi penuh (`src/app/(store)/checkout/page.tsx`).
+- CTA cart "Lanjut ke Checkout" diaktifkan (`src/modules/cart/presentation/cart-summary.tsx`).
+- Presentation components di `src/modules/checkout/presentation/`: `CheckoutEmptyState`, `CheckoutAddressSummary`, `CheckoutOrderSummary`, `CheckoutFlow`.
 
-Scope implementasi:
+Scope implementasi (final, Decision 028):
 
-1. Page `(store)/checkout` — pilih alamat, opsi shipping (stub), metode bayar (stub), ringkasan, place order.
-2. Redirect sukses ke `/orders/[id]` (atau confirmation state).
-3. Empty cart / no address → empty/error state yang jelas.
-4. Protected: redirect login dengan `next=/checkout`.
+1. Page `(store)/checkout` — alamat view-only (auto-confirmed dari `prepareCheckout`), opsi shipping (stub, `RadioGroup`), metode bayar (stub, `RadioGroup`), ringkasan item + total, place order.
+2. Sukses order ditampilkan **inline** di halaman `/checkout` (ringkasan orderId, alamat, shipping, payment, total dibayar + CTA "Lanjut belanja") — bukan redirect ke `/orders/[id]` yang baru dibangun di M7.7 (Decision 028).
+3. Empty cart (`CART_EMPTY` → CTA ke `/products`) / no address (`ADDRESS_REQUIRED` → CTA ke `/account`) → empty/error state jelas via `CheckoutEmptyState`.
+4. Protected: `requireCustomer()` → redirect `/login?next=/checkout`.
 
 Acceptance criteria:
-- Customer dapat menyelesaikan checkout di browser hingga order `WAITING_PAYMENT`.
-- Responsive + accessible (WCAG AA minimum).
-- `bun run check` + `bun run build` hijau.
+- ✅ Customer dapat menyelesaikan checkout di browser hingga order `WAITING_PAYMENT`.
+- ✅ Responsive + accessible (WCAG AA minimum) — semantic HTML, `RadioGroup` keyboard-accessible, focus ring dari shared UI kit.
+- ✅ `bun run check` (286 test) + `bun run build` hijau — route `/checkout` terdaftar.
 
 Dependency: M7.5 ✅.
+
+Catatan: alamat checkout bersifat view-only (tidak ada endpoint ganti alamat saat checkout); tidak ada perubahan `docs/07-api-specification.md`. Lihat Decision 028.
 
 ---
 

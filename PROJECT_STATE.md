@@ -55,7 +55,7 @@ Progress:
 
 Sedang dikerjakan:
 
-`phase-5 checkout & order` — **M7.6 UI: Checkout Flow** (next)
+`phase-5 checkout & order` — **M7.7 UI: Order History + Detail** (next)
 
 Tujuan:
 
@@ -210,6 +210,7 @@ Belum diputuskan:
 - ✅ **M7.3 — Checkout Customer API**: Endpoint customer checkout aktif di `src/app/api/v1/checkout/`. `GET /api/v1/checkout` (prepare), `POST /api/v1/checkout/shipping` (`optionId`), `POST /api/v1/checkout/payment` (`method`), `POST /api/v1/checkout/place-order` → `orderId` + status `WAITING_PAYMENT` (201). Dilindungi `requireCustomer()`. Presentation: `checkoutErrorStatus` di `src/modules/checkout/presentation/checkout-http.ts`. Facade existing (`checkoutPrepare` / select / place). Alamat default di-auto-confirm saat prepare. `bun run check` hijau (271 test).
 - ✅ **M7.4 — Order Customer + Admin API**: Customer routes `GET /api/v1/orders`, `GET /api/v1/orders/[id]`, `POST /api/v1/orders/[id]/cancel` (`requireCustomer`, ownership). Admin routes `GET /api/v1/admin/orders`, `GET /api/v1/admin/orders/[id]`, `PATCH /api/v1/admin/orders/[id]/status` (`requireAdmin`, state machine). Presentation: `orderErrorStatus` + `parseOrderListQuery`. Facade M7.2 dipakai langsung. `bun run check` hijau (279 test).
 - ✅ **M7.5 — Phase 5 Backend Exit Validation**: Exit gate backend Phase 5 lolos. Smoke test dipecah 2 file agar patuh `import/no-restricted-paths` (setiap module hanya boleh mengakses module lain lewat `public/`): `checkout/application/phase-5-backend-exit.test.ts` (prepareCheckout → shipping → payment → placeOrder, snapshot immutable siap dikonsumsi order) dan `order/application/phase-5-backend-exit.test.ts` (createOrderFromCheckout → `WAITING_PAYMENT` + reservasi `ACTIVE` → getOrder → cancel → reservasi `RELEASED`), keduanya + readiness contract (`typeof`) terhadap public facade sisi lain. Cross-module checkout/order dikonfirmasi hanya lewat public facade (tidak ada deep import ke layer internal module lain). Migration `checkout_domain_foundation` + `order_domain_foundation` terverifikasi urut & konsisten di `prisma/migrations/`. `bun run check` hijau (286 test, 22 test file).
+- ✅ **M7.6 — UI: Checkout Flow**: Halaman `/checkout` aktif (`src/app/(store)/checkout/page.tsx`, `requireCustomer()` → redirect `/login?next=/checkout`). Presentation baru di `src/modules/checkout/presentation/`: `CheckoutEmptyState`, `CheckoutAddressSummary` (alamat view-only + link ke `/account`), `CheckoutOrderSummary`, `CheckoutFlow` (client — select shipping/payment via API, place order, render success state inline). Empty/error state untuk `CART_EMPTY` dan `ADDRESS_REQUIRED`. CTA "Lanjut ke Checkout" di `CartSummary` diaktifkan. Decision 028: alamat checkout view-only (tanpa endpoint select-address baru) + sukses order inline (bukan redirect ke `/orders/[id]` yang belum ada). `bun run check` hijau (286 test) + `bun run build` hijau — route `/checkout` terdaftar.
 
 ---
 
@@ -217,7 +218,7 @@ Belum diputuskan:
 
 **Phase 5 — Checkout & Order** in progress (Decision 027).
 
-Backend Phase 5 ✅ selesai (M7.1–M7.5). Immediate next: **M7.6 — UI: Checkout Flow**.
+Backend Phase 5 ✅ selesai (M7.1–M7.5). M7.6 (UI Checkout Flow) ✅ selesai. Immediate next: **M7.7 — UI: Order History + Detail**.
 
 Workflow (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -242,8 +243,8 @@ Backend:
 5. ✅ **M7.5 — Phase 5 Backend Exit Validation**
 
 UI:
-6. ⏳ **M7.6 — UI: Checkout Flow** ← next
-7. ⏳ **M7.7 — UI: Order History + Detail**
+6. ✅ **M7.6 — UI: Checkout Flow**
+7. ⏳ **M7.7 — UI: Order History + Detail** ← next
 
 Urutan milestone Phase 4 (semua ✅ — closed):
 
@@ -479,8 +480,8 @@ Breakdown — Backend:
 
 Breakdown — UI:
 
-- [ ] M7.6 UI: Checkout Flow ← next
-- [ ] M7.7 UI: Order History + Detail
+- [x] M7.6 UI: Checkout Flow
+- [ ] M7.7 UI: Order History + Detail ← next
 
 Target Outcome:
 

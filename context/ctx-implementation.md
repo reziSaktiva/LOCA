@@ -9,13 +9,13 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
 - Phase 4 (Cart & Inventory): **completed** — M6.1–M6.8 selesai (backend + UI catch-up)
-- Phase 5 (Checkout & Order): **in progress** — Backend M7.1–M7.5 ✅ + M7.6 UI Checkout Flow ✅ selesai; next UI M7.7
+- Phase 5 (Checkout & Order): **completed** — Backend M7.1–M7.5 ✅ + UI M7.6–M7.7 ✅ selesai penuh
 - Current implementation progress: **99%**
 
 ## Current Focus
 
-- **Phase 5 — Checkout & Order** in progress (Decision 027: M7.1–M7.7).
-- Backend Phase 5 ✅ selesai. M7.6 UI Checkout Flow ✅ selesai. Immediate next: **M7.7 — UI: Order History + Detail**.
+- **Phase 5 — Checkout & Order** ✅ selesai penuh (Decision 027: M7.1–M7.7).
+- Immediate next: **Phase 6 — Payment & Shipping** (Midtrans + Biteship, `docs/11-development-roadmap.md`). Backlog/milestone Phase 6 (M8.x) belum disusun — perlu Definition of Ready sebelum kickoff.
 - Shipping/payment Phase 5 via **stub/port adapter**; Midtrans/Biteship di Phase 6.
 - Workflow **UI paralel per phase** (Decision 022) tetap berlaku.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
@@ -25,6 +25,7 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - M7.4: customer/admin order API (`/api/v1/orders`, `/api/v1/admin/orders`).
 - M7.5: exit gate backend Phase 5 — smoke test `checkout/application/phase-5-backend-exit.test.ts` + `order/application/phase-5-backend-exit.test.ts` (dipecah 2 file agar patuh boundary rule), migrations checkout/order terverifikasi urut. `bun run check` hijau (286 test).
 - M7.6: halaman `/checkout` aktif — alamat view-only, pilih shipping/payment via API, place order, sukses inline (Decision 028, tanpa endpoint select-address baru & tanpa redirect ke `/orders/[id]` yang belum ada). CTA "Lanjut ke Checkout" di cart diaktifkan. `bun run check` (286 test) + `bun run build` hijau.
+- M7.7: halaman `/orders` (list + pagination + empty state) dan `/orders/[id]` (status timeline, item, ringkasan biaya, alamat/kirim/bayar snapshot, cancel dialog) aktif. `isOrderCancellable` menjembatani invariant domain `isCancellableStatus` ke layer route tanpa melanggar `import/no-restricted-paths`. Tidak ada endpoint baru — memakai facade M7.4. `AccountPage` mendapat tombol "Pesanan Saya". `bun run check` (288 test) + `bun run build` hijau. **Phase 5 selesai penuh.**
 
 ## Completed (Planning Side)
 
@@ -248,7 +249,7 @@ Target setup awal (Phase 2 selesai):
 - Route strategy: `(store)`, `(auth)`, `(admin)/admin/*` — lihat `docs/04-system-architecture.md` §9
 - Closed. Active work moved to Phase 5.
 
-## Phase 5 (In Progress — M7.1–M7.7)
+## Phase 5 (Completed — M7.1–M7.7)
 
 Milestones:
 1. ✅ M7.1 Checkout Domain Foundation
@@ -257,7 +258,7 @@ Milestones:
 4. ✅ M7.4 Order Customer + Admin API
 5. ✅ M7.5 Phase 5 Backend Exit Validation
 6. ✅ M7.6 UI: Checkout Flow
-7. ⏳ M7.7 UI: Order History + Detail ← next
+7. ✅ M7.7 UI: Order History + Detail
 
 ### Checkout Module
 
@@ -267,24 +268,25 @@ Milestones:
 - `CheckoutOrderPort` wired ke `createOrderFromCheckout` (M7.2).
 - Smoke test: `checkout/application/phase-5-backend-exit.test.ts`.
 - UI: `/checkout` (alamat view-only, shipping/payment `RadioGroup`, ringkasan, place order, sukses inline). Presentation: `CheckoutEmptyState`, `CheckoutAddressSummary`, `CheckoutOrderSummary`, `CheckoutFlow`.
-- Target phase: Phase 5 🔄 — backend + M7.6 closed, next M7.7 (order UI).
+- Target phase: Phase 5 ✅ — closed.
 
 ### Order Module
 
-- Status: **M7.2 + M7.4 + M7.5 Completed** — domain + customer/admin REST API + exit validation.
+- Status: **M7.2 + M7.4 + M7.5 + M7.7 Completed** — domain + customer/admin REST API + exit validation + UI order history/detail.
 - Routes customer: `GET /api/v1/orders`, `GET .../[id]`, `POST .../[id]/cancel`.
 - Routes admin: `GET /api/v1/admin/orders`, `GET .../[id]`, `PATCH .../[id]/status`.
 - Migration `20260722040000_order_domain_foundation` applied.
 - Smoke test: `order/application/phase-5-backend-exit.test.ts`.
-- Target phase: Phase 5 🔄 — backend closed, next UI (M7.6).
+- UI: `/orders` (list + pagination + empty state), `/orders/[id]` (status timeline, item, ringkasan biaya, alamat/kirim/bayar snapshot, cancel dialog). Presentation: `OrderStatusBadge`, `OrderEmptyState`, `OrderList`/`OrderListItem`, `OrderListPagination`, `OrderItemRow`, `OrderCostSummary`, `OrderShippingInfo`, `OrderStatusTimeline`, `OrderCancelDialog`.
+- Target phase: Phase 5 ✅ — closed.
 - Depends on: inventory reserve/commit/release (Decision 025), checkout snapshot input.
 
 ## Remaining Priority Flows
 
-### Checkout
+### Checkout & Order
 
-- M7.1–M7.6 selesai (backend + UI checkout flow); next: Order UI (M7.7).
-- Target: Phase 5 (in progress, UI stage — tahap akhir).
+- M7.1–M7.7 selesai penuh (backend + UI checkout flow + order history/detail).
+- Target: Phase 5 ✅ **selesai**.
 
 ### Payment
 

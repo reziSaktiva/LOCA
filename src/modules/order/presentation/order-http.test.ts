@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { OrderError } from "../domain/order-entities";
-import { isOrderStatus, orderErrorStatus, parseOrderListQuery } from "./order-http";
+import {
+  isOrderCancellable,
+  isOrderStatus,
+  orderErrorStatus,
+  parseOrderListQuery,
+} from "./order-http";
 
 describe("orderErrorStatus", () => {
   it("maps not-found errors to 404", () => {
@@ -56,16 +61,28 @@ describe("isOrderStatus", () => {
 
 describe("parseOrderListQuery", () => {
   it("parses page, limit, and status", () => {
-    const query = parseOrderListQuery(
-      new URLSearchParams("page=2&limit=10&status=PAID"),
-    );
+    const query = parseOrderListQuery(new URLSearchParams("page=2&limit=10&status=PAID"));
     expect(query).toEqual({ page: 2, limit: 10, status: "PAID" });
   });
 
   it("ignores invalid status and non-numeric paging", () => {
-    const query = parseOrderListQuery(
-      new URLSearchParams("page=abc&limit=xyz&status=NOPE"),
-    );
+    const query = parseOrderListQuery(new URLSearchParams("page=abc&limit=xyz&status=NOPE"));
     expect(query).toEqual({});
+  });
+});
+
+describe("isOrderCancellable", () => {
+  it("allows cancel for PENDING and WAITING_PAYMENT", () => {
+    expect(isOrderCancellable("PENDING")).toBe(true);
+    expect(isOrderCancellable("WAITING_PAYMENT")).toBe(true);
+  });
+
+  it("disallows cancel for operational and final statuses", () => {
+    expect(isOrderCancellable("PAID")).toBe(false);
+    expect(isOrderCancellable("PROCESSING")).toBe(false);
+    expect(isOrderCancellable("SHIPPED")).toBe(false);
+    expect(isOrderCancellable("DELIVERED")).toBe(false);
+    expect(isOrderCancellable("COMPLETED")).toBe(false);
+    expect(isOrderCancellable("CANCELLED")).toBe(false);
   });
 });

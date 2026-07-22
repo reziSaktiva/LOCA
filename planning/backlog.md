@@ -17,7 +17,7 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 Priority: P0
 
-Status: In Progress — kicked off 2026-07-22; milestone breakdown Decision 027
+Status: Completed (2026-07-22) — M7.1–M7.7 selesai; milestone breakdown Decision 027
 
 Owner: `checkout` module, `order` module
 
@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.7 — UI: Order History + Detail** (M7.1–M7.6 selesai)
+Phase 5 selesai penuh (backend + UI). Next: Phase 6 — Payment & Shipping (Midtrans/Biteship), backlog M8.x belum disusun.
 
 ---
 
@@ -252,21 +252,25 @@ Catatan: alamat checkout bersifat view-only (tidak ada endpoint ganti alamat saa
 
 Priority: P0
 
-Status: Ready (setelah M7.3/M7.4 API; idealnya setelah M7.6)
+Status: Completed (2026-07-22)
 
 Feature: `order-ui`
 
 Output:
-- `/orders` — daftar pesanan customer.
-- `/orders/[id]` — detail, status timeline, items, shipping/payment summary.
-- Presentation di `src/modules/order/presentation/`.
+- `/orders` — daftar pesanan customer (card list + pagination, empty state jika belum ada order).
+- `/orders/[id]` — detail: status badge + timeline riwayat, item pesanan (thumbnail/qty/harga), ringkasan biaya (subtotal/ongkir/diskon/total), alamat + metode kirim/bayar (snapshot immutable), CTA "Batalkan Pesanan" (dialog konfirmasi) hanya saat status `PENDING`/`WAITING_PAYMENT`.
+- Presentation di `src/modules/order/presentation/`: `OrderStatusBadge`, `OrderEmptyState`, `OrderList`/`OrderListItem`, `OrderListPagination`, `OrderItemRow`, `OrderCostSummary`, `OrderShippingInfo`, `OrderStatusTimeline`, `OrderCancelDialog`.
+- `isOrderCancellable` ditambahkan di `order-http.ts` (wrap invariant domain `isCancellableStatus`) agar halaman `src/app/(store)/orders/[id]/page.tsx` tidak melanggar `import/no-restricted-paths` (route hanya boleh akses domain lewat presentation/public).
+- Shared helper baru `src/shared/kernel/format-date.ts`.
+- `AccountPage` mendapat tombol "Pesanan Saya" ke `/orders` (selaras IA `docs/02-user-experience.md`).
+- Tidak ada endpoint baru — seluruhnya memakai facade M7.4 (`listCustomerOrders`, `getOrder`, `cancelOrderForActor`).
 - Phase 5 UI exit criteria terpenuhi → **Phase 5 selesai**.
 
 Acceptance criteria:
-- Customer melihat history + detail order milik sendiri.
-- Status/timeline terbaca; empty state jika belum ada order.
-- Responsive + accessible.
-- `bun run check` + `bun run build` hijau.
+- ✅ Customer melihat history + detail order milik sendiri (ownership check → `notFound()`, no existence leak).
+- ✅ Status/timeline terbaca; empty state jika belum ada order.
+- ✅ Responsive + accessible (semantic HTML, dialog keyboard-accessible, focus ring shared UI kit).
+- ✅ `bun run check` (288 test) + `bun run build` hijau — route `/orders` dan `/orders/[id]` terdaftar.
 
 Dependency: M7.4 ✅; M7.6 ✅ (untuk E2E visual dari cart → checkout → order).
 

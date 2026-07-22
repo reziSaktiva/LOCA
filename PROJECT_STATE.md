@@ -6,7 +6,7 @@
 
 # Project
 
-Status: Phase 5 In Progress — M7.5 Phase 5 Backend Exit Validation selesai; next M7.6
+Status: Phase 5 Completed — M7.7 UI Order History + Detail selesai; next Phase 6 (Payment & Shipping)
 
 Current Version: v1.00
 
@@ -31,7 +31,7 @@ Membangun website sebagai **Brand Hub** sekaligus **Direct-to-Consumer (D2C) E-C
 ✅ Phase 2 — Catalog Foundation (Completed)
 ✅ Phase 3 — Customer & Homepage (Completed)
 ✅ Phase 4 — Cart & Inventory (Completed)
-🔄 Phase 5 — Checkout & Order (In Progress — kicked off 2026-07-22)
+✅ Phase 5 — Checkout & Order (Completed — 2026-07-22)
 
 Progress:
 
@@ -55,11 +55,11 @@ Progress:
 
 Sedang dikerjakan:
 
-`phase-5 checkout & order` — **M7.7 UI: Order History + Detail** (next)
+`phase-5 checkout & order` — **selesai** (M7.1–M7.7 tercapai); next: **Phase 6 — Payment & Shipping**
 
 Tujuan:
 
-Membangun proses transaksi end-to-end dari cart hingga order `WAITING_PAYMENT` (M7.1–M7.7). Shipping/payment Phase 5 via stub/port adapter; Midtrans/Biteship di Phase 6 (Decision 027). M7.1–M7.5 selesai: domain checkout/order + customer checkout API + customer/admin order API + backend exit validation. Backend Phase 5 ditutup; giliran UI (M7.6–M7.7).
+Membangun proses transaksi end-to-end dari cart hingga order `WAITING_PAYMENT` (M7.1–M7.7). Shipping/payment Phase 5 via stub/port adapter; Midtrans/Biteship di Phase 6 (Decision 027). M7.1–M7.5 selesai: domain checkout/order + customer checkout API + customer/admin order API + backend exit validation. M7.6–M7.7 selesai: UI checkout flow + UI order history/detail. **Phase 5 selesai penuh (backend + UI).** Milestone/backlog Phase 6 (M8.x) belum disusun — perlu Definition of Ready sebelum kickoff Midtrans/Biteship.
 
 ---
 
@@ -211,14 +211,15 @@ Belum diputuskan:
 - ✅ **M7.4 — Order Customer + Admin API**: Customer routes `GET /api/v1/orders`, `GET /api/v1/orders/[id]`, `POST /api/v1/orders/[id]/cancel` (`requireCustomer`, ownership). Admin routes `GET /api/v1/admin/orders`, `GET /api/v1/admin/orders/[id]`, `PATCH /api/v1/admin/orders/[id]/status` (`requireAdmin`, state machine). Presentation: `orderErrorStatus` + `parseOrderListQuery`. Facade M7.2 dipakai langsung. `bun run check` hijau (279 test).
 - ✅ **M7.5 — Phase 5 Backend Exit Validation**: Exit gate backend Phase 5 lolos. Smoke test dipecah 2 file agar patuh `import/no-restricted-paths` (setiap module hanya boleh mengakses module lain lewat `public/`): `checkout/application/phase-5-backend-exit.test.ts` (prepareCheckout → shipping → payment → placeOrder, snapshot immutable siap dikonsumsi order) dan `order/application/phase-5-backend-exit.test.ts` (createOrderFromCheckout → `WAITING_PAYMENT` + reservasi `ACTIVE` → getOrder → cancel → reservasi `RELEASED`), keduanya + readiness contract (`typeof`) terhadap public facade sisi lain. Cross-module checkout/order dikonfirmasi hanya lewat public facade (tidak ada deep import ke layer internal module lain). Migration `checkout_domain_foundation` + `order_domain_foundation` terverifikasi urut & konsisten di `prisma/migrations/`. `bun run check` hijau (286 test, 22 test file).
 - ✅ **M7.6 — UI: Checkout Flow**: Halaman `/checkout` aktif (`src/app/(store)/checkout/page.tsx`, `requireCustomer()` → redirect `/login?next=/checkout`). Presentation baru di `src/modules/checkout/presentation/`: `CheckoutEmptyState`, `CheckoutAddressSummary` (alamat view-only + link ke `/account`), `CheckoutOrderSummary`, `CheckoutFlow` (client — select shipping/payment via API, place order, render success state inline). Empty/error state untuk `CART_EMPTY` dan `ADDRESS_REQUIRED`. CTA "Lanjut ke Checkout" di `CartSummary` diaktifkan. Decision 028: alamat checkout view-only (tanpa endpoint select-address baru) + sukses order inline (bukan redirect ke `/orders/[id]` yang belum ada). `bun run check` hijau (286 test) + `bun run build` hijau — route `/checkout` terdaftar.
+- ✅ **M7.7 — UI: Order History + Detail**: Halaman `/orders` (list + pagination) dan `/orders/[id]` (detail) aktif di `src/app/(store)/orders/`, keduanya `requireCustomer()` → redirect `/login?next=...`; detail memakai `notFound()` untuk order tidak ada/bukan milik customer (no existence leak). Presentation baru di `src/modules/order/presentation/`: `OrderStatusBadge`/`orderStatusLabel` (label + warna semantik per status), `OrderEmptyState`, `OrderList`/`OrderListItem`, `OrderListPagination`, `OrderItemRow`, `OrderCostSummary` (item + subtotal/ongkir/diskon/total), `OrderShippingInfo` (alamat + metode kirim/bayar snapshot), `OrderStatusTimeline` (riwayat status kronologis), `OrderCancelDialog` (client, confirm dialog → `POST /orders/[id]/cancel` → `router.refresh()`). `order-http.ts` diperluas: `isOrderCancellable` (wrap invariant domain `isCancellableStatus`, dipakai page untuk menampilkan CTA batal tanpa melanggar `import/no-restricted-paths`). Tambahan shared helper `src/shared/kernel/format-date.ts` (`formatDate`/`formatDateTime`, locale id-ID). `AccountPage` mendapat tombol "Pesanan Saya" ke `/orders`. Tidak ada endpoint baru — seluruhnya memakai facade M7.4 (`listCustomerOrders`, `getOrder`, `cancelOrderForActor`). `bun run check` hijau (288 test) + `bun run build` hijau — route `/orders` dan `/orders/[id]` terdaftar. **Phase 5 selesai penuh (backend + UI).**
 
 ---
 
 # Next Action
 
-**Phase 5 — Checkout & Order** in progress (Decision 027).
+**Phase 5 — Checkout & Order** ✅ selesai penuh (Decision 027, M7.1–M7.7).
 
-Backend Phase 5 ✅ selesai (M7.1–M7.5). M7.6 (UI Checkout Flow) ✅ selesai. Immediate next: **M7.7 — UI: Order History + Detail**.
+Backend Phase 5 ✅ selesai (M7.1–M7.5). UI Phase 5 ✅ selesai (M7.6–M7.7). Immediate next: **Phase 6 — Payment & Shipping** (integrasi Midtrans + Biteship, lihat `docs/11-development-roadmap.md`). Backlog/milestone Phase 6 (M8.x) belum disusun — perlu Definition of Ready (feature backlog, acceptance criteria, dependency check) sebelum kickoff, mengikuti pola M3.7/M7.x sebelumnya.
 
 Workflow (Decision 022): **Backend selesai → UI dikerjakan dalam phase yang sama, sebelum pindah ke phase berikutnya.**
 
@@ -244,7 +245,7 @@ Backend:
 
 UI:
 6. ✅ **M7.6 — UI: Checkout Flow**
-7. ⏳ **M7.7 — UI: Order History + Detail** ← next
+7. ✅ **M7.7 — UI: Order History + Detail**
 
 Urutan milestone Phase 4 (semua ✅ — closed):
 
@@ -468,7 +469,7 @@ Target Outcome:
 
 ---
 
-## 🔄 Milestone 7 — Checkout & Order (In Progress)
+## ✅ Milestone 7 — Checkout & Order (Completed)
 
 Breakdown — Backend:
 
@@ -481,7 +482,7 @@ Breakdown — Backend:
 Breakdown — UI:
 
 - [x] M7.6 UI: Checkout Flow
-- [ ] M7.7 UI: Order History + Detail ← next
+- [x] M7.7 UI: Order History + Detail
 
 Target Outcome:
 

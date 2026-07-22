@@ -9,6 +9,32 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (11)
+
+### Added
+
+- **M7.7 — UI: Order History + Detail**: halaman `/orders` (list) dan `/orders/[id]` (detail) aktif, keduanya server component dengan `requireCustomer()` → redirect `/login?next=...`.
+  - `/orders` (`src/app/(store)/orders/page.tsx`): daftar pesanan customer (card `OrderList`/`OrderListItem` — nomor order, tanggal, kota tujuan, badge status, total dibayar), pagination via `OrderListPagination` (query `?page=`), empty state `OrderEmptyState` jika belum pernah order.
+  - `/orders/[id]` (`src/app/(store)/orders/[id]/page.tsx`): badge status, `OrderStatusTimeline` (riwayat status kronologis), `OrderShippingInfo` (alamat + metode kirim/bayar snapshot), `OrderCostSummary` (item via `OrderItemRow` + subtotal/ongkir/diskon/total), CTA "Batalkan Pesanan" (`OrderCancelDialog`, dialog konfirmasi → `POST /api/v1/orders/[id]/cancel` → `router.refresh()`) — hanya tampil jika `isOrderCancellable(order.orderStatus)` benar. Order tidak ditemukan/bukan milik customer → `notFound()` (no existence leak, custom `not-found.tsx`).
+  - `order-http.ts` diperluas: `isOrderCancellable(status)` — wrapper tipis di atas invariant domain `isCancellableStatus` (`../domain/order-invariants`), dibutuhkan karena `src/app/**` dilarang import domain langsung (`import/no-restricted-paths`) sehingga logika cancel policy tetap satu sumber kebenaran di domain layer.
+  - Presentation baru di `src/modules/order/presentation/`: `OrderStatusBadge` + `orderStatusLabel` (label Indonesia + warna semantik success/warning/info/destructive per status), `OrderEmptyState`, `OrderListItem`, `OrderList`, `OrderListPagination`, `OrderItemRow`, `OrderCostSummary`, `OrderShippingInfo`, `OrderCancelDialog` (client).
+  - Shared helper baru `src/shared/kernel/format-date.ts` (`formatDate`, `formatDateTime`, locale `id-ID`).
+  - `AccountPage` (`src/app/(store)/account/page.tsx`) mendapat tombol "Pesanan Saya" ke `/orders`, selaras IA `docs/02-user-experience.md` (Account > Orders).
+  - Tidak ada endpoint/kontrak API baru — seluruhnya memakai facade M7.4 yang sudah ada (`listCustomerOrders`, `getOrder`, `cancelOrderForActor`).
+
+### Verified
+
+- `bun run check` hijau (lint + typecheck + test — 288 test, +2 dari unit test `isOrderCancellable` di `order-http.test.ts`).
+- `bun run build` hijau — route `/orders` dan `/orders/[id]` terdaftar sebagai dynamic route.
+- Prettier diterapkan hanya pada file yang disentuh task ini (drift formatting pre-existing di file lain tidak disentuh, di luar scope task).
+
+### Notes
+
+- **Phase 5 — Checkout & Order selesai penuh** (backend M7.1–M7.5 + UI M7.6–M7.7).
+- Next: **Phase 6 — Payment & Shipping** (integrasi Midtrans + Biteship, `docs/11-development-roadmap.md`). Backlog/milestone Phase 6 (M8.x) belum disusun — perlu Definition of Ready sebelum kickoff, mengikuti pola M3.7/M7.x.
+
+---
+
 ## 2026-07-22 (10)
 
 ### Added

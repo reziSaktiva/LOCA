@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.2 — Order Domain Foundation**
+Immediate next: **M7.3 — Checkout Customer API**
 
 ---
 
@@ -82,7 +82,7 @@ Acceptance criteria:
 
 Dependency:
 - Cart + customer + inventory facades stabil (Phase 3–4 ✅).
-- Order create port di-stub (`ORDER_MODULE_UNAVAILABLE`) sampai M7.2 selesai, lalu di-wire.
+- Order create port di-stub di M7.1; di-wire ke order facade pada M7.2.
 
 ---
 
@@ -90,7 +90,7 @@ Dependency:
 
 Priority: P0
 
-Status: Ready (setelah / paralel akhir M7.1)
+Status: Done (2026-07-22)
 
 Feature: `order-domain`
 

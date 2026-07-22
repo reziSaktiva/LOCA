@@ -9,6 +9,30 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-22 (4)
+
+### Added
+
+- **M7.2 — Order Domain Foundation**:
+  - Domain: `Order`, `OrderItem`, `OrderStatusHistory`, state machine, invariants, repository contract.
+  - Application: `createOrderFromCheckout` (reserve stock → persist `WAITING_PAYMENT`), `transitionOrderStatus`, `cancelOrder` (release stock), `getOrderDetail`.
+  - Ports: catalog snapshot + inventory reserve/release.
+  - Infrastructure: `PrismaOrderRepository`; migration `20260722040000_order_domain_foundation` (applied).
+  - Public facade: `src/modules/order/public/order-service.ts`.
+  - Checkout: `CheckoutOrderPort` wired ke order facade (stub `ORDER_MODULE_UNAVAILABLE` dihapus).
+  - Catalog: `VariantSnapshot` + `brand` / `categoryName` untuk snapshot item order.
+
+### Verified
+
+- `bun run check` hijau (268 test).
+- `prisma migrate deploy` — order migration applied.
+
+### Notes
+
+- Next: **M7.3 — Checkout Customer API** (prepare → shipping → payment → place-order via HTTP).
+
+---
+
 ## 2026-07-22 (3)
 
 ### Added

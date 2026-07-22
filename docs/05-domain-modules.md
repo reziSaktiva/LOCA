@@ -524,7 +524,7 @@ Mengubah cart valid menjadi order draft siap pembayaran.
 - `getShippingOptions(customerId, cartId, destination)` — facade: `getShippingOptionsForCustomer` / `checkoutGetShippingOptions` (destination dari alamat terpilih di session)
 - `selectShippingOption(customerId, cartId, optionId)` — facade: `checkoutSelectShippingOption`
 - `selectPaymentMethod(customerId, cartId, method)` — facade: `checkoutSelectPaymentMethod`
-- `placeOrder(customerId, payload)` — facade: `placeOrderForCustomer` / `checkoutPlaceOrder` (M7.1: order port belum wired → `ORDER_MODULE_UNAVAILABLE` hingga M7.2)
+- `placeOrder(customerId, payload)` — facade: `placeOrderForCustomer` / `checkoutPlaceOrder` (M7.2: `CheckoutOrderPort` → `createOrderFromCheckout`)
 - Tambahan M7.1: `checkoutSelectAddress(customerId, addressId)` untuk lifecycle `ADDRESS_CONFIRMED`
 
 ### Owned Entities
@@ -607,14 +607,14 @@ Menjadi source of truth lifecycle transaksi pembelian.
 
 ### Public Services
 
-- `createOrderFromCheckout(payload)`
-- `getOrder(orderId, actorContext)`
-- `listCustomerOrders(customerId, query)`
-- `listOrdersForAdmin(query)`
-- `transitionOrderStatus(orderId, nextStatus, reason?)`
-- `cancelOrder(orderId, actorContext, reason)`
-- `markOrderPaid(orderId, paymentRef)`
-- `attachShippingInfo(orderId, shipmentRef)`
+- `createOrderFromCheckout(payload)` — facade: `createOrderFromCheckout` / `orderCreateFromCheckout`
+- `getOrder(orderId, actorContext)` — facade: `getOrder` / `orderGetDetail` (actor authorization di API layer M7.4)
+- `listCustomerOrders(customerId, query)` — facade: `listCustomerOrders` / `orderListForCustomer`
+- `listOrdersForAdmin(query)` — facade: `listOrdersForAdmin` / `orderListForAdmin`
+- `transitionOrderStatus(orderId, nextStatus, reason?)` — facade: `transitionOrderStatusForActor` / `orderTransitionStatus`
+- `cancelOrder(orderId, actorContext, reason)` — facade: `cancelOrderForActor` / `orderCancel` (release reserved stock)
+- `markOrderPaid(orderId, paymentRef)` — Phase 6 (payment webhook)
+- `attachShippingInfo(orderId, shipmentRef)` — Phase 6 (shipping)
 
 ### Owned Entities
 

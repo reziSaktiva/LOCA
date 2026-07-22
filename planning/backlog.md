@@ -30,7 +30,7 @@ Prasyarat (sudah siap):
 - `inventoryReserveStock` / `inventoryCommitStock` / `inventoryReleaseReservedStock`
 - Customer address API/UI, cart API/UI
 
-Immediate next: **M7.3 — Checkout Customer API**
+Immediate next: **M7.4 — Order Customer + Admin API**
 
 ---
 
@@ -129,7 +129,7 @@ Dependency:
 
 Priority: P0
 
-Status: Ready (setelah M7.1 + M7.2)
+Status: Completed (2026-07-22)
 
 Feature: `checkout-customer-api`
 

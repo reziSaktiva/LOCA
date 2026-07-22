@@ -9,18 +9,19 @@ Dokumen ini adalah snapshot implementasi terkini dan akan sering berubah.
 - Phase 2 (Catalog Foundation): **completed** (M4.1–M4.8 selesai)
 - Phase 3 (Customer & Homepage): **completed** (M5.1–M5.3 selesai, migration `20260709130000_homepage_banner` sudah diapply ke Supabase)
 - Phase 4 (Cart & Inventory): **completed** — M6.1–M6.8 selesai (backend + UI catch-up)
-- Phase 5 (Checkout & Order): **in progress** — M7.1–M7.2 ✅; next M7.3
+- Phase 5 (Checkout & Order): **in progress** — M7.1–M7.3 ✅; next M7.4
 - Current implementation progress: **98%**
 
 ## Current Focus
 
 - **Phase 5 — Checkout & Order** in progress (Decision 027: M7.1–M7.7).
-- Immediate next: **M7.3 — Checkout Customer API**.
+- Immediate next: **M7.4 — Order Customer + Admin API**.
 - Shipping/payment Phase 5 via **stub/port adapter**; Midtrans/Biteship di Phase 6.
 - Workflow **UI paralel per phase** (Decision 022) tetap berlaku.
 - Route groups aktif: `(store)`, `(auth)`, `(admin)/admin/*` — layout + shared components di `src/shared/ui/layout/`.
 - Decision 025: kontrak Phase 5 (`getCartSnapshotForCheckout`, inventory reserve/commit/release) siap dipakai.
 - M7.2: `createOrderFromCheckout` + reserve stock; `CheckoutOrderPort` wired.
+- M7.3: customer checkout API `GET/POST /api/v1/checkout/*` hingga place-order `WAITING_PAYMENT`.
 
 ## Completed (Planning Side)
 
@@ -249,15 +250,16 @@ Target setup awal (Phase 2 selesai):
 Milestones:
 1. ✅ M7.1 Checkout Domain Foundation
 2. ✅ M7.2 Order Domain Foundation
-3. ⏳ M7.3 Checkout Customer API ← next
-4. ⏳ M7.4 Order Customer + Admin API
+3. ✅ M7.3 Checkout Customer API
+4. ⏳ M7.4 Order Customer + Admin API ← next
 5. ⏳ M7.5 Phase 5 Backend Exit Validation
 6. ⏳ M7.6 UI: Checkout Flow
 7. ⏳ M7.7 UI: Order History + Detail
 
 ### Checkout Module
 
-- Status: **M7.1 Completed** — domain, application, Prisma repo, public facade, stub shipping/payment.
+- Status: **M7.1 + M7.3 Completed** — domain/application/Prisma/facade + customer REST API.
+- Routes: `GET /api/v1/checkout`, `POST .../shipping|payment|place-order` (`requireCustomer`).
 - Migration `20260722030000_checkout_domain_foundation` applied.
 - `CheckoutOrderPort` wired ke `createOrderFromCheckout` (M7.2).
 - Target phase: Phase 5 🔄
@@ -266,14 +268,14 @@ Milestones:
 
 - Status: **M7.2 Completed** — domain, create/transition/cancel, Prisma repo, public facade, reserve stock.
 - Migration `20260722040000_order_domain_foundation` applied.
-- Target phase: Phase 5 🔄
+- Target phase: Phase 5 🔄 — next expose customer/admin API (M7.4).
 - Depends on: inventory reserve/commit/release (Decision 025), checkout snapshot input.
 
 ## Remaining Priority Flows
 
 ### Checkout
 
-- M7.1–M7.2 selesai; next Checkout Customer API (M7.3).
+- M7.1–M7.3 selesai; next Order Customer + Admin API (M7.4).
 - Target: Phase 5 (in progress).
 
 ### Payment

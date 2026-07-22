@@ -256,6 +256,8 @@ describe("getVariantSnapshot (via repository)", () => {
     expect(snapshot?.productName).toBe("Run Socks Pro");
     expect(snapshot?.price).toBe(89000);
     expect(snapshot?.variantLabel).toBe("S");
+    expect(snapshot?.brand).toBe("LOCA");
+    expect(snapshot?.categoryName).toBe("Socks");
   });
 
   it("return null for non-existent variant", async () => {

@@ -9,6 +9,25 @@ Mengikuti prinsip:
 
 ---
 
+## 2026-07-23
+
+### Fixed
+
+- **BUG-001 — RadioGroup uncontrolled→controlled warning di Checkout Flow**: `src/modules/checkout/presentation/checkout-flow.tsx` — fallback `value` pada `RadioGroup` (shipping & payment) diganti dari `?? undefined` menjadi `?? ""` agar komponen controlled sejak render pertama (sebelumnya `undefined` saat belum ada pilihan membuat Base UI menganggap uncontrolled, lalu berubah jadi controlled setelah user memilih — memicu warning React). Ditemukan saat mengerjakan M7.6 — UI: Checkout Flow (Phase 5).
+
+### Verified
+
+- `bun run check` hijau (288 test, tidak berubah — tidak ada test coverage khusus komponen presentation ini).
+- `bun run build` hijau — route `/checkout` tetap terdaftar tanpa error.
+
+### Notes
+
+- Bug bersifat kosmetik (console warning), tidak menghalangi flow checkout — dikonfirmasi dari log terminal sebelumnya bahwa `place-order` tetap sukses (201) sebelum fix ini.
+- Detail dicatat di `planning/backlog.md` §Known Issues (BUG-001, status Fixed).
+- Belum commit — menunggu instruksi eksplisit sesuai `AGENTS.md` §7.
+
+---
+
 ## 2026-07-22 (11)
 
 ### Added

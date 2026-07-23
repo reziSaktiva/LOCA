@@ -11,6 +11,39 @@ Daftar pekerjaan yang telah disetujui tetapi belum menjadi prioritas.
 
 ---
 
+## Known Issues
+
+### BUG-001 — RadioGroup uncontrolled→controlled warning di Checkout Flow
+
+Priority: P2 (cosmetic dev warning, tidak menghalangi fungsi)
+
+Status: Fixed (dilaporkan 2026-07-23, diperbaiki 2026-07-23)
+
+Ditemukan saat mengerjakan: **M7.6 — UI: Checkout Flow** (Phase 5)
+
+Lokasi: `src/modules/checkout/presentation/checkout-flow.tsx` — dua `RadioGroup` (pilih shipping & pilih payment method).
+
+Gejala:
+
+```
+Base UI: A component is changing the uncontrolled value state of RadioGroup to be controlled.
+Elements should not switch from uncontrolled to controlled (or vice versa).
+```
+
+Muncul di console browser saat user memilih opsi shipping/payment pertama kali di `/checkout`. Tidak menyebabkan kegagalan fungsional — flow checkout tetap selesai sampai `POST /checkout/place-order` 201 (terverifikasi dari log terminal dev server).
+
+Root cause:
+
+- `value={current.selectedShippingOptionId ?? undefined}` dan `value={current.selectedPaymentMethod ?? undefined}` — saat state awal `null` (belum ada pilihan), prop `value` yang diterima Base UI `RadioGroup` adalah `undefined`, sehingga komponen dianggap **uncontrolled** pada render pertama.
+- Begitu `selectShipping`/`selectPayment` sukses dan state di-update ke string non-kosong, `value` berubah jadi defined → komponen mencoba jadi **controlled** di tengah lifecycle. React/Base UI melarang perpindahan uncontrolled→controlled setelah mount pertama, sehingga muncul warning ini.
+
+Fix yang diterapkan:
+
+- Fallback `undefined` diganti string kosong (`current.selectedShippingOptionId ?? ""` dan `current.selectedPaymentMethod ?? ""`) pada kedua `RadioGroup`, supaya `value` selalu berupa string dari render pertama (controlled sejak awal, `""` berarti belum ada pilihan yang match — tidak akan pernah cocok dengan `optionId`/`method` asli yang selalu non-empty).
+- Verifikasi: `bun run check` hijau (288 test, tidak berubah — tidak ada test coverage untuk komponen ini) dan `bun run build` hijau (route `/checkout` tetap terdaftar).
+
+---
+
 ## Current Backlog
 
 ### Checkout & Order Phase 5 (M7.1–M7.7)

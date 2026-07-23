@@ -253,7 +253,7 @@ export function CheckoutFlow({ session, shippingOptions, paymentMethods, items }
             Pilih pengiriman
           </h2>
           <RadioGroup
-            value={current.selectedShippingOptionId ?? undefined}
+            value={current.selectedShippingOptionId ?? ""}
             onValueChange={(value) => selectShipping(value as string)}
             className="flex flex-col gap-2"
           >
@@ -293,7 +293,7 @@ export function CheckoutFlow({ session, shippingOptions, paymentMethods, items }
             Metode pembayaran
           </h2>
           <RadioGroup
-            value={current.selectedPaymentMethod ?? undefined}
+            value={current.selectedPaymentMethod ?? ""}
             onValueChange={(value) => selectPayment(value as string)}
             className="flex flex-col gap-2"
           >
